@@ -153,6 +153,7 @@ function PS-RemoteShell {
 			$InternalCmd = $Cmd.Split(" ", 2)
 			if($InternalCmd[0] -eq "delay") {
 				$Delay = [Int]$InternalCmd[1]
+				$Output = "Delay is now $($Delay)"
 			} else {
 				$Output = ([ScriptBlock]::Create($Cmd).Invoke() | Out-String)
 			}
