@@ -62,6 +62,8 @@ class Cli:
                 UI.error("*** You really want to kill this shell *** (yes/no)")
                 if UI.prompt("Exit").lower() == "yes":
                     self.db.push_cmd(self.guid, "exit")
+                    self._prompt = "Main"
+                    self.guid = ""
             else:
                 Log.log_shell(self.guid, "Sending", data)
                 if self.shell_cmds.has_key(cmd):

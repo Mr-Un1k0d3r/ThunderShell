@@ -3,6 +3,7 @@
     @package: core/utils.py
 """
 import os
+import ssl
 import string
 import random
 import urllib2
@@ -50,9 +51,15 @@ class Utils:
     def download_url(path):
         request = urllib2.Request(path)
         request.add_header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0")
+        
+        # Accept invalid cert
+        context = ssl.create_default_context()
+        context.check_hostname = False
+        context.verify_mode = ssl.CERT_NONE
+        
         data = ""
         try:
-            data = urllib2.urlopen(request).read()
+            data = urllib2.urlopen(request, context=context).read()
         except:
             UI.error("Failed to fetch %s" % path)
         
