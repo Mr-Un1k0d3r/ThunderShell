@@ -29,6 +29,7 @@ class Cli:
         self.shell_cmds["delay"] = self.update_delay
         self.shell_cmds["refresh"] = self.refresh
         self.shell_cmds["exec"] = self.exec_code
+        self.shell_cmds["ps"] = self.ps
 
         self.config = config
         self.db = self.config.get("redis")
@@ -186,6 +187,7 @@ class Cli:
         print "\texec          args (path/url)           In memory execution of code (shellcode)"
         print "\tread          args (remote path)        Read a file on the remote host"
         print "\tupload        args (path/url, path)     Upload a file on the remote system"
+        print "\tps                                      List processes"
         print "\tdelay         args (milliseconds)       Update the callback delay"
         print "\thelp                                    Show this help menu"
         Alias.list_alias()
@@ -273,6 +275,10 @@ class Cli:
         else:
             UI.error("Cannot fetch the resource")
             return data
+    
+    def ps(self, data):
+        ps = Utils.load_powershell_script("ps.ps1", 0)
+        return ps
     
     def update_delay(self, data):
         delay = Utils.get_arg_at(data, 1, 2)
