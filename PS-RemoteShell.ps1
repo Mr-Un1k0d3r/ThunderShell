@@ -16,7 +16,7 @@ function Get-UserInfo {
 			$Arch = "x86"
 		}
 		
-		return "$($Arch) | $($Target):$($Domain)\$($env:username)"   
+		return "$($Arch) - $($Target):$($Domain)\$($env:username)"   
     }
 }
 
