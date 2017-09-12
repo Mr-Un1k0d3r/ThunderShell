@@ -93,10 +93,11 @@ class Cli:
             prompt = self.db.get_data("%s:prompt" % guid)
             id = self.db.get_data("%s:id" % guid)
             
-            if Utils.get_arg_at(data, 1, 2) == "full":
-                print "  %s\t%s %s last seen %s" % (id, prompt, guid, timestamp)
-            else:
-                print "  %s\t%s" % (id, prompt)
+            if not id == "":
+                if Utils.get_arg_at(data, 1, 2) == "full":
+                    print "  %s\t%s %s last seen %s" % (id, prompt, guid, timestamp)
+                else:
+                    print "  %s\t%s" % (id, prompt)
             
     def interact(self, data):
         current_id = Utils.get_arg_at(data, 1, 2)
