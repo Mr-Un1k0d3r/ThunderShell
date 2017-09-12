@@ -17,7 +17,7 @@ class Cli:
         self.cmds["exit"] = self.exit_cli
         self.cmds["list"] = self.list_clients
         self.cmds["interact"] = self.interact
-        self.cmds["event"] = self.view_event
+        self.cmds["show"] = self.view_event
         self.cmds["help"] = self.show_help
         self.cmds["kill"] = self.kill_shell
         
@@ -111,8 +111,39 @@ class Cli:
             UI.error("Invalid session ID")
             
     def view_event(self, data):
-        pass
+        log_path = Utils.get_arg_at(data, 1, 2)
+        if log_path == "":
+            UI.error("Missing arguments")
+            return 
     
+        log_path += ".log"
+        
+        rows = Utils.get_arg_at(data, 2, 2)
+        if rows == "":
+            rows = 10
+        else:
+            try:
+                rows = int(rows)
+            except:
+                rows = 10
+                
+        log_path = Log.get_current_path(log_path)
+        
+        data = []
+        
+        if Utils.file_exists(log_path):
+            for line in open(log_path, "rb").readlines():
+                data.append(line)
+            
+            print "\nLast %d lines of log\n-----------------------\n" % rows    
+            data = list(reversed(data))
+            
+            for i in range(0, rows):
+                try:
+                    print data[i]
+                except:
+                    pass
+                
     def kill_shell(self, data):
         current_id = Utils.get_arg_at(data, 1, 2)
         guid = ""
@@ -132,7 +163,7 @@ class Cli:
         print "\nHelp Menu\n-----------------------\n"
         print "\tlist      args (full)             List all active shells"
         print "\tinteract  args (id)               Interact with a session"
-        print "\tevent     args (log/http, count)  Show http or error log (default number of rows 10)"
+        print "\tshow      args (error/http/event, count)  Show error, http or event log (default number of rows 10)"
         print "\tkill      args (id)               Kill shell (clear db only)"
         print "\texit                              Exit the application"
         print "\thelp                              Show this help menu"
