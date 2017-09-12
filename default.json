@@ -2,8 +2,8 @@
         "redis-host": "localhost",
         "redis-port": 6379,
 
-        "http-host": "192.168.17.129",
-        "http-port": 8083,
+        "http-host": "1.1.1.1",
+        "http-port": 8080,
         "http-server": "Microsoft-IIS/7.5",
 
         "https-enabled": "off",
