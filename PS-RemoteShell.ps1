@@ -2,15 +2,21 @@ function Get-UserInfo {
 	
     PROCESS {
 		if( -not (Test-Path env:userdomain)) {
-			$domain = $env:computername
+			$Domain = $env:computername
 		} else {
-			$domain = $env:userdomain
+			$Domain = $env:userdomain
 		}
 		
-		$target = Get-WmiObject Win32_NetworkAdapterConfiguration | Where {$_.Ipaddress.length -gt 1}
-		$target = $target.ipaddress[0] 
+		$Target = Get-WmiObject Win32_NetworkAdapterConfiguration | Where {$_.Ipaddress.length -gt 1}
+		$Target = $Target.ipaddress[0] 
 		
-		return "$($target):$($domain)\$($env:username)"   
+		$Arch = "x64"
+		
+		if([IntPtr]::size -eq 4) {
+			$Arch = "x86"
+		}
+		
+		return "$($Arch) | $($Target):$($Domain)\$($env:username)"   
     }
 }
 
