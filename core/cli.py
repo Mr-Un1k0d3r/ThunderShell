@@ -8,6 +8,7 @@ import base64
 from core.ui import UI
 from core.utils import Utils
 from core.log import Log
+from core.alias import Alias
 
 class Cli:
 
@@ -151,6 +152,7 @@ class Cli:
         print "\tupload        args (path/url, path)     Upload a file on the remote system"
         print "\tdelay         args (milliseconds)       Update the callback delay"
         print "\thelp                                    Show this help menu"
+        Alias.list_alias()
 
     def fetch(self, data):
         try:
@@ -160,6 +162,7 @@ class Cli:
             return ";"
         
         data = ";"
+        path = Alias.get_alias(path)
         if Utils.file_exists(path, False, False):
             data = Utils.load_file_unsafe(path)
         else:
@@ -190,6 +193,7 @@ class Cli:
             return ";"
         
         data = ";"
+        path = Alias.get_alias(path)
         if Utils.file_exists(path, False, False):
             data = Utils.load_file_unsafe(path)
         else:
@@ -216,6 +220,7 @@ class Cli:
             return ";"
         
         data = ";"
+        path = Alias.get_alias(path)
         if Utils.file_exists(path, False, False):
             data = Utils.load_file_unsafe(path)
         else:
