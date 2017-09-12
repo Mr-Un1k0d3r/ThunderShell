@@ -14,14 +14,16 @@ if __name__ == "__main__":
     UI.banner()
     
     if len(sys.argv) < 2:
-        UI.error("Missing configuration file path", True)
+        UI.error("Missing configuration file path\n\nUsage: %s config (optional -nohttpd)" % sys.argv[0], True)
         
     config = CONFIG(sys.argv[1])
     db = RedisQuery(config)
     config.set("redis", db)
     
+    
     # Launch the HTTPD daemon
-    httpd_thread = init_httpd_thread(config)
+    if not "-nohttpd" in sys.argv:
+        httpd_thread = init_httpd_thread(config)
     
     cli = Cli(config)
     
