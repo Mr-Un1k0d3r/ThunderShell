@@ -2,6 +2,13 @@
 
 ThunderShell is a Powershell based RAT that rely on HTTP request to communicate. All the network traffic is encrypted using a second layer of RC4 to avoid SSL interception and defeat network hooks.
 
+# Dependencies
+
+```
+apt install redis-server
+apt install python-redis
+```
+
 # Usage
 
 Victim:
