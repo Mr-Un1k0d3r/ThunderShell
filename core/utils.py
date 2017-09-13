@@ -73,7 +73,7 @@ class Utils:
     @staticmethod
     def update_vars(data, length):
         for i in reversed(range(0, length + 1)):
-            data = data.replace("var%d" % i, Utils.gen_str(random.randrange(4, 16)))
+            data = data.replace("VAR%d" % i, Utils.gen_str(random.randrange(4, 16)))
         return data   
     
     @staticmethod
