@@ -34,5 +34,9 @@ namespace VAR22 {
 }
 "@
 
-Add-Type -TypeDefinition $VAR21 -Language CSharp
+Try {
+    Add-Type -TypeDefinition $VAR21 -Language CSharp
+} Catch {
+
+}
 [VAR22.VAR2]::VAR20()
