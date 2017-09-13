@@ -9,7 +9,7 @@ namespace VAR22 {
     using System.Management.Automation.Runspaces;
     
     public static class VAR2 { 
-        public static bool VAR20() {
+        public static string VAR20() {
         
             Runspace VAR4 = RunspaceFactory.CreateRunspace();
             VAR4.Open();
@@ -28,8 +28,7 @@ namespace VAR22 {
             foreach(PSObject VAR15 in VAR13) {
                 VAR14.AppendLine(VAR15.ToString());
             }
-            Console.Write(VAR14.ToString());
-            return true;
+            return VAR14.ToString();
         }
     }
 }
