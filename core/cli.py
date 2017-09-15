@@ -75,7 +75,7 @@ class Cli:
                     callback = self.shell_cmds[cmd]
                     data = callback(data)
 
-                if not cmd == "help":
+                if not cmd == "help" or not data = "":
                     self.db.push_cmd(self.guid, data)
                     self.get_cmd_output()
                 
@@ -209,7 +209,7 @@ class Cli:
             cmd, path, ps = data.split(" ", 2)
         except:
             UI.error("Missing arguments")
-            return ";"
+            return ""
         
         data = ";"
         path = self.alias.get_alias(path)
@@ -225,7 +225,7 @@ class Cli:
             return "%s;%s" % (data, ps)
         else:
             UI.error("Cannot fetch the resource")
-            return data
+            return ""
         
     def read_file(self, data):
         try:
@@ -233,14 +233,14 @@ class Cli:
             return "Get-Content %s" % path
         except:
             UI.error("Missing arguments")
-            return ";"
+            return ""
         
     def upload_file(self, data):
         try:
             cmd, path, remote = data.split(" ", 2)
         except:
             UI.error("Missing arguments")
-            return ";"
+            return ""
         
         data = ";"
         path = self.alias.get_alias(path)
@@ -267,7 +267,7 @@ class Cli:
             cmd, path = data.split(" ", 1)
         except:
             UI.error("Missing arguments")
-            return ";"
+            return ""
         
         data = ";"
         path = self.alias.get_alias(path)
@@ -293,7 +293,7 @@ class Cli:
             cmd, ps_cmd = data.split(" ", 1)
         except:
             UI.error("Missing arguments")
-            return ";"
+            return ""
                
         ps = Utils.load_powershell_script("powerless.ps1", 22)
         ps = Utils.update_key(ps, "PAYLOAD", base64.b64encode(ps_cmd))
@@ -306,15 +306,15 @@ class Cli:
             option, arch, pid, cmd = data.split(" ", 3)
         except:
             UI.error("Missing arguments")
-            return ";"
+            return ""
         
         if len(cmd) > 4096:
             UI.error("Your command is bigger than 4096 bytes")
-            return ";"
+            return ""
         
         if not arch in archs:
             UI.error("Invalid architecture provided (32/64)")
-            return ";"
+            return ""
         
         dll = Utils.load_file("bin/inject-%s.dll" % arch)
         dll = dll.replace("A" * 4096, cmd + "\x00" * (4096 - len(cmd)))
@@ -339,16 +339,16 @@ class Cli:
     def refresh(self, data):
         for item in self.db.get_output(self.guid):
             print item
-        return ";"
+        return ""
 
     def set_alias(self, data):
         try:
              cmd, key, value = data.split(" ", 2)
         except:
             UI.error("Missing arguments")
-            return ";"    
+            return ""    
         
         self.alias.set_custom(key, value)
         UI.success("%s is now set to %s" % (key, value))
            
-        return ";"
+        return ""
