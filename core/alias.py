@@ -6,7 +6,7 @@ class Alias:
     
     def __init__(self):
         self.alias = {}
-        self.alias["powerview"] = ("https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Recon/PowerView.ps1", "PowerView tool set)")
+        self.alias["powerview"] = ("https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Recon/PowerView.ps1", "PowerView tool set")
         self.alias["powerup"] = ("https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Privesc/PowerUp.ps1", "PowerUp tool set")
         self.alias["mimikatz"] = ("https://github.com/PowerShellMafia/PowerSploit/raw/master/Exfiltration/Invoke-Mimikatz.ps1", "Invoke-Mimikatz utility")
         self.alias["wmiexec"] = ("https://raw.githubusercontent.com/Mr-Un1k0d3r/RedTeamPowershellScripts/master/scripts/Remote-WmiExecute.ps1", "Remote-WmiExecute utility")
