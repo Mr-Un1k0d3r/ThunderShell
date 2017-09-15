@@ -119,11 +119,13 @@ Shell Help Menu
         upload        args (path/url, path)     Upload a file on the remote system
         ps                                      List processes
         powerless     args (powershell)         Execute Powershell command without invoking Powershell
+        inject        args (32/64, pid, command)Inject command into a target process (max length 4096)
+        alias         args (key, value)         Create an alias to avoid typing the same thing over and over
         delay         args (milliseconds)       Update the callback delay
         help                                    Show this help menu
 
 
-List of path alias
+List of built in alias
 -----------------------
 
         powerup                 PowerUp tool set
@@ -132,7 +134,12 @@ List of path alias
         keethief                KeeThief tool set (Get-KeePassDatabaseKey)
         mimikatz                Invoke-Mimikatz utility
         inveigh                 Invoke-Inveigh utility
-        powerview               PowerView tool set)
+        powerview               PowerView tool set
+
+
+List user defined alias
+-----------------------
+
 
 (x64 - 10.0.0.153:RingZer0\MrUn1k0d3r)>>> whoami
 RingZer0\MrUn1k0d3r
