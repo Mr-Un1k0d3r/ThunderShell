@@ -14,9 +14,9 @@ Every errors, http requests and commands are logged in the logs folder.
 
 # How it works
 
-Once the PowerShell script is executed and HTTP request will be issued to the server. The body of each POST request contains the RC4 encrypted communication. Why RC4 because it's strong enough to hide the traffic. The idea is to upload / download data over the network that cannot be inspected. The RAT support HTTPS but some security product may perform SSL interception and obtain visibility on your data leading to detection of malicious payload (PowerShell script, stager etc...). The RC4 encryption allow you to communicate over the wire without leaking your payload. The RC4 encryption also protect against endpoint agent that inspect traffic directly on the host, again the traffic is decrypted at the "software" level blocking detection at that level too.
+Once the PowerShell script is executed and HTTP request will be issued to the server. The body of each POST request contains the RC4 encrypted communication. Why RC4 because it's strong enough to hide the traffic. The idea is to upload / download data over the network that cannot be inspected. The RAT support HTTPS but some security product may perform SSL interception and obtain visibility on your data leading to detection of malicious payload (PowerShell script, stager etc...). The RC4 encryption allows you to communicate over the wire without leaking your payload. The RC4 encryption also protects against endpoint agent that inspects traffic directly on the host, again the traffic is decrypted at the "software" level blocking detection at that level too.
 
-To use the power of the tool there is some built in function such as `fetch`, `exec` and `upload` that allow you to run your payload quite easily.
+To use the power of the tool there is some built-in function such as `fetch`, `exec` and `upload` that allow you to run your payload quite easily.
 
 * Fetch flow
 
