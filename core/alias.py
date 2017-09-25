@@ -6,14 +6,8 @@ class Alias:
     
     def __init__(self):
         self.alias = {}
-        self.alias["powerview"] = ("https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Recon/PowerView.ps1", "PowerView tool set")
-        self.alias["powerup"] = ("https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Privesc/PowerUp.ps1", "PowerUp tool set")
-        self.alias["mimikatz"] = ("https://github.com/PowerShellMafia/PowerSploit/raw/master/Exfiltration/Invoke-Mimikatz.ps1", "Invoke-Mimikatz utility")
         self.alias["wmiexec"] = ("https://raw.githubusercontent.com/Mr-Un1k0d3r/RedTeamPowershellScripts/master/scripts/Remote-WmiExecute.ps1", "Remote-WmiExecute utility")
         self.alias["searchevent"] = ("https://github.com/Mr-Un1k0d3r/RedTeamPowershellScripts/blob/master/scripts/Search-EventForUser.ps1", "Search-EventForUser utility")
-        self.alias["inveigh"] = ("https://raw.githubusercontent.com/Kevin-Robertson/Inveigh/master/Scripts/Inveigh.ps1", "Invoke-Inveigh utility")
-        self.alias["keethief"] = ("https://raw.githubusercontent.com/HarmJ0y/KeeThief/master/PowerShell/KeeThief.ps1", "KeeThief tool set (Get-KeePassDatabaseKey)")
-        
         self.custom_alias = {}
         
     def get_alias(self, alias):
