@@ -75,7 +75,7 @@ class Cli:
                     callback = self.shell_cmds[cmd]
                     data = callback(data)
 
-                if not cmd == "help" or not data == "":
+                if not (cmd == "help" or data == ""):
                     self.db.push_cmd(self.guid, data)
                     self.get_cmd_output()
                 
