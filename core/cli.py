@@ -280,7 +280,7 @@ class Cli:
             UI.success("Fetching %s" % path)
             
             data = base64.b64encode(data)
-            ps = Utils.load_powershell_script("exec.ps1", 12)
+            ps = Utils.load_powershell_script("exec.ps1", 16)
             ps = Utils.update_key(ps, "PAYLOAD", data)
             UI.success("Payload should be executed shortly on the target")
             return ps
