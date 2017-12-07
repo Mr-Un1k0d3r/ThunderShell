@@ -4,6 +4,7 @@
 """
 import os
 import ssl
+import glob
 import string
 import random
 import urllib2
@@ -84,3 +85,9 @@ class Utils:
     def gen_str(size):
         return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(size)) 
         
+    @staticmethod
+    def get_download_folder_content():
+        files = []
+        for item in glob.glob("download/*"):
+            files.append(item.replace("download/", ""))
+        return files

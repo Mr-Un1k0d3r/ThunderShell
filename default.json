@@ -6,6 +6,7 @@
         "http-port": 8080,
         "http-server": "Microsoft-IIS/7.5",
         "http-download-path": "cat.png",
+        "http-default-404": "default.html",
 
         "https-enabled": "off",
         "https-cert-path": "cert.pem",
