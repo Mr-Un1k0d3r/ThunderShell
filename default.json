@@ -5,6 +5,7 @@
         "http-host": "1.1.1.1",
         "http-port": 8080,
         "http-server": "Microsoft-IIS/7.5",
+        "http-download-path": "cat.png",
 
         "https-enabled": "off",
         "https-cert-path": "cert.pem",

