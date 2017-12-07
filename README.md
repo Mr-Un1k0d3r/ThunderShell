@@ -73,7 +73,7 @@ If `https-enabled` is `on`, `https-cert-path` must point to a PEM file with this
 ```
 ### Payload delivery
 
-The `http-download-path` is used to deliver the PowerShell RAT code. It will perform variables renaming by default and will deliver the payload only if the path match the one defined by the `"http-download-path` variable.
+The `http-download-path` is used to deliver the PowerShell RAT code. It will perform variables renaming by default and will deliver the payload only if the path match the one defined by the `http-download-path` variable.
 
 In this example if the attacker browse to `http://1.1.1.1:8080/cat.png` the web server will return this:
 
