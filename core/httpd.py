@@ -42,7 +42,9 @@ def HTTPDFactory(config):
             if not guid == None:
                 self.db.update_checkin(guid)
             
-                length = int(self.headers.getheader("Content-Length"))
+                length = 0
+                if not self.headers.getheader("Content-Length") == None:
+                    length = int(self.headers.getheader("Content-Length"))
                 data = self.rfile.read(length)
                 try:
                     data = self.rc4.crypt(base64.b64decode(data))
