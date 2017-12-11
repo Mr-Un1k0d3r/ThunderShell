@@ -3,6 +3,7 @@
     @package: core/utils.py
 """
 import os
+import re
 import ssl
 import glob
 import string
@@ -91,3 +92,9 @@ class Utils:
         for item in glob.glob("download/*"):
             files.append(item.replace("download/", ""))
         return files
+    
+    @staticmethod
+    def validate_guid(guid):
+        if re.match("^[\w\d]+$", guid):
+            return guid
+        return ""
