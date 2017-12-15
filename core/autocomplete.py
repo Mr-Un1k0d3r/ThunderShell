@@ -8,7 +8,6 @@ class Completer(object):
         if state == 0:
             if text:
                 self.matches = [s for s in self.options 
-                                    #if text in s]
                                     if s and s.startswith(text)]
             else:
                 self.matches = self.options[:]
