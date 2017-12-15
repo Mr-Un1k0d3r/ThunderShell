@@ -5,15 +5,14 @@ class Completer(object):
         self.options = sorted(options)
 
     def complete(self, text, state):
-        if state == 0:  # on first trigger, build possible matches
-            if text:  # cache matches (entries that start with entered text)
+        if state == 0:
+            if text:
                 self.matches = [s for s in self.options 
                                     #if text in s]
                                     if s and s.startswith(text)]
-            else:  # no text entered, all matches possible
+            else:
                 self.matches = self.options[:]
 
-        # return match indexed by state
         try: 
             return self.matches[state]
         except IndexError:
