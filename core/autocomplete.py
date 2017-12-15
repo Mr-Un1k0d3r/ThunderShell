@@ -1,4 +1,7 @@
-# -*- coding: utf-8 -*-
+"""
+    @author: Tazz0 RingZer0 Team
+    @package: core/alias.py
+"""
 class Completer(object):
     
     def __init__(self, options):
