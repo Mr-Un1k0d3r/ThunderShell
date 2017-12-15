@@ -7,6 +7,7 @@ ThunderShell is a Powershell based RAT that rely on HTTP request to communicate.
 ```
 apt install redis-server
 apt install python-redis
+apt install python-tabulate
 ```
 
 # Logs
