@@ -1,6 +1,6 @@
 """
     @author: Tazz0 RingZer0 Team
-    @package: core/alias.py
+    @package: core/autocomplete.py
 """
 class Completer(object):
     
