@@ -4,11 +4,18 @@
 """
 import os
 import time
+import readline
 import base64
+from core.autocomplete import Completer
 from core.ui import UI
 from core.utils import Utils
 from core.log import Log
 from core.alias import Alias
+
+try:
+    from tabulate import tabulate
+except:
+    print("[!] tabulate lib is missing:\npip install tabulate")
 
 class Cli:
 
@@ -33,14 +40,21 @@ class Cli:
         self.shell_cmds["powerless"] = self.powerless
         self.shell_cmds["inject"] = self.inject
         self.shell_cmds["alias"] = self.set_alias
+        self.shell_cmds["background"] = None
+        self.shell_cmds["exit"] = None
 
         self.config = config
         self.db = self.config.get("redis")
 
         self._prompt = "Main"
+
         self.guid = ""
 
         self.alias = Alias()
+
+        self.completer = Completer(self.cmds)
+        readline.parse_and_bind("tab: complete")
+        readline.set_completer(self.completer.complete)
 
     def set_prompt(self, prompt):
         self._prompt = prompt
@@ -55,7 +69,7 @@ class Cli:
         self.guid = guid
 
     def parse_cmd(self, data):
-        cmd = data.split(" ", 1)[0].lower()
+        cmd = data.split(" ", 1)[0].lower() 
         
         # interacting with a shell
         if not self.guid == "":
@@ -91,7 +105,7 @@ class Cli:
         os._exit(0)
 
     def list_clients(self, data):
-        print "\nList of active shells\n-----------------------\n"
+        print("\nList of active shells\n"+"-"*21+"\n")
         for shell in self.db.get_all_shells():
             guid = shell.split(":")[0]
             timestamp = Utils.unix_to_date(self.db.get_data(shell))
@@ -100,9 +114,9 @@ class Cli:
             
             if not id == "":
                 if Utils.get_arg_at(data, 1, 2) == "full":
-                    print "  %s\t%s %s last seen %s" % (id, prompt, guid, timestamp)
+                    print("  %s\t%s %s last seen %s" % (id, prompt, guid, timestamp))
                 else:
-                    print "  %s\t%s" % (id, prompt)
+                    print("  %s\t%s" % (id, prompt))
             
     def interact(self, data):
         current_id = Utils.get_arg_at(data, 1, 2)
@@ -114,6 +128,9 @@ class Cli:
                 break
             
         if not guid == "":
+            self.completer = Completer(self.shell_cmds)
+            readline.set_completer(self.completer.complete)
+            readline.parse_and_bind("tab: complete")
             self.guid = guid
             self._prompt = self.db.get_data("%s:prompt" % guid)
         else:
@@ -144,8 +161,8 @@ class Cli:
             for line in open(log_path, "rb").readlines():
                 data.append(line)
             
-            print "\nLast %d lines of log\n-----------------------\n" % rows    
-            data = list(reversed(data))
+            print("\nLast %d lines of log\n----------------------\n" % rows)    
+            data = list(data)
             
             for i in range(0, rows):
                 try:
@@ -164,19 +181,19 @@ class Cli:
             
         if not guid == "":
             self.db.delete_all_by_guid(guid)
-            print "Deleting shell with ID %s" % current_id
+            print("Deleting shell with ID %s" % current_id)
         else:
             UI.error("Invalid session ID")
 
     def show_help(self, data):
-        print "\nHelp Menu\n-----------------------\n"
-        print "\tlist      args (full)             List all active shells"
-        print "\tinteract  args (id)               Interact with a session"
-        print "\tshow      args (error/http/event, count)  Show error, http or event log (default number of rows 10)"
-        print "\tkill      args (id)               Kill shell (clear db only)"
-        print "\texit                              Exit the application"
-        print "\thelp                              Show this help menu"
-        
+        print("\nHelp Menu\n"+"="*9)
+        print("\n" + tabulate({
+            "Commands":["list","interact","show","kill","exit","help"],
+            "Args":["full","id","error | http | event","id"],
+            "Descriptions":["List all active shells","Interact with a session","Show error, http or event log (default number of rows 10)",
+                            "kill shell (clear db only)","Exit the application","Show this help menu"]
+        }, headers='keys', tablefmt="simple"))
+
     # shell commands start here
     def get_cmd_output(self):
         timestamp = time.time()
@@ -188,19 +205,15 @@ class Cli:
                 break
 
     def show_help_shell(self, data):
-        print "\nShell Help Menu\n-----------------------\n"
-        print "\tbackground                              Return to the main console"
-        print "\trefresh                                 Check for previous commands output"
-        print "\tfetch         args (path/url, command)  In memory execution of a script and execute a commmand"
-        print "\texec          args (path/url)           In memory execution of code (shellcode)"
-        print "\tread          args (remote path)        Read a file on the remote host"
-        print "\tupload        args (path/url, path)     Upload a file on the remote system"
-        print "\tps                                      List processes"
-        print "\tpowerless     args (powershell)         Execute Powershell command without invoking Powershell"
-        print "\tinject        args (pid, command)       Inject command into a target process (max length 4096)"
-        print "\talias         args (key, value)         Create an alias to avoid typing the same thing over and over"
-        print "\tdelay         args (milliseconds)       Update the callback delay"
-        print "\thelp                                    Show this help menu"
+        print("\nHelp Menu\n"+"="*9)
+        print("\n"+ tabulate({
+            "Commands":["background","refresh","fetch","exec","read","upload","ps","powerless","inject","alias","delay","help"],
+            "Args":["","","path/url, cmd","path/url","remote path","path/url, path","","powershell cmd","pid, command","key, value","milliseconds"],
+            "Descriptions":["Return to the main console","Check for previous commands output","In memory execution of a script and execute a command",
+                            "In memory execution of code (shellcode)","Read a file on the remote host","Upload a file on the remote system",
+                            "List processes","Execute Powershell command without invoking Powershell","Inject command into a target process (max length 4096)",
+                            "Create an alias to avoid typing the same thing over and over","Update the callback delay","show this help menu"]
+        }, headers='keys', tablefmt="simple"))
         self.alias.list_alias()
         self.alias.list_custom_alias()
         
