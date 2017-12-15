@@ -6,6 +6,7 @@ import os
 import time
 import readline
 import base64
+from tabulate import tabulate
 from core.autocomplete import Completer
 from core.ui import UI
 from core.utils import Utils
