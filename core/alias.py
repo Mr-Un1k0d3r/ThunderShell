@@ -41,14 +41,14 @@ class Alias:
         self.custom_alias[key] = value
         
     def list_alias(self):
-        print "\n\nList of built in aliases\n-----------------------\n"
+        print("\n\nList of built in aliases\n"+"-"*24)
         
         for key in self.get_all_alias():
-            print "\t%s%s%s" % (key, " " * (24 - len(key)), self.get_description(key))
+            print("%s%s%s" % (key, " " * (28 - len(key)), self.get_description(key)))
         
     def list_custom_alias(self):
 
-        print "\n\nList user defined aliases\n-----------------------\n"
+        print("\n\nList user defined aliases\n"+"-"*26)
         
         for key in self.get_all_custom_alias():
-            print "\t%s%s%s" % (key, " " * (24 - len(key)), self.get_custom_description(key))
+            print("%s%s%s" % (key, " " * (28 - len(key)), self.get_custom_description(key)))
