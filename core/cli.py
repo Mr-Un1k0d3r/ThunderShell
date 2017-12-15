@@ -12,11 +12,6 @@ from core.utils import Utils
 from core.log import Log
 from core.alias import Alias
 
-try:
-    from tabulate import tabulate
-except:
-    print("[!] tabulate lib is missing:\npip install tabulate")
-
 class Cli:
 
     def __init__(self, config):
