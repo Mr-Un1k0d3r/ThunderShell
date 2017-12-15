@@ -52,10 +52,10 @@ class Cli:
 
         self.alias = Alias()
 
-        if self.guid == "":
-            self.completer = Completer(self.cmds)
-            readline.parse_and_bind("tab: complete")
-            readline.set_completer(self.completer.complete)
+
+        self.completer = Completer(self.cmds)
+        readline.parse_and_bind("tab: complete")
+        readline.set_completer(self.completer.complete)
 
     def set_prompt(self, prompt):
         self._prompt = prompt
