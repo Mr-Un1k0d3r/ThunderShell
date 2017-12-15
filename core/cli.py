@@ -43,7 +43,6 @@ class Cli:
         self.shell_cmds["background"] = None
         self.shell_cmds["exit"] = None
 
-
         self.config = config
         self.db = self.config.get("redis")
 
@@ -57,7 +56,6 @@ class Cli:
             self.completer = Completer(self.cmds)
             readline.parse_and_bind("tab: complete")
             readline.set_completer(self.completer.complete)
-
 
     def set_prompt(self, prompt):
         self._prompt = prompt
@@ -73,7 +71,6 @@ class Cli:
 
     def parse_cmd(self, data):
         cmd = data.split(" ", 1)[0].lower() 
-        
         
         # interacting with a shell
         if not self.guid == "":
