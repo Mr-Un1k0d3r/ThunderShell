@@ -11,6 +11,7 @@ from core.ui import UI
 from core.rc4 import RC4
 from core.parser import HTTPDParser
 from core.utils import Utils
+from core.apis import ServerApi
 
 def HTTPDFactory(config):
     
@@ -30,7 +31,18 @@ def HTTPDFactory(config):
             self.send_header("Content-Type", "text/html")
             self.end_headers()
             
+        def set_json_header(self):
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            
         def do_POST(self):
+            if self.path.split("/")[1] == "api":
+                server_api = ServerApi(self.config, self)
+                self.output = server_api.process()
+                self.return_json()
+                return 
+            
             guid = ""
             try:
                 guid = Utils.validate_guid(self.path.split('?', 1)[1])
@@ -61,6 +73,12 @@ def HTTPDFactory(config):
             self.return_data()
             
         def do_GET(self):
+            if self.path.split("/")[1] == "api":
+                server_api = ServerApi(self.config, self)
+                self.output = server_api.process()
+                self.return_json()
+                return 
+            
             path = self.path.split("/")[-1]
             if path == self.config.get("http-download-path"):
                 Log.log_event("Download Stager", "PowerShell stager was fetched from %s (%s)" % (self.client_address[0], self.address_string()))
@@ -75,6 +93,10 @@ def HTTPDFactory(config):
             
         def return_data(self):
             self.set_http_headers()
+            self.wfile.write(self.output) 
+            
+        def return_json(self):
+            self.set_json_header()
             self.wfile.write(self.output) 
             
         def log_message(self, format, *args):
