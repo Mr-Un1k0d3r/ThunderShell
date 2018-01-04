@@ -5,7 +5,7 @@
 import BaseHTTPServer
 import base64
 import ssl
-from threading import Thread
+import threading
 from core.log import Log
 from core.ui import UI
 from core.rc4 import RC4
@@ -106,7 +106,7 @@ def HTTPDFactory(config):
     return HTTPD
         
 def init_httpd_thread(config):
-    thread = Thread(target=start_httpd, args=(config,))
+    thread = threading.Thread(target=start_httpd, args=(config,))
     thread.start()
     return thread
     
