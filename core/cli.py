@@ -339,7 +339,7 @@ class Cli:
 
     def set_alias(self, data):
         try:
-             cmd, key, value = data.split(" ", 2)
+            cmd, key, value = data.split(" ", 2)
         except:
             UI.error("Missing arguments")
             return ""    

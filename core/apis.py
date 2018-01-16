@@ -3,6 +3,7 @@
     @package: core/apis.py
 """
 from core.utils import Utils
+from core.log import Log
 import urllib2
 import hashlib
 import json
@@ -31,6 +32,12 @@ class CliApi:
     def list_shell(self):
         return self.send_get_request("%s/api/list" % self.server)
     
+    def get_shell_data(self, guid):
+        return self.send_get_request("%s/api/shell/%s" % (self.server, guid))
+        
+    def send_shell_data(self, guid, data):
+        return self.send_post_request("%s/api/shell/%s" % (self.server, guid, data))
+    
     def send_get_request(self, url):
         return self.send_request(url)
         
@@ -49,6 +56,7 @@ class CliApi:
                 return json.loads(urllib2.urlopen(request).read())
         except:
             return False               
+        
 class ServerApi:
     
     def __init__(self, config, request):
@@ -63,11 +71,10 @@ class ServerApi:
             callback = self.request.path.split("/")[2].lower()
             if callback == "login":
                 self.auth()
-            if callback == "list":
+            elif callback == "list":
                 self.get_shells()
-            if callback == "shell":
+            elif callback == "shell":
                 self.get_shell_output()    
-            
         except:
             pass
         
@@ -98,7 +105,9 @@ class ServerApi:
             try:
                 guid = self.request.path.split("/")[3]
                 guid = Utils.validate_guid(guid)
-                self.output["data"] = base64.b64encode(self.db.get_cmd(guid))
+                path = Log.get_current_path("shell_%s.log" % guid)
+                data = Utils.load_file(path, False, False)
+                self.output["data"] = base64.b64encode(data)
             except:
                 return 
             

@@ -25,8 +25,8 @@ class Utils:
         return False
     
     @staticmethod
-    def load_file(path, die=False):
-        if Utils.file_exists(path, die):
+    def load_file(path, die=False, show_error=True):
+        if Utils.file_exists(path, die, show_error):
             return open(path, "rb").read()
         return ""
     

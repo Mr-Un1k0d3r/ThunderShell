@@ -14,5 +14,9 @@
         "encryption-key": "test",
         "max-output-timeout": 5,
         
-        "server-password": "letmein"
+        "server-password": "letmein",
+        
+        "aliases": {
+            "myalias": "http://google.ca"
+        }
 }

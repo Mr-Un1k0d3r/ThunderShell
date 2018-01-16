@@ -9,6 +9,7 @@ import threading
 import hashlib
 import time
 import os
+import base64
 
 class ThunderShellGUI:
     GUI_VERSION = "1.0"
@@ -17,6 +18,8 @@ class ThunderShellGUI:
         self.config = {}
         self.app = None
         self.cliapi = None
+        self.current_shell_id = None
+        self.current_data_hash = None
         
     def launch(self):
         self.init_main_ui()
@@ -54,6 +57,7 @@ class ThunderShellGUI:
         self.init_menu()
         self.init_status_bar()
         self.refresh_shell()
+        self.refresh_active_shell_data()
 
     def init_shell_ui(self):
         self.app.startPanedFrame("left_pane")
@@ -62,7 +66,7 @@ class ThunderShellGUI:
         self.app.setListBoxWidth("shell_list", 45)
         self.app.startPanedFrame("right_pane")
         self.app.addScrolledTextArea("shell_output", 0, 0, 0, 2)
-        self.app.disableTextArea("shell_output")
+        #self.app.disableTextArea("shell_output")
         self.app.setTextAreaBg("shell_output", "black")
         self.app.setTextAreaFg("shell_output", "green")
         self.app.setSticky("sw")
@@ -79,7 +83,6 @@ class ThunderShellGUI:
         
     def init_menu(self):
         tools = ["Refresh Shells", "Save Current", "Exit"]
-        
         self.app.addToolbar(tools, self.menu_click, findIcon=False)
         
     def init_status_bar(self):
@@ -97,16 +100,35 @@ class ThunderShellGUI:
         shells = self.cliapi.list_shell()
         for shell in shells["shells"]:
             self.app.addListItem("shell_list", str(shell))
+            
+        self.app.addListItem("shell_list", "Select a session")
+        self.app.after(60000, self.refresh_shell) # Refresh shell every 60 seconds
 
+    def refresh_active_shell_data(self):
+        data = self.cliapi.get_shell_data(self.current_shell_id)
+        try:
+            data = base64.b64decode(data["data"])
+            new_data_hash = hashlib.md5(data).hexdigest()
+            if not new_data_hash == self.current_data_hash:
+                self.app.clearTextArea("shell_output")
+                self.app.setTextArea("shell_output", data)
+                self.current_data_hash = new_data_hash
+        except:
+            self.app.setStatusbar("Failed to fetch data for %s" % self.current_shell_id, 1)
+            self.app.setTextArea("shell_output", "Nothing to display")
+        self.app.after(3000, self.refresh_active_shell_data) # Refresh shell output every 3 seconds
+        
     def get_input(self, widget):
         data = self.app.getEntry(widget)
         self.app.clearEntry(widget)
+        self.cliapi.send_shell_cmd(self.current_shell_id, {"data": base64.b64decode(data)})
         
     def get_shell_from_list(self, shell):
         data = self.app.getListBox(shell)
         if len(data) == 1:
             id = data[0].split(" ")[0]
-            print id
+            self.current_shell_id = id
+            self.refresh_active_shell_data()
             
     def menu_click(self, tab):
         if tab == "Refresh Shells":
@@ -117,7 +139,7 @@ class ThunderShellGUI:
             os._exit(0)
             
     def login_click(self, action):           
-        self.config["server"] = self.app.getEntry("Server")
+        self.config["server"] = self.app.getEntry("Server").strip()
         self.config["password"] = hashlib.sha512(self.app.getEntry("Password")).hexdigest()
         self.config["version"] = self.GUI_VERSION
         self.cliapi = CliApi(self.config)
