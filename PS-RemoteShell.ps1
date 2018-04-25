@@ -181,7 +181,7 @@ function PS-RemoteShell {
 				$Output = "hello $($Random)"
 			}
 			
-			$Output  = $Output + "`n"
+			$Output = $Output + "`n"
 			$BodyData = $Output + $ErrorMessage
 			$error.Clear()
 		}
