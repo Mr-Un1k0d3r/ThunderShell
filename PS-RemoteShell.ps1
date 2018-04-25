@@ -182,9 +182,8 @@ function PS-RemoteShell {
 			}
 			
 			$Output  = $Output + "`n"
-			
-			$error.Clear()
 			$BodyData = $Output + $ErrorMessage
+			$error.Clear()
 		}
 	}
    
