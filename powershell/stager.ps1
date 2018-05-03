@@ -7,8 +7,11 @@ function Get-UserInfo {
             $VAR1 = $env:userdomain
         }
         
-        $VAR2 = Get-WmiObject Win32_NetworkAdapterConfiguration | Where {$_.Ipaddress.length -gt 1}
-        $VAR2 = $VAR2.ipaddress[0] 
+        try {
+            $VAR2 = (Get-WmiObject Win32_NetworkAdapterConfiguration | Where {$_.DefaultIPGateway -ne $null}).IPAddress | Select-Object -First 1
+        } catch {
+            $VAR2 = "Unknown"
+        }
         
         $VAR3 = "x64"
         
