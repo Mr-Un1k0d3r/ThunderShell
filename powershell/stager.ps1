@@ -110,7 +110,7 @@ function VAR55 {
         [string]$Url,
         [Parameter(Mandatory=$True)]
         [string]$Data
-	)
+    )
 	
 	PROCESS {
 		$VAR30 = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0"
