@@ -98,3 +98,10 @@ class Utils:
         if re.match("^[\w\d]+$", guid):
             return guid
         return ""
+    
+    @staticmethod
+    def check_dependencies():
+        try:
+            from tabulate import tabulate
+        except:
+            UI.error("Missing depencies. Install (python-redis, python-tabulate)", True)
