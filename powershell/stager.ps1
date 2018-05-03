@@ -136,7 +136,7 @@ function VAR55 {
 		$VAR36 = New-Object System.IO.StreamReader($VAR35)
 		$VAR31 = $VAR36.ReadToEnd()
 
-		return $VAR31
+		return ($VAR31 | Out-String)
 	}
 }
 
