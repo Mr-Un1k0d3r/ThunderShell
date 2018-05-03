@@ -132,10 +132,13 @@ function VAR55 {
 				$VAR33.Dispose() 
 			}
 		}
-		$VAR35 = $VAR32.GetResponse().getResponseStream()
-		$VAR36 = New-Object System.IO.StreamReader($VAR35)
-		$VAR31 = $VAR36.ReadToEnd()
-
+		try {
+			$VAR35 = $VAR32.GetResponse().getResponseStream()
+			$VAR36 = New-Object System.IO.StreamReader($VAR35)
+			$VAR31 = $VAR36.ReadToEnd()
+		} catch {
+			$VAR31 = ""
+		}
 		return ($VAR31 | Out-String)
 	}
 }
