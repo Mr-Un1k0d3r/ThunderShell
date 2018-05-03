@@ -139,6 +139,7 @@ function VAR55 {
 			$VAR36 = New-Object System.IO.StreamReader($VAR35)
 			$VAR31 = $VAR36.ReadToEnd()
 		}
+		$error.Clear()
 		return $VAR31
 	}
 }
