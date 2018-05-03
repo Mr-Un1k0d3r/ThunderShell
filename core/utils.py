@@ -103,5 +103,6 @@ class Utils:
     def check_dependencies():
         try:
             from tabulate import tabulate
+            import redis
         except:
             UI.error("Missing depencies. Install (python-redis, python-tabulate)", True)
