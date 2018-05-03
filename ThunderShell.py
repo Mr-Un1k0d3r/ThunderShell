@@ -9,9 +9,11 @@ from core.redisquery import RedisQuery
 from core.httpd import init_httpd_thread
 from core.cli import Cli
 from core.ui import UI
+from core.utils import Utils
 
 if __name__ == "__main__":
     UI.banner()
+    Utils.check_dependencies()
     
     if len(sys.argv) < 2:
         UI.error("Missing configuration file path\n\nUsage: %s config (optional -nohttpd)" % sys.argv[0], True)
