@@ -211,7 +211,7 @@ class Cli:
         cmd = Utils.get_arg_at(data, 1, 2)
         print "Executing: %s\n----------------------\n" % cmd
         
-        output = subprocess.run(cmd, stdout=subprocess.PIPE, stderro=subprocess.PIPE, shell=True)
+        output = subprocess.check_output(cmd, stdout=subprocess.PIPE, stderro=subprocess.PIPE, shell=True)
         print output
         
     # shell commands start here
