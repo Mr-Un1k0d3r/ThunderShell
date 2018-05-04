@@ -200,7 +200,7 @@ class Cli:
         }, headers='keys', tablefmt="simple"))
     
     def flushdb(self, data):
-        force = Utils.get_arg_at(data, 1, 2)
+        force = Utils.get_arg_at(data, 1, 1)
         if force:
             self.db.flushdb()
             UI.error("The whole redis DB was flushed")
@@ -208,7 +208,7 @@ class Cli:
             UI.error("Please use the force switch")
             
     def os_shell(self, data):
-        cmd = Utils.get_arg_at(data, 1, 2)
+        cmd = Utils.get_arg_at(data, 1, 1)
         print "Executing: %s\n----------------------\n" % cmd
         
         output = subprocess.check_output(cmd, stderr=subprocess.PIPE, shell=True)
