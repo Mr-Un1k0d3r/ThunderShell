@@ -138,6 +138,10 @@ class Cli:
             UI.error("Missing arguments")
             return 
     
+        if not log_path in ("http", "event", "error"):
+            UI.error("Invalid path")
+            return
+    
         log_path += ".log"
         
         rows = Utils.get_arg_at(data, 2, 2)
@@ -156,6 +160,8 @@ class Cli:
         if Utils.file_exists(log_path):
             for line in open(log_path, "rb").readlines():
                 data.append(line)
+                
+            data = list(reversed(data))
             
             print("\nLast %d lines of log\n----------------------\n" % rows)    
             data = list(data)
