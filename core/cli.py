@@ -6,6 +6,7 @@ import os
 import time
 import readline
 import base64
+import subprocess
 from tabulate import tabulate
 from core.autocomplete import Completer
 from core.ui import UI
@@ -24,6 +25,7 @@ class Cli:
         self.cmds["help"] = self.show_help
         self.cmds["kill"] = self.kill_shell
         self.cmds["purge"] = self.flushdb
+        self.cmds["os"] = self.os_shell
         
         self.shell_cmds = {}
         self.shell_cmds["help"] = self.show_help_shell
@@ -191,10 +193,10 @@ class Cli:
     def show_help(self, data):
         print("\nHelp Menu\n"+"="*9)
         print("\n" + tabulate({
-            "Commands":["list","interact","show","kill","exit","help", "purge"],
-            "Args":["full","id","(error,http,event) rows","id", "", "", "force"],
+            "Commands":["list","interact","show","kill", "os", "purge","exit","help"],
+            "Args":["full","id","(error,http,event) rows","id", "command", "force", "", ""],
             "Descriptions":["List all active shells","Interact with a session","Show error, http or event log (default number of rows 10)",
-                            "kill shell (clear db only)","Exit the application","Show this help menu", "WARNING! Delete all the Redis DB"]
+                            "kill shell (clear db only)", "Execute command on the system (local)", "WARNING! Delete all the Redis DB", "Exit the application","Show this help menu"]
         }, headers='keys', tablefmt="simple"))
     
     def flushdb(self, data):
@@ -205,6 +207,13 @@ class Cli:
         else:
             UI.error("Please use the force switch")
             
+    def os_shell(self, data):
+        cmd = Utils.get_arg_at(data, 1, 2)
+        print "Executing: %s\n----------------------\n" % cmd
+        
+        output = subprocess.run(cmd, stdout=subprocess.PIPE, stderro=subprocess.PIPE, shell=True)
+        print output
+        
     # shell commands start here
     def get_cmd_output(self):
         timestamp = time.time()
