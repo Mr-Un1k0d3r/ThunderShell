@@ -114,6 +114,7 @@ def start_httpd(config):
     ip = config.get("http-host")
     port = int(config.get("http-port"))
     
+    print "\r\n"
     UI.success("Starting web server on %s port %d" % (ip, port))
     
     server_class = BaseHTTPServer.HTTPServer
