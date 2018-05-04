@@ -23,6 +23,7 @@ class Cli:
         self.cmds["show"] = self.view_event
         self.cmds["help"] = self.show_help
         self.cmds["kill"] = self.kill_shell
+        self.cmds["purge"] = self.flushdb
         
         self.shell_cmds = {}
         self.shell_cmds["help"] = self.show_help_shell
@@ -190,12 +191,16 @@ class Cli:
     def show_help(self, data):
         print("\nHelp Menu\n"+"="*9)
         print("\n" + tabulate({
-            "Commands":["list","interact","show","kill","exit","help"],
-            "Args":["full","id","(error,http,event) rows","id"],
+            "Commands":["list","interact","show","kill","exit","help", "purge"],
+            "Args":["full","id","(error,http,event) rows","id", "", ""],
             "Descriptions":["List all active shells","Interact with a session","Show error, http or event log (default number of rows 10)",
-                            "kill shell (clear db only)","Exit the application","Show this help menu"]
+                            "kill shell (clear db only)","Exit the application","Show this help menu", "WARNING! Delete all the Redis DB"]
         }, headers='keys', tablefmt="simple"))
-
+    
+    def flushdb(self):
+        self.db.flushdb()
+        UI.error("The whole redis DB was flushed")
+        
     # shell commands start here
     def get_cmd_output(self):
         timestamp = time.time()
