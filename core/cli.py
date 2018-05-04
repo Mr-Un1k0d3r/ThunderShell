@@ -192,15 +192,19 @@ class Cli:
         print("\nHelp Menu\n"+"="*9)
         print("\n" + tabulate({
             "Commands":["list","interact","show","kill","exit","help", "purge"],
-            "Args":["full","id","(error,http,event) rows","id", "", ""],
+            "Args":["full","id","(error,http,event) rows","id", "", "force"],
             "Descriptions":["List all active shells","Interact with a session","Show error, http or event log (default number of rows 10)",
                             "kill shell (clear db only)","Exit the application","Show this help menu", "WARNING! Delete all the Redis DB"]
         }, headers='keys', tablefmt="simple"))
     
-    def flushdb(self):
-        self.db.flushdb()
-        UI.error("The whole redis DB was flushed")
-        
+    def flushdb(self, data):
+        force = Utils.get_arg_at(data, 1, 2)
+        if force:
+            self.db.flushdb()
+            UI.error("The whole redis DB was flushed")
+        else:
+            UI.error("Please use the force switch")
+            
     # shell commands start here
     def get_cmd_output(self):
         timestamp = time.time()
