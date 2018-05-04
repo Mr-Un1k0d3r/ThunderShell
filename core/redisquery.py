@@ -97,3 +97,8 @@ class RedisQuery:
     def delete_all_by_guid(self, guid):
         for item in self.scan_data("*%s*" % guid):
             self.delete_entry(item)
+            
+    def flushdb(self):
+        self.conn.flushdb()
+        self.conn.flushall()
+    
