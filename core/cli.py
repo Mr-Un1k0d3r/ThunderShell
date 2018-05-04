@@ -192,7 +192,7 @@ class Cli:
         print("\nHelp Menu\n"+"="*9)
         print("\n" + tabulate({
             "Commands":["list","interact","show","kill","exit","help", "purge"],
-            "Args":["full","id","(error,http,event) rows","id", "", "force"],
+            "Args":["full","id","(error,http,event) rows","id", " ", "force"],
             "Descriptions":["List all active shells","Interact with a session","Show error, http or event log (default number of rows 10)",
                             "kill shell (clear db only)","Exit the application","Show this help menu", "WARNING! Delete all the Redis DB"]
         }, headers='keys', tablefmt="simple"))
