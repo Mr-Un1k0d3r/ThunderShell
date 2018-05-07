@@ -5,6 +5,7 @@
 import BaseHTTPServer
 import base64
 import ssl
+import json
 import threading
 from core.log import Log
 from core.ui import UI
@@ -59,6 +60,8 @@ def HTTPDFactory(config):
                     length = int(self.headers.getheader("Content-Length"))
                 data = self.rfile.read(length)
                 try:
+                    # for now we discard the UUID
+                    data = json.dumps(data)["data"]
                     data = self.rc4.crypt(base64.b64decode(data))
                 except:
                     Log.log_error("Invalid base64 data received", self.path)
