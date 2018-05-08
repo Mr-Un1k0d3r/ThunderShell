@@ -13,7 +13,7 @@ function VAR50 {
             $VAR2 = "Unknown"
         }
         
-        $VAR3 = "x64"
+        $VAR3 = "x64"0
         
         if([IntPtr]::size -eq 4) {
             $VAR3 = "x86"
@@ -109,7 +109,7 @@ function VAR55 {
         [Parameter(Mandatory=$True)]
         [string]$Url,
         [Parameter(Mandatory=$True)]
-        [string]$Data
+        [string]$Data,
         [Parameter(Mandatory=$True)]
         [string]$UUID
     )
