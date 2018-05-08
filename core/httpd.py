@@ -61,7 +61,7 @@ def HTTPDFactory(config):
                 data = self.rfile.read(length)
                 try:
                     # for now we discard the UUID
-                    data = json.dumps(data)["data"]
+                    data = json.loads(data)["data"]
                     data = self.rc4.crypt(base64.b64decode(data))
                 except:
                     Log.log_error("Invalid base64 data received", self.path)
