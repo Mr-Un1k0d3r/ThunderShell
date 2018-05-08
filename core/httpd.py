@@ -6,6 +6,7 @@ import BaseHTTPServer
 import base64
 import ssl
 import json
+import uuid
 import threading
 from core.log import Log
 from core.ui import UI
@@ -70,6 +71,7 @@ def HTTPDFactory(config):
                 
                 parser = HTTPDParser(config)
                 self.output = base64.b64encode(self.rc4.crypt(parser.parse_cmd(guid, data)))
+                self.output = json.dumps({"ID": str(uuid.uuid4()), "data": self.output})
             else:
                 self.output = Utils.load_file("html/%s" % self.config.get("http-default-404"))
                 
