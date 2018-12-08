@@ -1,22 +1,29 @@
 {
-        "redis-host": "localhost",
-        "redis-port": 6379,
+	"redis-host": "localhost",
+	"redis-port": 6379,
 
-        "http-host": "192.168.17.129",
-        "http-port": 8080,
-        "http-server": "Microsoft-IIS/7.5",
-        "http-download-path": "cat.png",
-        "http-default-404": "default.html",
+	"mysql-host": "localhost",
+	"mysql-user": "root",
+	"mysql-pass": "",
+	"mysql-port": "3306",
 
-        "https-enabled": "off",
-        "https-cert-path": "cert.pem",
+	"http-host": "1.1.1.1",
+	"http-port": 1111,
+	"http-server": "Microsoft-IIS/7.5",
+	"http-download-path": "cat.png",
+	"http-default-404": "default.html",
 
-        "encryption-key": "test",
-        "max-output-timeout": 5,
-        
-        "server-password": "letmein",
-        
-        "aliases": {
-            "myalias": "http://google.ca"
-        }
+	"https-enabled": "off",
+	"https-cert-path": "cert.pem",
+
+	"encryption-key": "PleaseChangeMe",
+	"max-output-timeout": 5,
+
+	"server-password": "PleaseChangeMe",
+
+	"aliases": {
+		"myalias": ""
+	},
+
+	"cli-sync-delay": 5
 }
