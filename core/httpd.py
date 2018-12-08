@@ -147,15 +147,17 @@ def start_httpd(config):
 
     print "\r\n"
     UI.success("Starting web server on %s port %d" % (ip, port))
+    try:
+        server_class = BaseHTTPServer.HTTPServer
+        factory = HTTPDFactory(config)
+        httpd_server = server_class((ip, port), factory)
+        if config.get("https-enabled") == "on":
+            cert = config.get("https-cert-path")
+            Utils.file_exists(cert, True)
 
-    server_class = BaseHTTPServer.HTTPServer
-    factory = HTTPDFactory(config)
-    httpd_server = server_class((ip, port), factory)
-    if config.get("https-enabled") == "on":
-        cert = config.get("https-cert-path")
-        Utils.file_exists(cert, True)
+            httpd_server.socket = ssl.wrap_socket(httpd_server.socket, certfile=cert)
+            UI.success("Web server is using HTTPS")
 
-        httpd_server.socket = ssl.wrap_socket(httpd_server.socket, certfile=cert)
-        UI.success("Web server is using HTTPS")
-
-    httpd_server.serve_forever()
+        httpd_server.serve_forever()
+    except:
+        UI.error("Server was not able to start (Port already in use?)... Aborting", True)
