@@ -40,7 +40,7 @@ class MySQLQuery:
 
 	def push_cmd_data(self, guid, data):
 		if len(data) >= 1024:
-			data = "(truncated)%s...%s" % (data[:512], data[512:])
+			data = "(truncated)%s...%s" % (data[:512], data[-512:])
 		cursor = self.conn.cursor()
 		cursor.execute("INSERT INTO thundershell.shell_cmd_data VALUES (%s, %s)", (guid, data, ))
 		self.conn.commit()
