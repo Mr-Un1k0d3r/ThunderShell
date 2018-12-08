@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form class="form-signin" method="POST">
+      <h1 class="h3 mb-3 font-weight-normal">{{ banner }}</h1>
+      <label for="username" class="sr-only">Your username</label>
+      <input type="text" id="username" name="username" class="form-control padding-bottom" placeholder="Username" required autofocus>
+      <label for="password" class="sr-only">Server Password</label>
+      <input type="password" id="password" name="password" class="form-control padding-bottom" placeholder="Password" required>
+      <button class="btn btn-lg btn-warning btn-block padding-bottom" type="submit">Sign in</button>
+	{% if error %}
+	<div class="alert alert-warning">{{ error }}</div>
+	{% endif %}
+	
+    </form>
+{% endblock %}

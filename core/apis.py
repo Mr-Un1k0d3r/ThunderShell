@@ -116,7 +116,7 @@ class ServerApi:
             try:
                 guid = self.request.path.split("/")[3]
                 guid = Utils.validate_guid(guid)
-                self.db.push_cmd(guid, self.get_post_data())
+                self.db.push_cmd(guid, self.get_post_data(), Utils.guid())
             except:
                 return
             

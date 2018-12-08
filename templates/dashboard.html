@@ -1,0 +1,31 @@
+{% extends "base_auth.html" %}
+
+{% block content %}
+	<script>
+		auth = "{{ auth }}";
+		api_path = "{{ path }}/api/";
+		current_id = "";
+		current_user = "{{ username }}";
+	</script>
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+		{% for shell in shells %}	      
+              <li class="nav-item">
+                <a class="nav-link active spawn-shell" href="#{{ shell }}" data-id="{{ shell }}">
+                  {{ shells[shell] }}
+                </a>
+              </li>
+		{% endfor %}
+            </ul>
+          </div>
+        </nav>
+	<textarea id="output" name="output" spellcheck="false" readonly></textarea>
+      </div>
+    </div>
+<footer>
+<span class="shell"> Command>{{ shell }}</span><input type="text" id="cmd" name="cmd">
+</footer>
+{% endblock %}

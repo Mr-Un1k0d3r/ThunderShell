@@ -10,18 +10,29 @@ from core.httpd import init_httpd_thread
 from core.cli import Cli
 from core.ui import UI
 from core.utils import Utils
+from core.mysqlquery import MySQLQuery
 
 if __name__ == "__main__":
     UI.banner()
     Utils.check_dependencies()
     
-    if len(sys.argv) < 2:
-        UI.error("Missing configuration file path\n\nUsage: %s config (optional -nohttpd)" % sys.argv[0], True)
+    if len(sys.argv) < 3:
+        UI.error("Missing configuration file path or username\n\nUsage: %s config username (optional -nohttpd)" % sys.argv[0], True)
         
     config = CONFIG(sys.argv[1])
+    uid = Utils.guid()
+    config.set("uid", uid)
+    config.set("username", "(CLI)%s" % sys.argv[2])
     db = RedisQuery(config)
+    sql = MySQLQuery(config)
+    sql.install_db().init_uid()
+
     config.set("redis", db)
-    
+    config.set("mysql", sql)
+
+    db.update_config(config).init_sql()
+
+    UI.success("Current Active session UUID is %s" % config.get("uid"))
     
     # Launch the HTTPD daemon
     if not "-nohttpd" in sys.argv:

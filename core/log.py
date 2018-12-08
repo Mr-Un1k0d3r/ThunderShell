@@ -13,10 +13,13 @@ class Log:
         open(path, "a+").write("%s (%s) [%s] %s\n" % (ip, time.strftime("%c"), address, request))
         
     @staticmethod
-    def log_shell(guid, type, data):
+    def log_shell(guid, type, data, username = None):
         path = "%sshell_%s.log" % (Log.create_folder_tree(), guid)
-        open(path, "a+").write("[%s] %s:\n%s\n\n" % (time.strftime("%c"), type, data))
-        
+	if not username == None:
+	        open(path, "a+").write("%s [%s] %s:\n%s\n\n" % (username, time.strftime("%c"), type, data))
+        else:
+		open(path, "a+").write("[%s] %s:\n%s\n\n" % (time.strftime("%c"), type, data))
+
     @staticmethod
     def log_event(type, data):
         path = "%sevent.log" % (Log.create_folder_tree())

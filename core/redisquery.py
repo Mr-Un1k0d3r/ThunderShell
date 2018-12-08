@@ -21,7 +21,7 @@ class RedisQuery:
     def __init__(self, config):
         self.config = config
         self.init_redis()
-        
+
     def init_redis(self):
         try:
             self.conn = redis.StrictRedis(host=self.config.get("redis-host"), port=int(self.config.get("redis-port")), db=0)
@@ -65,26 +65,35 @@ class RedisQuery:
     def get_last_checkin(self, guid):
         return self.get_data("%s:active" % guid)
         
-    def push_cmd(self, guid, cmd):
-        self.set_key("%s:cmd:%s" % (guid, str(time.time())), cmd)
-        
+    def push_cmd(self, guid, cmd, cmd_guid, origin):
+	timestamp = str(time.time())
+	self.sql.push_cmd_data(cmd_guid, cmd)
+	for session in self.sql.get_active_session(guid):
+		self.sql.add_cmd(guid, cmd_guid, session, timestamp, origin)
+
+        data = "%s:%s" % (cmd_guid, cmd)
+	self.set_key("%s:cmd:%s" % (guid, timestamp), data)
+
     def get_cmd(self, guid):
         data = list(self.scan_data("%s:cmd:*" % guid))
         if len(data) > 0:
             key = data.pop(0)
             data = self.get_data(key)
-            self.delete_entry(key)
+	    self.delete_entry(key)
             return data
-        return ";"
+        return None
     
-    def push_output(self, guid, output):
-        self.set_key("%s:output:%s" % (guid, str(time.time())), output)
-        
-    def get_output(self, guid):
+    def push_output(self, guid, output, cmd_guid):
+	timestamp = str(time.time())
+        for session in self.sql.get_active_session(guid):
+                self.sql.add_response(guid, cmd_guid, session, timestamp)
+
+        self.set_key("%s:%s:output:%s" % (guid, cmd_guid, timestamp), output)
+
+    def get_output(self, guid, cmd_guid):
         data = []
-        for item in self.scan_data("%s:output:*" % guid):
+        for item in self.scan_data("%s:%s:output:*" % (guid, cmd_guid)):
             data.append(self.get_data(item))
-            self.delete_entry(item)
             return data
         return []
     
@@ -97,8 +106,15 @@ class RedisQuery:
     def delete_all_by_guid(self, guid):
         for item in self.scan_data("*%s*" % guid):
             self.delete_entry(item)
-            
+
     def flushdb(self):
         self.conn.flushdb()
         self.conn.flushall()
-    
+
+    def update_config(self, config):
+	self.config = config
+	return self
+
+    def init_sql(self):
+        self.sql = self.config.get("mysql")
+

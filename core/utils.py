@@ -5,6 +5,7 @@
 import os
 import re
 import ssl
+import uuid
 import glob
 import string
 import random
@@ -98,11 +99,16 @@ class Utils:
         if re.match("^[\w\d]+$", guid):
             return guid
         return ""
+
+    @staticmethod
+    def guid():
+        return str(uuid.uuid4())
     
     @staticmethod
     def check_dependencies():
         try:
             from tabulate import tabulate
             import redis
+	    import MySQLdb
         except:
-            UI.error("Missing depencies. Install (python-redis, python-tabulate)", True)
+            UI.error("Missing depencies. Install (python-redis, python-tabulate, python-mysqldb)", True)

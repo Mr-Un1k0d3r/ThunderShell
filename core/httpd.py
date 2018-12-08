@@ -8,6 +8,7 @@ import ssl
 import json
 import uuid
 import threading
+import random
 from core.log import Log
 from core.ui import UI
 from core.rc4 import RC4
@@ -40,18 +41,33 @@ def HTTPDFactory(config):
         def set_json_header(self):
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
+	    self.send_header("Access-Control-Allow-Origin", "*")
             self.end_headers()
 
         def do_POST(self):
+
             if self.path.split("/")[1] == "api":
                 server_api = ServerApi(self.config, self)
                 self.output = server_api.process()
                 self.return_json()
                 return
 
+            length = 0
+            if not self.headers.getheader("Content-Length") == None:
+                length = int(self.headers.getheader("Content-Length"))
+
+            data = self.rfile.read(length)
+            try:
+                data = json.loads(data)
+                data["Data"] = self.rc4.crypt(base64.b64decode(data["Data"]))
+            except:
+                Log.log_error("Invalid base64 data received or bad decryption", self.path)
+                self.return_data()
+                return
+
             guid = ""
             try:
-                guid = Utils.validate_guid(self.path.split('?', 1)[1])
+                guid = Utils.validate_guid(data["ID"])
             except:
                 Log.log_error("Invalid request no GUID", self.path)
                 self.return_data()
@@ -60,22 +76,17 @@ def HTTPDFactory(config):
             if not guid == None:
                 self.db.update_checkin(guid)
 
-                length = 0
-                if not self.headers.getheader("Content-Length") == None:
-                    length = int(self.headers.getheader("Content-Length"))
-                data = self.rfile.read(length)
-                try:
-                    # for now we discard the UUID
-                    data = json.loads(data)["data"]
-                    data = self.rc4.crypt(base64.b64decode(data))
-                except:
-                    Log.log_error("Invalid base64 data received", self.path)
-                    self.return_data()
-                    return
-
                 parser = HTTPDParser(config)
-                self.output = base64.b64encode(self.rc4.crypt(parser.parse_cmd(guid, data)))
-                self.output = json.dumps({"ID": str(uuid.uuid4()), "data": self.output})
+                output = parser.parse_cmd(guid, data["Data"], data["UUID"])
+		if not output == None:
+                    uuid = output[:36]
+                    output = output[37:]
+                    self.output = base64.b64encode(self.rc4.crypt(output))
+                    self.output = json.dumps({"UUID": uuid, "ID": guid, "Data": self.output})
+		else:
+                    self.output = json.dumps({"UUID": None, "ID": guid, "Data": Utils.gen_str(random.randrange(10, 1000))})
+		self.return_json()
+		return
             else:
                 self.output = Utils.load_file("html/%s" % self.config.get("http-default-404"))
 
@@ -102,8 +113,17 @@ def HTTPDFactory(config):
                 Log.log_error("Invalid request got a GET request", self.path)
             self.return_data(force_download)
 
+        def do_OPTIONS(self):
+             self.send_response(200, "OK")
+	     self.send_header("Access-Control-Allow-Origin", "*")
+             self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+             self.send_header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Authorization")
+	     self.output = "OK"
+	     self.return_json()
+
         def return_data(self, force_download = False):
             self.set_http_headers(force_download)
+            print self.output
             self.wfile.write(self.output)
 
         def return_json(self):

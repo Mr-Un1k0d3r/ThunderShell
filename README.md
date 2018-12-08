@@ -157,7 +157,6 @@ Shell Help Menu
 -----------------------
 
         background                              Return to the main console
-        refresh                                 Check for previous commands output
         fetch         args (path/url, command)  In memory execution of a script and execute a commmand
         exec          args (path/url)           In memory execution of code (shellcode)
         read          args (remote path)        Read a file on the remote host

