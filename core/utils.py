@@ -112,3 +112,4 @@ class Utils:
 	    import MySQLdb
         except:
             UI.error("Missing depencies. Install (python-redis, python-tabulate, python-mysqldb)", True)
+

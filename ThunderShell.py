@@ -23,6 +23,9 @@ if __name__ == "__main__":
         UI.error("Missing configuration file path or username\n\nUsage: %s config username (optional -nohttpd)" % sys.argv[0], True)
         
     config = CONFIG(sys.argv[1])
+    if config.reload_config():
+        config = CONFIG(sys.argv[1])
+
     uid = Utils.guid()
     config.set("uid", uid)
     config.set("username", "(CLI)%s" % sys.argv[2])
