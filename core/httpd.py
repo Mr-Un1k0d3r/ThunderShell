@@ -123,7 +123,6 @@ def HTTPDFactory(config):
 
         def return_data(self, force_download = False):
             self.set_http_headers(force_download)
-            print self.output
             self.wfile.write(self.output)
 
         def return_json(self):
