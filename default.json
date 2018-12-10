@@ -3,7 +3,7 @@
         "myalias": ""
     }, 
     "cli-sync-delay": 5, 
-    "encryption-key": "NDrywKKCxsJctyvnmBLWQwin", 
+    "encryption-key": "", 
     "http-default-404": "default.html", 
     "http-download-path": "cat.png", 
     "http-fqdn": "testing.com", 
@@ -19,5 +19,5 @@
     "mysql-user": "root", 
     "redis-host": "localhost", 
     "redis-port": 6379, 
-    "server-password": "PleaseChangeMe"
+    "server-password": ""
 }

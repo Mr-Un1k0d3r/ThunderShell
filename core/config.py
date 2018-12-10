@@ -40,6 +40,7 @@ class CONFIG:
         install = Utils.file_exists(CONFIG.DEFAULT_INSTALL_PATH, False)
 	if not install:
 		self.set("encryption-key", Utils.gen_str(24))
+		self.set("server-password", Utils.gen_str(32))
 		open(CONFIG.DEFAULT_INSTALL_PATH, "wb").write("OK")
 		self.save_config()
 		self.reload = True
