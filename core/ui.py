@@ -6,6 +6,15 @@ import os
 import sys
 from core.version import Version
 
+class Colors:
+
+    Yellow = "\033[33m"
+    White = "\033[00m"
+    Blue = "\033[34m"
+    Green = "\033[32m"
+    Red = "\033[36m"
+    Gray = "\033[1;30m"
+
 class UI:
     
     @staticmethod
@@ -36,4 +45,73 @@ class UI:
 
     @staticmethod
     def banner():
-        print "\n\033[32mThunder Shell %s | Clients Server CLI\nMr.Un1k0d3r RingZer0 Team 2017\n--------------------------------------------------------\n\033[00m" % Version.VERSION
+        print('''
+             {}.#"{}    {}=[{} Thunder Shell| RingZer0 Team {}]={}
+           {}.##"{}
+        {}.###"{}       __       __    _________    __            __
+       {}###P{}        {}###{}|     {}###{}|  {}##########{}|  {}###{}|          {}###{}|
+     {}d########"{}    {}###{}|     {}###{}|  {}###{}|         {}###{}|          {}###{}|
+     {}****####"{}     {}###{}|_____{}###{}|  {}###{}|__       {}###{}|          {}###{}|
+       {}.###"{}       {}############{}|  {}######{}|      {}###{}|          {}###{}|
+      {}.##"{}         {}###{}|     {}###{}|  {}###{}|         {}###{}|          {}###{}|
+     {}.#"{}           {}###{}|     {}###{}|  {}###{}|______   {}###{}|_______   {}###{}|_______
+    {}."{}             {}###{}|     {}###{}|  {}##########{}|  {}###########{}|  {}###########{}|
+
+
+        '''.format(
+                Colors.Yellow, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+
+                Colors.Yellow, Colors.White,
+                Colors.Yellow, Colors.White,
+
+                Colors.Yellow, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+
+                Colors.Yellow, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+
+                Colors.Yellow, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+
+                Colors.Yellow, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+
+                Colors.Yellow, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+
+                Colors.Yellow, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+
+                Colors.Yellow, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                Colors.Gray, Colors.White,
+                )
+            )
