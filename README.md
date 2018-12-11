@@ -332,6 +332,7 @@ multi threads and multiple shell now sync
 # Credit 
 
 Mr.Un1k0d3r @MrUn1k0d3r
+
 Tazz0 @Tazz019
 
 RingZer0 Team 2017
