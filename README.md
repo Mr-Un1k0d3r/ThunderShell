@@ -6,7 +6,7 @@ ThunderShell is a C# RAT that communicates via HTTP requests. All the network tr
 
 # Current version
 
-Current release is 2.0.0
+Current release is 2.0.1
 
 # Installation
 
@@ -143,7 +143,7 @@ http://1.1.1.1:1111/cat.png
 
 The endpoint supports several options that can be added to the url http://1.1.1.1:1111/cat.png/`type`/`delay`/
 
-`type` supports only `ps` for now. `delay` is the amount of sleep (in milliseconds) between each callback. Its default value is `10000` (10 seconds).
+`type` supports only `ps` and `exe` for now. `delay` is the amount of sleep (in milliseconds) between each callback. Its default value is `10000` (10 seconds).
 
 ### Executing the code on the target
 
@@ -325,6 +325,14 @@ Initial release
 code rewrite from powershell to C# to add flexibility
 multi threads and multiple shell now sync
 ```
+
+### Version 2.0.1 (11/12/2018)
+
+```
+payload generator support exe
+custom response headers added
+```
+
 
 # Upcoming features
 
