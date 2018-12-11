@@ -22,6 +22,7 @@ ThunderShell itself uses Python2 and requires the following dependencies:.
 apt install python
 apt install redis-server
 apt install mysql-server
+apt install mono-dmcs
 apt install python-redis
 apt install python-mysqldb
 apt install python-tabulate
