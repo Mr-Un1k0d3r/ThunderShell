@@ -39,7 +39,7 @@ class HTTPDParser:
         UI.success("Registering new shell %s" % prompt)
         UI.success("New shell ID %s GUID is %s" % (index, guid))
         Log.log_event("New Shell", data)
-        
+
     def hello(self, guid, data):
         self.output = self.db.get_cmd(guid)
 

