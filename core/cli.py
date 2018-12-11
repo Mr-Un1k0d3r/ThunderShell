@@ -52,7 +52,7 @@ class Cli:
         self.alias = Alias()
 
         self.completer = Completer(self.cmds)
-        readline.parse_and_bind("tab: complete")
+        readline.parse_and_bind("tab:complete")
         readline.set_completer(self.completer.complete)
 
         start_cmd_sync(config)
