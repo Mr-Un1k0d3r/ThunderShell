@@ -3,5 +3,8 @@
 				"X-Powered-By": "ASP.NET",
 				"X-AspNet-Version": "4.0.30319",
 				"Set-Cookie": "ASP.NET_SessionId={{random}}[32];"
-		}
+		},
+
+	"autocommands": ["whoami", "cmd /c set"],
+	"auto-interact": "on"
 }

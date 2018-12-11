@@ -39,7 +39,12 @@ def start_cmd_sync(config):
 	thread.start()
 
 def start_cmd_sync_thread(sync):
-	delay = float(sync.config.get("cli-sync-delay"))
+	delay = 0
+	try:
+		delay = float(sync.config.get("cli-sync-delay"))
+	except:
+		UI.error("\"cli-sync-delay\" should be an integer check your config")
+		delay = 5
 	while True:
 		guid = sync.get_cmd_send()
 		guid = sync.get_cmd_output(guid)

