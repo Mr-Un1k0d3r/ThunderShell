@@ -46,7 +46,7 @@ class UI:
     @staticmethod
     def banner():
         print('''
-             {}.#"{}    {}=[{} Thunder Shell| RingZer0 Team {}]={}
+             {}.#"{}    {}=[{} ThunderShell version {} | RingZer0 Team {}]={}
            {}.##"{}
         {}.###"{}       __       __    _________    __            __
        {}###P{}        {}###{}|     {}###{}|  {}##########{}|  {}###{}|          {}###{}|
@@ -64,6 +64,7 @@ class UI:
                 Colors.Gray, Colors.White,
 
                 Colors.Yellow, Colors.White,
+		Version.VERSION,
                 Colors.Yellow, Colors.White,
 
                 Colors.Yellow, Colors.White,
