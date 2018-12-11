@@ -69,7 +69,7 @@ Example configuration file `profile.json`:
 				"Set-Cookie": "ASP.NET_SessionId={{random}}[32];"
 		},
 		
-	"autocommand": ["whoami", "set"]
+	"autocommands": ["whoami", "cmd /c set"]
 }
 ```
 
