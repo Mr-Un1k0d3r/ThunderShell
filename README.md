@@ -58,10 +58,11 @@ Example configuration file `profile.json`:
 
 ```
 {
-	headers: {
-				"X-Powered-By": "ThunderShell",
-				"Cookie": "user={{random}}[16]"
-			}
+	"headers": {
+				"X-Powered-By": "ASP.NET",
+				"X-AspNet-Version": "4.0.30319",
+				"Cookie": "ASP.NET_SessionId={{random}}[32];"
+		}
 }
 ```
 
