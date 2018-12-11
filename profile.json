@@ -1,0 +1,6 @@
+{
+	"headers": {
+				"X-Powered-By": "ThunderShell",
+				"Cookie": "user={{random}}[32];"
+		}
+}

@@ -113,3 +113,14 @@ class Utils:
         except:
             UI.error("Missing depencies. Install (python-redis, python-tabulate, python-mysqldb)", True)
 
+    @staticmethod
+    def parse_random(data):
+        for item in re.findall("{{random}}\[.{2}\]", data):
+		size = 16
+		try:
+		    size = int(re.findall("[0-9]{2}", item)[0])
+		except:
+		    pass	
+		data = data.replace(item, Utils.gen_str(size))
+
+	return data

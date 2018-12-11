@@ -224,8 +224,12 @@ class Cli:
         cmd = Utils.get_arg_at(data, 1, 1)
         print "Executing: %s\n----------------------\n" % cmd
         
-        output = subprocess.check_output(cmd, stderr=subprocess.PIPE, shell=True)
-        print output
+	try:
+	        output = subprocess.check_output(cmd, stderr=subprocess.PIPE, shell=True)
+        except:
+		UI.error("Command failed to execute properly")
+		output = ""
+	print output
         
     def show_help_shell(self, data):
         print("\nHelp Menu\n"+"="*9)

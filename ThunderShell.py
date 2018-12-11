@@ -26,6 +26,12 @@ if __name__ == "__main__":
     if config.reload_config():
         config = CONFIG(sys.argv[1])
 
+    profile = config.get("http-profile")
+    if not profile == "":
+	Utils.file_exists(profile, True)
+	profile = CONFIG(profile)
+	config.set("profile", profile)
+
     uid = Utils.guid()
     config.set("uid", uid)
     config.set("username", "(CLI)%s" % sys.argv[2])

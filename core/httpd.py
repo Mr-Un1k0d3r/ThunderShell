@@ -31,6 +31,7 @@ def HTTPDFactory(config):
 
         def set_http_headers(self, force_download = False):
             self.send_response(200)
+	    self.set_custom_headers()
             if force_download:
                 self.send_header("Content-Type", "application/octet-stream")
                 self.send_header("Content-Disposition", 'attachment; filename="%s"' % self.path.rsplit("/", 1)[1])
@@ -40,9 +41,17 @@ def HTTPDFactory(config):
 
         def set_json_header(self):
             self.send_response(200)
+	    self.set_custom_headers()
             self.send_header("Content-Type", "application/json")
             self.send_header("Access-Control-Allow-Origin", "*")
             self.end_headers()
+
+
+	def set_custom_headers(self):
+		profile = self.config.get("profile")
+		if not profile == "":
+			for item in profile.get("headers"):
+				self.send_header(item, Utils.parse_random(profile.get("headers")[item]))
 
         def do_POST(self):
 

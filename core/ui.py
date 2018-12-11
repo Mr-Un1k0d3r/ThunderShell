@@ -61,12 +61,11 @@ class UI:
         '''.format(
                 Colors.Yellow, Colors.White,
                 Colors.Gray, Colors.White,
-                Colors.Gray, Colors.White,
+                Version.VERSION, Colors.Gray, Colors.White,
 
                 Colors.Yellow, Colors.White,
-		Version.VERSION,
                 Colors.Yellow, Colors.White,
-
+		
                 Colors.Yellow, Colors.White,
                 Colors.Gray, Colors.White,
                 Colors.Gray, Colors.White,
