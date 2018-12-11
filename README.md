@@ -4,6 +4,10 @@
 
 ThunderShell is a C# RAT that communicates via HTTP requests. All the network traffic is encrypted using a second layer of RC4 to avoid SSL interception and defeat network detection on the target system. RC4 is a weak cipher and is employed here to help obfuscate the traffic. HTTPS options should be used to provide integrity and strong encryption.
 
+### Advantage against detection
+
+The "core" RAT doesn't require a second stage to be injected / loaded in memory. 
+
 # Current version
 
 Current release is 2.0.1
@@ -63,7 +67,9 @@ Example configuration file `profile.json`:
 				"X-Powered-By": "ASP.NET",
 				"X-AspNet-Version": "4.0.30319",
 				"Set-Cookie": "ASP.NET_SessionId={{random}}[32];"
-		}
+		},
+		
+	"autocommand": ["whoami", "set"]
 }
 ```
 
