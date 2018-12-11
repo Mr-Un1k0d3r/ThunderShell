@@ -116,6 +116,8 @@ $ python ThunderShell.py default.json MrUn1k0d3r -gui
 
 `default.json` is the configuration file. `MrUn1k0d3r` is the username for the session. `-gui` launches the web interface.
 
+Other user can start a CLI interface by adding the `-notthpd` switch to avoid trying to start the HTTP daemon a second time
+
 ### HTTPS configuration
 
 If `https-enabled` is `on`, `https-cert-path` must point to a PEM file with this structure:
