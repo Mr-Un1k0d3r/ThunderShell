@@ -9,6 +9,7 @@
     "http-fqdn": "192.168.17.129", 
     "http-host": "192.168.17.129", 
     "http-port": 8080, 
+    "http-profile": "profile.json",
     "http-server": "Microsoft-IIS/7.5", 
     "https-cert-path": "cert.pem", 
     "https-enabled": "off", 
