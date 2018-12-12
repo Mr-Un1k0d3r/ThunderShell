@@ -16,10 +16,13 @@ class Sync:
 		guid = False
 		for item in self.sql.get_cmd(self.config.get("uid")):
 			print ""
-			UI.success("[%s] Sending command: %s" % (item[4], self.sql.get_cmd_data(item[1])))
+			data = self.sql.get_cmd_data(item[1])
+			UI.success("%s - Sending command: %s" % (item[4], data))
 
 			self.sql.delete_cmd(item[0], item[2], item[1], item[3])
 			guid = item[0]
+			if data == "exit":
+				guid = "exit"
 		return guid
 
 	def get_cmd_output(self, guid):
@@ -31,7 +34,10 @@ class Sync:
 		return guid
 
 	def get_prompt(self, guid):
-		UI.prompt_no_input(self.redis.get_data("%s:prompt" % guid))
+		if not guid == "exit":
+			UI.prompt_no_input(self.redis.get_data("%s:prompt" % guid))
+		else:
+			UI.prompt_no_input("Main")
 
 def start_cmd_sync(config):
 	sync = Sync(config)

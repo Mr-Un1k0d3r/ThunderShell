@@ -42,7 +42,7 @@ class Payload:
 		output = ""
 		filename = "/tmp/%s" % Utils.gen_str(10)
 		open(filename, "wb+").write(data)
-		cmdline = "mcs %s -out:%s.exe -r:bin/System.Management.Automation.dll -r:bin/System.Web.Extensions.dll > /dev/null 2>&1" % (filename, filename)
+		cmdline = "mcs %s -out:%s.exe -r:bin/System.Management.Automation.dll -r:bin/System.Web.Extensions.dll -r:bin/System.Windows.Forms.dll > /dev/null 2>&1" % (filename, filename)
 
 		os.system(cmdline)
 		output = open("%s.exe" % filename, "rb").read()

