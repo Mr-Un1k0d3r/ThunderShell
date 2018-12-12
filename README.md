@@ -167,7 +167,7 @@ The example below executes Windows and Powershell commmands directly without inv
 python ThunderShell.py default.json MrUn1k0d3r -gui
 
 
-             .#"    =[ Thunder Shell| RingZer0 Team ]=
+             .#"    =[ Thunder Shell 2.0.1 | RingZer0 Team ]=
            .##"
         .###"       __       __    _________    __            __
        ###P        ###|     ###|  ##########|  ###|          ###|
@@ -181,7 +181,7 @@ python ThunderShell.py default.json MrUn1k0d3r -gui
 
 
 [-] install.lock not found
-
+[*] Generating new keys
 [+] Current Active session UUID is c8ab130e-9ec1-40d5-a5de-cb7c0ec9698a
 
 [+] Starting web server on 192.168.17.129 port 8080

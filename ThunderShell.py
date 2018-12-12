@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     db.update_config(config).init_sql()
 
-    UI.success("Current Active session UUID is %s" % config.get("uid"))
+    UI.warn("Current Active session UUID is %s" % config.get("uid"))
     
     # Launch the HTTPD daemon
     if not "-nohttpd" in sys.argv:

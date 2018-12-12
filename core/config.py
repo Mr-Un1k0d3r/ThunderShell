@@ -39,6 +39,7 @@ class CONFIG:
     def gen_encryption_key(self):
         install = Utils.file_exists(CONFIG.DEFAULT_INSTALL_PATH, False)
 	if not install:
+		UI.warn("Generating new keys")
 		self.set("encryption-key", Utils.gen_str(24))
 		self.set("server-password", Utils.gen_str(32))
 		open(CONFIG.DEFAULT_INSTALL_PATH, "wb").write("OK")

@@ -41,6 +41,8 @@ class HTTPDParser:
         UI.success("New shell ID %s GUID is %s" % (index, guid))
         Log.log_event("New Shell", data)
 	self.get_autocommands(guid)
+	if self.config.get("auto-interact") == "on":
+		pass
 
     def hello(self, guid, data):
         self.output = self.db.get_cmd(guid)
