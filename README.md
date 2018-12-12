@@ -69,7 +69,7 @@ Example configuration file `profile.json`:
                                 "Set-Cookie": "ASP.NET_SessionId={{random}}[32];"
                 },
 
-        "autocommand": ["whoami", "set"],
+        "autocommands": ["whoami", "cmd /c set"],
         "auto-interact": "on"
 }
 ```
@@ -148,7 +148,7 @@ Based on the configuration file, to generate a payload simply browse to:
 http://1.1.1.1:1111/cat.png
 ```
 
-The endpoint supports several options that can be added to the url http://1.1.1.1:1111/cat.png/`type`/`delay`/
+The endpoint supports several options that can be added to the url http://1.1.1.1:1111/cat.png/type/delay/
 
 `type` supports only `ps` and `exe` for now. `delay` is the amount of sleep (in milliseconds) between each callback. Its default value is `10000` (10 seconds).
 
@@ -221,7 +221,6 @@ exec        path/url, cmd   In memory execution of code (shellcode)
 read        path/url        Read a file on the remote host
 upload      remote path     Upload a file on the remote system
 ps          path/url, path  List processes
-powerless                   Execute Powershell command without invoking Powershell
 inject      powershell cmd  Inject command into a target process (max length 4096)
 alias       pid, command    Create an alias to avoid typing the same thing over and over
 delay       key, value      Update the callback delay
