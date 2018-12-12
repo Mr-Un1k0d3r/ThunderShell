@@ -221,10 +221,10 @@ exec        path/url, cmd   In memory execution of code (shellcode)
 read        path/url        Read a file on the remote host
 upload      remote path     Upload a file on the remote system
 ps          path/url, path  List processes
-inject      powershell cmd  Inject command into a target process (max length 4096)
-alias       pid, command    Create an alias to avoid typing the same thing over and over
-delay       key, value      Update the callback delay
-help        milliseconds    show this help menu
+inject      pid, command    Inject command into a target process (max length 4096)
+alias       key, value      Create an alias to avoid typing the same thing over and over
+delay       milliseconds    Update the callback delay
+help                        show this help menu
 
 List of built in aliases
 ------------------------
