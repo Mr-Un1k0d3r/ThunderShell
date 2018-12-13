@@ -34,7 +34,7 @@ def HTTPDFactory(config):
 	    self.set_custom_headers()
             if force_download:
                 self.send_header("Content-Type", "application/octet-stream")
-                self.send_header("Content-Disposition", 'attachment; filename="%s"' % self.path.split("/", 1)[1].replace("/exe/", ".exe"))
+                self.send_header("Content-Disposition", 'attachment; filename="%s"' % self.path.split("/", 1)[1].replace("/exe/", ".exe").replace("/cs/", ".cs"))
             else:
                 self.send_header("Content-Type", "text/html")
             self.end_headers()
