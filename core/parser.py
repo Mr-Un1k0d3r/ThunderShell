@@ -62,5 +62,5 @@ class HTTPDParser:
 	if isinstance(commands, list):
 		UI.success("Running auto commands on shell %s" % guid)
 		for command in commands:
-			print "[+] %s" % command
+			print "\t[+] %s" % command
 			self.db.push_cmd(guid, command, Utils.guid(), self.config.get("username"))
