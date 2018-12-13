@@ -110,8 +110,18 @@ class Utils:
             from tabulate import tabulate
             import redis
 	    import MySQLdb
+	    import bogus
         except:
-            UI.error("Missing depencies. Install (python-redis, python-tabulate, python-mysqldb)", True)
+            UI.error("Missing dependencies", False)
+	    Utils.install_dependencies()
+
+    @staticmethod
+    def install_dependencies():
+	UI.warn("Installing dependencies")
+	if not os.getuid() == 0:
+		UI.error("root privileges required to install the dependencies")
+	os.system("apt update && apt install mysql-server redis-server mono-dmcs python-tabulate python-mysqldb python-redis -y")
+	UI.error("Installation completed please restart ThunderShell", True)
 
     @staticmethod
     def parse_random(data):
