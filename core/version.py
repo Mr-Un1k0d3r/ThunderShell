@@ -3,4 +3,4 @@
     @package: core/version.py
 """
 class Version:
-    VERSION = "2.0.1"
+    VERSION = "2.0.2"

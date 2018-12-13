@@ -10,7 +10,7 @@ The "core" RAT doesn't require a second stage to be injected / loaded in memory.
 
 # Current version
 
-Current release is 2.0.1
+Current release is 2.0.2
 
 # Installation
 
@@ -356,6 +356,14 @@ multi threads and multiple shell now sync
 payload generator support exe
 custom response headers added
 ```
+
+### Version 2.0.2 (11/12/2018)
+
+```
+bug fix
+auto install dependencies on first run
+```
+
 
 
 # Upcoming features

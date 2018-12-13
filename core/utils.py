@@ -110,7 +110,6 @@ class Utils:
             from tabulate import tabulate
             import redis
 	    import MySQLdb
-	    import bogus
         except:
             UI.error("Missing dependencies", False)
 	    Utils.install_dependencies()

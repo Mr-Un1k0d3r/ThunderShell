@@ -6,18 +6,18 @@ import os
 import sys
 
 from core.utils import Utils
+from core.ui import UI
 # Make sure all the dependencies are installed
+UI.banner()
 Utils.check_dependencies()
 
 from core.config import CONFIG
 from core.redisquery import RedisQuery
 from core.httpd import init_httpd_thread
 from core.cli import Cli
-from core.ui import UI
 from core.mysqlquery import MySQLQuery
 
 if __name__ == "__main__":
-    UI.banner()
     
     if len(sys.argv) < 3:
         UI.error("Missing configuration file path or username\n\nUsage: %s config username (optional -nohttpd)" % sys.argv[0], True)
