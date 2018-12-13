@@ -35,13 +35,13 @@ apt install python-tabulate
 # ThunderShell features
 ### Payload delivery
 
-Currently ThunderShell only supports C# wrapped in PowerShell.
+Currently ThunderShell supports:
 
-Future release will include:
+* `C#` as `cs`
+* `powershell` as `ps`
+* `C# exe` as `exe`
 
-* `powershell`
-* `C# exe`
-* `C# dll`
+default option is powershell `ps`
 
 ### Multi users interface
 
@@ -172,9 +172,9 @@ The executable can be used directly
 http://1.1.1.1:1111/cat.png/exe/
 ```
 
-The raw data can be downloaded and modified manually
+The raw C# data can be downloaded and modified manually
 ```
-http://1.1.1.1:1111/cat.png/raw/
+http://1.1.1.1:1111/cat.png/cs/
 ```
 
 # The interface

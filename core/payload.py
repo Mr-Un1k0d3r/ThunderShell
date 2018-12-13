@@ -13,12 +13,11 @@ class Payload:
 		self.config = config
 		self.type = {}
 		self.type["ps"] = "stager.ps1"
-		self.type["raw"] = "stager.ps1"
-		self.type["js"] = "stager.ps1"
-		self.type["hta"] = "stager.ps1"
+		#self.type["js"] = "stager.ps1"
+		#self.type["hta"] = "stager.ps1"
 		self.type["exe"] = "../bin/stager.cs"
-		self.type["dll"] = "stager.ps1"
-		
+		self.type["cs"] = "../bin/stager.cs"
+
 		self.delay = Payload.DEFAULT_DELAY
 		self.option = Payload.DEFAULT_TYPE
 
