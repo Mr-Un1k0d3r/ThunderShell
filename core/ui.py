@@ -29,7 +29,7 @@ class UI:
 
     @staticmethod
     def warn(message):
-        print "\033[36m[*] %s\033[00m" % message
+        print "\033[33m[*] %s\033[00m" % message
     
     @staticmethod    
     def prompt(path):
