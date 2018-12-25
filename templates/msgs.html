@@ -1,0 +1,17 @@
+{% block content %}
+{% for msg in msgs %}
+<div style="border-bottom:1px dotted gray;" class="direct-chat-msg">
+   <div class="direct-chat-info clearfix">
+      <span id="message-username" class="direct-chat-name pull-left"> {{msg["username"]}} </span>
+      <span id="message-timestamp" style="font-size: 14px;" class="direct-chat-timestamp pull-right"> {{msg["timestamp"]}} </span>
+   </div>
+   <div id="message-text" class="direct-chat-text">
+     {{msg["message"]}}
+   </div>
+</div>
+<script>
+var objDiv = document.getElementById("message-area");
+objDiv.scrollTop = objDiv.scrollHeight;
+</script>
+{% endfor %}
+{% endblock %}

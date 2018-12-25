@@ -1,0 +1,110 @@
+html {
+  cursor: default;
+}
+/* Style the tab */
+.tab {
+overflow: auto;
+border-bottom: 1px solid #ccc;
+background-color: #f1f1f1;
+}
+/* Style the buttons inside the tab */
+.tab button {
+background-color: inherit;
+float: left;
+border: 0;
+cursor: pointer;
+padding: 10px 12px;
+transition: 0.3s;
+font-size: 16px;
+}
+/* Style the tab content */
+.tab-content {
+display: none;
+padding: 6px 12px;
+border: 0;
+border-top: none;
+}
+#username {
+  font-size: 16px;
+  margin-top: 15px;
+  margin-right: 15px;
+}
+#host-info {
+  font-size: 16px;
+  margin-top: 15px;
+  margin-left: 15px;
+}
+#online-shells-title{
+  font-weight: bold;
+}
+#online-shells-body {
+  font-size: 14px;
+  height: 400px;
+  max-height: 400px;
+  overflow: auto;
+}
+#chat-title{
+  font-weight: bold;
+}
+#chat-body {
+  height: 400px;
+  max-height: 400px;
+  overflow: auto;
+}
+#message-area {
+  overflow: auto;
+  height: 340px;
+  max-height: 340px;
+  word-wrap: break-word;
+}
+#message-username{
+  font-size: 16px;
+}
+#message-text {
+  font-size: 14px;
+  margin-left: -10px;
+  border: none;color: black;
+  text-align: left;
+  background-color: white;
+  width: 100%;
+}
+#log {
+  display: hidden;
+}
+#log-title{
+  font-weight: bold;
+}
+#log-body {
+  height: 320px;
+  font-size: 14px;
+  margin-left: 0px;
+  border: none;
+  color: black;
+  text-align: left;
+  padding-left: 10px;
+  background-color: white;
+  width: 100%;
+  white-space:pre-wrap;
+  overflow:auto;
+}
+#log-output {
+  height: 400px
+}
+#log-output {
+  font-size: 16px;
+  margin-left: 0;
+  border: none;
+  color: black;
+  text-align: left;
+  background-color: white;
+  width: 100%
+}
+#log-full {
+  display: hidden;
+}
+#log-full-title{
+  font-weight: bold;
+}
+#log-full-body {
+  height: 725px;
+}

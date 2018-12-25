@@ -1,0 +1,34 @@
+{% block content %}
+<table class="table">
+   <thead>
+      <tr>
+         <th>Domain\Username</th>
+         <th>Hostname</th>
+         <th>IP</th>
+         <th>Last Seen</th>
+      </tr>
+   </thead>
+   <tbody>
+     {% if shells%}
+     {% for shell in shells %}
+      <tr>
+         <td><a onclick='
+           $("#shell-placeholder").load("/api/attachShell/{{uid}}/{{ shell["shell_id"] }}")
+           $("#shell-placeholder").css("display", "block");
+           $("#shell-box").css("display", "block");
+           $("#online-shells-body").collapse("hide");
+           $("#chat-body").collapse("hide");
+           $("#log").css("display", "none");
+           $("#log-full").css("display", "none");
+             '>{{shell["shell_prompt"]}}</a></td>
+         <td>{{shell["shell_hostname"]}}</td>
+         <td>{{shell["shell_ip"]}}</td>
+         <td>{{shell["shell_timestamp"]}}</td>
+      </tr>
+      {% endfor %}
+      {% endif %}
+   </tbody>
+</table>
+<script>
+</script>
+{% endblock %}

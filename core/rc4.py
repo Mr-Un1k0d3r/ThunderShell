@@ -8,14 +8,11 @@ class RC4:
 
     def KSA(self):
         keylength = len(self.key)
-
         S = range(256)
-
         j = 0
         for i in range(256):
             j = (j + S[i] + self.key[i % keylength]) % 256
             S[i], S[j] = S[j], S[i]
-
         return S
 
     def PRGA(self, S):
@@ -24,11 +21,10 @@ class RC4:
         while True:
             i = (i + 1) % 256
             j = (j + S[i]) % 256
-            S[i], S[j] = S[j], S[i] 
-
+            S[i], S[j] = S[j], S[i]
             K = S[(S[i] + S[j]) % 256]
             yield K
-            
+
     def crypt(self, data):
         output = ""
         self.S = self.KSA()
