@@ -116,8 +116,8 @@ class Utils:
     def check_dependencies():
         try:
             from tabulate import tabulate
-            import Flask
-            import flask_socketio
+            from flask_socketio import SocketIO
+            import flask
             import redis
             import MySQLdb
         except:
