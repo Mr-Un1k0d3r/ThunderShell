@@ -117,6 +117,7 @@ class Utils:
         try:
             from tabulate import tabulate
             import Flask
+            import flask_socketio
             import redis
             import MySQLdb
         except:
@@ -128,7 +129,7 @@ class Utils:
         UI.warn('Installing dependencies')
         if not os.getuid() == 0:
             UI.error('root privileges required to install the dependencies')
-        os.system('/usr/bin/apt update && /usr/bin/apt install mysql-server redis-server mono-dmcs python-tabulate python-mysqldb python-redis python-Flask -y')
+        os.system('/usr/bin/apt update && /usr/bin/apt install mysql-server redis-server mono-dmcs python-tabulate python-mysqldb python-redis python-flask python-dev libxml2-dev libxslt-dev python-pip -y && pip install flask-socketIO')
         UI.error('Installation completed please restart ThunderShell',True)
 
     @staticmethod
