@@ -6,13 +6,13 @@
   <meta name="author" content="">
   <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', filename='css/login.css') }}" rel="stylesheet">
-  <link href="{{ url_for('static', filename='css/font-awesome.min.css')}}" rel="stylesheet">
-  <link href="{{ url_for('static', filename='img/TShell.ico') }}" rel="shortcut icon">
+  <link href="{{ url_for('static', filename='css/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='img/TShell-Black.ico') }}" rel="shortcut icon">
 </head>
 <div style="margin: 300px auto;"class="container">
 	<div id="login-box">
 		<div class="logo">
-			<h1 class="logo-caption"><span style="color: black; font-weight: bold;" class="tweak"><img style="max-height: 50px;max-width:50px;" src="{{ url_for('static', filename='img/TShell.ico') }}"></img>  Thunder</span>Shell</h1>
+			<h1 class="logo-caption"><span style="color: yellow; font-weight: bold;" class="tweak"><img style="max-height: 50px;max-width:50px;" src="{{ url_for('static', filename='img/TShell-Yellow.ico') }}"></img>  Thunder</span>Shell</h1>
 		</div>
 		<div class="controls">
       <form method="POST">
@@ -21,6 +21,7 @@
 			<button type="submit" class="btn btn-default btn-block btn-custom">Login</button>
     </form>
 		</div>
+    <div style="color: yellow;text-align: center">RingZer0 Team</div><br>
     {% if error %}
     <div style="color: black;background-color: white;" class="alert alert-warning">{{ error }}</div>
     {% endif %}
