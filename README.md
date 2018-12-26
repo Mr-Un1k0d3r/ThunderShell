@@ -10,7 +10,7 @@ The "core" RAT doesn't require a second stage to be injected / loaded in memory.
 
 # Current version
 
-Current release is 2.0.2
+Current release is 2.1.0
 
 # Installation
 
@@ -364,6 +364,13 @@ bug fix
 auto install dependencies on first run
 ```
 
+### Version 2.1.0 (26/12/2018)
+
+```
+bug fix
+integration of the web interface
+fixing coding style (tab vs space). It's not standardized using tabs
+```
 
 
 # Upcoming features
