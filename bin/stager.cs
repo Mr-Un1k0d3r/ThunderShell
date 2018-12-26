@@ -243,7 +243,7 @@ namespace VAR1 {
    VAR7 = VAR14;
    VAR8 = VAR37(16);
    VAR9 = Encoding.ASCII.GetBytes(VAR15);
-   VAR10 = 100;
+   VAR10 = 1000;
    Process VAR17 = Process.GetCurrentProcess();
    VAR12 = VAR17.Id;
    try {
