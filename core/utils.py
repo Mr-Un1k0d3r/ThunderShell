@@ -116,7 +116,7 @@ class Utils:
     def check_dependencies():
         try:
             from tabulate import tabulate
-            import glob2
+            import Flask
             import redis
             import MySQLdb
         except:
@@ -128,7 +128,7 @@ class Utils:
         UI.warn('Installing dependencies')
         if not os.getuid() == 0:
             UI.error('root privileges required to install the dependencies')
-        os.system('/usr/bin/apt update && /usr/bin/apt install mysql-server redis-server mono-dmcs python-tabulate python-mysqldb python-redis -y && pip install glob')
+        os.system('/usr/bin/apt update && /usr/bin/apt install mysql-server redis-server mono-dmcs python-tabulate python-mysqldb python-redis python-Flask -y')
         UI.error('Installation completed please restart ThunderShell',True)
 
     @staticmethod
