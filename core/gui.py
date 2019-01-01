@@ -1,16 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from flask import redirect, url_for, request, render_template, jsonify
-from flask_socketio import SocketIO
-from core.log import Log
-from core.utils import Utils
+
 import threading
 import time
 import os
+from flask import redirect, url_for, request, render_template, jsonify
+from flask_socketio import SocketIO
+from core.ui import UI
+from core.log import Log
+from core.utils import Utils
+from core.version import Version
 from core.apis import ThunderShellFlaskAPI
 
 errors = ['Wrong password', 'Session was destroyed']
-version = '2.1.0'
+version = Version.VERSION
 
 app = ThunderShellFlaskAPI(__name__, root_path=os.getcwd(), template_folder=os.getcwd() + '/templates', static_path='/static')
 websocket = SocketIO(app)
@@ -22,8 +25,10 @@ def login(error):
         if app.post_login():
             return redirect(url_for('dashboard'))
         return redirect(url_for('login', error=1))
+    
     if error:
         error = errors[error - 1]
+    
     return render_template('login.html', error=error)
 
 @app.route('/logout', methods=['GET'])
@@ -32,6 +37,7 @@ def logout():
     if app.auth():
         app.logout()
         error = 2
+    
     return redirect(url_for('login', error=error))
 
 @app.route('/')
@@ -69,7 +75,7 @@ def push_msg(json):
                     json['timestamp'] = Utils.timestamp()
                     app.send_msg(json)
                     # We are logging the chat because we have a small brain and
-                    # are unable to remember things, if this botters you just comment it out :)
+                    # are unable to remember things, if this bother you just comment it out :)
                     Log.log_chat(json['timestamp'], json['username'], json['message'])
         except KeyError:
             pass
@@ -199,8 +205,6 @@ def remove_shell(id):
     else:
         return redirect(url_for('login'))
 
-
-# Initiation
 def init_gui_thread(config):
     thread = threading.Thread(target=start_gui, args=(config,))
     thread.start()
@@ -208,15 +212,24 @@ def init_gui_thread(config):
 
 def start_gui(config):
     prefix = "http://"
+    
+    try:
+        port =  int(config.get("gui-port"))   
+    except:
+        UI.error("(gui-port) GUI HTTP port need to be a integer.", True)
+    
     if config.get("https-enabled") == "on":
             prefix = "https://"
+            
     web_config = {}
     web_config["server"] = "%s%s:%s" % (prefix, config.get("http-host"), config.get("http-port"))
     web_config["version"] = version
     app.init(config, web_config)
     path = "%s/logs/%s" % (os.getcwd(), str(time.strftime("%d-%m-%Y")))
     gui_log = "%s/gui.log" % path
+    
     if not os.path.exists(path):
         os.makedirs(path)
+        
     fd = os.open(gui_log, os.O_RDWR | os.O_CREAT); fd2 = 2
-    websocket.run(app, host=config.get("gui-host"), port=int(config.get("gui-port")), log_output=os.dup2(fd, fd2))
+    websocket.run(app, host=config.get("gui-host"), port=port, log_output=os.dup2(fd, fd2))

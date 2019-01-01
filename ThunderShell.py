@@ -56,14 +56,14 @@ if __name__ == '__main__':
         httpd_thread = init_httpd_thread(config)
 
     # Launch the GUI
-    if '-gui' in sys.argv:
+    if not '-nogui' in sys.argv:
         if config.get('https-enabled') == 'on':
             print('')
             UI.warn('Web GUI Started: https://%s:%s' % (config.get('gui-host'), config.get('gui-port')))
         else:
             UI.warn('Web GUI Started: http://%s:%s' % (config.get('gui-host'), config.get('gui-port')))
         UI.warn('Web GUI Password: %s\n\n' % config.get('server-password'))
-        init_gui_thread(config)
+        webui_thread = init_gui_thread(config)
 
     cli = Cli(config)
 
@@ -75,3 +75,4 @@ if __name__ == '__main__':
             UI.error('*** You really want to exit the application? *** (yes/no)')
             if UI.prompt('Exit').lower() == 'yes':
                 os._exit(0)
+                sql.shutdown()

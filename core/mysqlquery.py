@@ -134,3 +134,6 @@ class MySQLQuery:
         data = cursor.fetchone()
         cursor.close()
         return data[1]
+
+    def shutdown(self):
+        self.conn.close()

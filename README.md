@@ -120,8 +120,10 @@ The `server-password` and `encryption-key` are generated automatically on the fi
 The server, including the web interface, are started from the CLI:
 
 ```
-$ python ThunderShell.py default.json MrUn1k0d3r -gui
+$ python ThunderShell.py default.json MrUn1k0d3r 
 ```
+
+It can also be started without the httpd daemon and the web ui using the following switch `-nohttpd` and `-nogui` 
 
 `default.json` is the configuration file. `MrUn1k0d3r` is the username for the session. `-gui` launches the web interface.
 

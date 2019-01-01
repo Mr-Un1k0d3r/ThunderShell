@@ -142,3 +142,4 @@ class Utils:
                 pass
             data = data.replace(item, Utils.gen_str(size))
         return data
+        

@@ -174,8 +174,11 @@ def init_httpd_thread(config):
 
 def start_httpd(config):
     ip = config.get('http-host')
-    port = int(config.get('http-port'))
-
+    try:
+        port = int(config.get('http-port'))
+    except:
+        UI.error("(http-port) HTTP port need to be a integer.", True)
+        
     print '\r\n'
     UI.success('Starting web server on %s port %d' % (ip, port))
     try:
