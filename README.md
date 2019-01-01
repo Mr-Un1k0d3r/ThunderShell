@@ -123,9 +123,7 @@ The server, including the web interface, are started from the CLI:
 $ python ThunderShell.py default.json MrUn1k0d3r 
 ```
 
-`default.json` is the configuration file. `MrUn1k0d3r` is the username for the session. `-gui` launches the web interface.
-
-Other user can start a CLI interface by adding the `-notthpd` switch to avoid trying to start the HTTP daemon a second time
+`default.json` is the configuration file. `MrUn1k0d3r` is the username for the session.  By default the HTTP daemon and Web Ui will be launched.
 
 
 
