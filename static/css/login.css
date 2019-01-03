@@ -78,3 +78,11 @@ body, html {
 	background: rgba(48, 46, 45, 1);
 	border-color: yellow;
 }
+
+footer {
+    color: yellow:
+    width: 500px;
+    margin: auto;
+    margin-top: 10px;
+    font-size: 0.25cm;
+}
