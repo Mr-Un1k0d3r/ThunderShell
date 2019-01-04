@@ -229,6 +229,6 @@ def start_gui(config, cli):
     if not os.path.exists(path):
         os.makedirs(path)
         
-    fd = os.open(gui_log, os.O_RDWR, os.O_CREAT)
+    fd = os.open(gui_log, os.O_RDWR | os.O_CREAT)
     stderr = 2
     websocket.run(app, host=config.get("gui-host"), port=port, log_output=os.dup2(fd, stderr))
