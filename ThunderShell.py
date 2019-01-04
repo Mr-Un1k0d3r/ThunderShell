@@ -53,13 +53,13 @@ if __name__ == '__main__':
 
     cli = Cli(config)
 
+    # Launch the GUI
+    if not '-nogui' in sys.argv:
+        webui_thread = init_gui_thread(config, cli)
+
     # Launch the HTTPD daemon
     if not '-nohttpd' in sys.argv:
         httpd_thread = init_httpd_thread(config)
-
-    # Launch the GUI
-    if not '-nogui' in sys.argv:
-        webui_thread = init_gui_thread(cli, config)
 
     while True:
         try:

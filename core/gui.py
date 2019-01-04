@@ -10,12 +10,12 @@ from core.ui import UI
 from core.log import Log
 from core.utils import Utils
 from core.version import Version
-from core.apis import ThunderShellFlaskAPI
+from core.apis import FlaskFactory
 
 errors = ['Wrong password', 'Session was destroyed']
 version = Version.VERSION
 
-app = ThunderShellFlaskAPI(__name__, root_path=os.getcwd(), template_folder=os.getcwd() + '/templates', static_path='/static')
+app = FlaskFactory(__name__, root_path=os.getcwd(), template_folder=os.getcwd() + '/templates', static_path='/static')
 websocket = SocketIO(app)
 
 @app.route('/login/<int:error>', methods=['GET', 'POST'])

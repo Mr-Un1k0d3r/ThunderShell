@@ -16,7 +16,7 @@ from core.utils import Utils
 from core.log import Log
 
 
-class ThunderShellFlaskAPI(Flask):
+class FlaskFactory(Flask):
 
     """
     TODO: Implement all the same feature as the CLI:
