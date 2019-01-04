@@ -41,7 +41,7 @@ border-top: none;
   font-weight: bold;
 }
 #online-shells-body {
-  font-size: 14px;
+  font-size: 10px;
   height: 400px;
   max-height: 400px;
   overflow: auto;
@@ -73,7 +73,7 @@ border-top: none;
   font-size: 16px;
 }
 #message-text {
-  font-size: 14px;
+  font-size: 10px;
   margin-left: -10px;
   border: none;color: black;
   text-align: left;
@@ -91,7 +91,7 @@ border-top: none;
 }
 #log-body {
   height: 320px;
-  font-size: 14px;
+  font-size: 10px;
   margin-left: 0px;
   border: none;
   color: black;
@@ -156,7 +156,7 @@ border-top: none;
   float: left;padding: 10px;
 }
 #shrink-shell {
-  font-size: 12px;
+  font-size: 10px;
   margin-top: 2px;
   align: right;
 }
@@ -187,5 +187,5 @@ border-top: none;
   white-space:pre-wrap;
 }
 #message-timestamp {
-  font-size: 14px;
+  font-size: 10px;
 }

@@ -79,6 +79,10 @@ body, html {
 	border-color: yellow;
 }
 
+.login-username {
+    margin-bottom: 5px;
+}
+
 footer {
     color: yellow;
     width: 500px;
