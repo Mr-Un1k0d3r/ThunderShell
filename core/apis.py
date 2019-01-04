@@ -5,16 +5,16 @@
     @package: core/apis.py
 """
 
-from core.utils import Utils
-from core.log import Log
 import hashlib
 import json
 import base64
 import os
+import fnmatch
 from time import sleep
 from flask import Flask, session, request
 from core.websync import Sync
-import fnmatch
+from core.utils import Utils
+from core.log import Log
 
 
 class ThunderShellFlaskAPI(Flask):
@@ -180,8 +180,8 @@ class ThunderShellFlaskAPI(Flask):
                 shell_info = {
                     'shell_ip': shell.split(':')[2],
                     'shell_id': shell.split(':')[0],
-                    'shell_prompt': self.redis.get_data('%s:prompt' % shell.split(':')[0]).split(' ')[1],
-                    'shell_hostname': self.redis.get_data('%s:prompt' % shell.split(':')[0]).split(' ')[0],
+                    'shell_prompt': self.redis.get_prompt(shell.split(':')[0]).split(' ')[1],
+                    'shell_hostname': self.redis.get_prompt(shell.split(':')[0]).split(' ')[0],
                     'shell_timestamp': self.redis.get_data(shell),
                     }
                 shells_list.append(shell_info)
@@ -190,15 +190,15 @@ class ThunderShellFlaskAPI(Flask):
             print e
 
     def get_shell_domain(self, id):
-        domain = self.redis.get_data('%s:prompt' % id).split(' ')[1].split('\\')[0]
+        domain = self.redis.get_prompt(id).split(' ')[1].split('\\')[0]
         return domain
 
     def get_shell_hostname(self, id):
-        hostname = self.redis.get_data('%s:prompt' % id).split(' ')[0]
+        hostname = self.redis.get_prompt(id).split(' ')[0]
         return hostname
 
     def get_shell_user(self, id):
-        user = self.redis.get_data('%s:prompt' % id).split(' ')[1].split('\\')[1]
+        user = self.redis.get_prompt(id).split(' ')[1].split('\\')[1]
         return user
 
     def get_payloads_name(self):
