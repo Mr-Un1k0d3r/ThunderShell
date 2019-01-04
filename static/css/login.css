@@ -80,9 +80,10 @@ body, html {
 }
 
 footer {
-    color: yellow:
+    color: yellow;
     width: 500px;
     margin: auto;
     margin-top: 10px;
     font-size: 0.25cm;
+    text-align: center;
 }
