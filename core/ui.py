@@ -19,7 +19,6 @@ class Colors:
     Red = "\033[36m"
     Gray = "\033[1;30m"
 
-
 class UI:
 
     @staticmethod

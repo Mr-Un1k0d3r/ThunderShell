@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
     @author: Mr.Un1k0d3r RingZer0 Team
-    @package: launch
+    @package: launcher
 """
 
 import os
@@ -26,7 +26,7 @@ from core.mysqlquery import MySQLQuery
 if __name__ == '__main__':
 
     if len(sys.argv) < 3:
-        UI.error('''Missing configuration file path or username\n\n Usage: %s config username (optional -nohttpd, -gui)'''% sys.argv[0], True)
+        UI.error('''Missing configuration file path or username\n\n Usage: %s config username (optional -nohttpd, -nogui)''' % sys.argv[0], True)
 
     config = CONFIG(sys.argv[1])
     if config.reload_config():
