@@ -51,6 +51,8 @@ if __name__ == '__main__':
     db.update_config(config).init_sql()
     UI.warn('Current Active CLI session UUID is %s' % config.get('uid'))
 
+    cli = Cli(config)
+
     # Launch the HTTPD daemon
     if not '-nohttpd' in sys.argv:
         httpd_thread = init_httpd_thread(config)
@@ -63,9 +65,7 @@ if __name__ == '__main__':
         else:
             UI.warn('Web GUI Started: http://%s:%s' % (config.get('gui-host'), config.get('gui-port')))
         UI.warn('Web GUI Password: %s\n\n' % config.get('server-password'))
-        webui_thread = init_gui_thread(config)
-
-    cli = Cli(config)
+        webui_thread = init_gui_thread(cli, config)
 
     while True:
         try:

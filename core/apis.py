@@ -32,15 +32,16 @@ class ThunderShellFlaskAPI(Flask):
             'help',
     """
 
-    def init(self, config, web_config):
+    def init(self, config, web_config, cli):
         self.sync = Sync(config)
-        self.secret_key = 'lkasjdlkj'
+        self.secret_key = Utils.gen_str(32)
         self.session = session
         self.request = request
-        self.realconf = config
-        self.sql = self.realconf.get('mysql')
-        self.redis = self.realconf.get('redis')
+        self.internal_config = config
+        self.sql = self.internal_config.get('mysql')
+        self.redis = self.internal_config.get('redis')
         self.web_conf = web_config
+        self.cli = cli
         self.active_users = []
         self.msgs = []
         self.cmds = []
@@ -76,7 +77,7 @@ class ThunderShellFlaskAPI(Flask):
         try:
             if str(request.form['username'].strip()) in self.active_users:
                 return False
-            if self.request.form['password'].strip() == self.realconf.get('server-password'):
+            if self.request.form['password'].strip() == self.internal_config.get('server-password'):
                 self.set_user()
                 self.get_users()
                 return True
@@ -141,58 +142,35 @@ class ThunderShellFlaskAPI(Flask):
         return self.sync.get_cmd_send(self.session['uid'])
 
     def get_ip(self):
-        host = self.realconf.get('http-host')
+        host = self.internal_config.get('http-host')
         return host
 
     def get_port(self):
-        port = self.realconf.get('http-port')
+        port = self.internal_config.get('http-port')
         return port
 
     def get_log_date(self, name):
         dates = fnmatch.filter(os.listdir(os.getcwd() + '/logs/'), '*-*-*')
         log_dates = []
+        logs = ["event", "http", "error", "chat"]
         for date in dates:
-            if name == 'event':
-                file_name = fnmatch.filter(os.listdir('%s/logs/%s' % (os.getcwd(), date)), 'event.log')
+            if name in logs:
+                file_name = fnmatch.filter(os.listdir('%s/logs/%s' % (os.getcwd(), date)), "%s.log" % name)
                 if file_name:
                     if date not in log_dates:
                         log_dates.append(date)
-            if name == 'http':
-                file_name = fnmatch.filter(os.listdir('%s/logs/%s' % (os.getcwd(), date)), 'http.log')
-                if file_name:
-                    if date not in log_dates:
-                        log_dates.append(date)
-            if name == 'error':
-                file_name = fnmatch.filter(os.listdir('%s/logs/%s' % (os.getcwd(), date)), 'error.log')
-                if file_name:
-                    if date not in log_dates:
-                        log_dates.append(date)
-            if name == 'chat':
-                file_name = fnmatch.filter(os.listdir('%s/logs/%s' % (os.getcwd(), date)), 'chat.log')
-                if file_name:
-                    if date not in log_dates:
-                        log_dates.append(date)
+                        
         return sorted(log_dates, key=lambda d: map(int, d.split('-')))
 
     def get_log_data(self, date, name):
-        try:
-            if name == 'event':
-                log = '%s/logs/%s/event.log' % (os.getcwd(), date)
-                return open('%s' % log, 'r').read()
-            if name == 'http':
-                log = '%s/logs/%s/http.log' % (os.getcwd(), date)
-                return open('%s' % log, 'r').read()
-            if name == 'error':
-                log = '%s/logs/%s/error.log' % (os.getcwd(), date)
-                return open('%s' % log, 'r').read()
-            if name == 'chat':
-                log = '%s/logs/%s/chat.log' % (os.getcwd(), date)
-                return open('%s' % log, 'r').read()
-            if name == 'dashboard':
-                log = '%s/logs/%s/event.log' % (os.getcwd(), date)
-                return open('%s' % log, 'r').read()
-        except:
-            return 'No recent activity.'
+        logs = ["event", "http", "error", "chat", "dashboard"]
+        
+        if name in logs:
+            try:
+                path = '%s/logs/%s/%s.log' % (os.getcwd(), date, name)
+                return open(path, 'r').read() 
+            except:
+                return 'No recent activity.'
 
     def get_shells(self):
         try:
@@ -224,10 +202,10 @@ class ThunderShellFlaskAPI(Flask):
         return user
 
     def get_payloads_name(self):
-        return self.realconf.get('http-download-path')
+        return self.internal_config.get('http-download-path')
 
     def get_protocol(self):
-        if self.realconf.get('https-enabled') == 'on':
+        if self.internal_config.get('https-enabled') == 'on':
             return 'https://'
         else:
             return 'http://'
@@ -287,7 +265,7 @@ class ServerApi:
             shells = []
             for shell in self.redis.get_all_shells():
                 guid = shell.split(':')[0]
-                prompt = self.redis.get_data('%s:prompt' % guid)
+                prompt = self.redis.get_prompt(guid)
                 shells.append('%s %s' % (guid, prompt))
             self.output['shells'] = shells
 

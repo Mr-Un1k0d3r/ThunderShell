@@ -180,7 +180,7 @@ def start_httpd(config):
         UI.error("(http-port) HTTP port need to be a integer.", True)
         
     print '\r\n'
-    UI.success('Starting web server on %s port %d' % (ip, port))
+    UI.warn('Starting web server on %s port %d' % (ip, port))
     try:
         server_class = BaseHTTPServer.HTTPServer
         factory = HTTPDFactory(config)

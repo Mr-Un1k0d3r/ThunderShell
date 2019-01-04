@@ -205,12 +205,12 @@ def remove_shell(id):
     else:
         return redirect(url_for('login'))
 
-def init_gui_thread(config):
-    thread = threading.Thread(target=start_gui, args=(config,))
+def init_gui_thread(config, cli):
+    thread = threading.Thread(target=start_gui, args=(config, cli, ))
     thread.start()
     return thread
 
-def start_gui(config):
+def start_gui(config, cli):
     prefix = "http://"
     
     try:
@@ -224,7 +224,7 @@ def start_gui(config):
     web_config = {}
     web_config["server"] = "%s%s:%s" % (prefix, config.get("http-host"), config.get("http-port"))
     web_config["version"] = version
-    app.init(config, web_config)
+    app.init(config, web_config, cli)
     path = "%s/logs/%s" % (os.getcwd(), str(time.strftime("%d-%m-%Y")))
     gui_log = "%s/gui.log" % path
     
