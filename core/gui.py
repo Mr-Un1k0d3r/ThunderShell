@@ -221,6 +221,9 @@ def start_gui(config, cli):
     if config.get("https-enabled") == "on":
             prefix = "https://"
             
+    UI.warn('Web GUI Started: %s%s:%s' % (prefix, config.get('gui-host'), config.get('gui-port')))
+    UI.warn('Web GUI Password: %s\n\n' % config.get('server-password'))
+            
     web_config = {}
     web_config["server"] = "%s%s:%s" % (prefix, config.get("http-host"), config.get("http-port"))
     web_config["version"] = version

@@ -59,12 +59,6 @@ if __name__ == '__main__':
 
     # Launch the GUI
     if not '-nogui' in sys.argv:
-        if config.get('https-enabled') == 'on':
-            print('')
-            UI.warn('Web GUI Started: https://%s:%s' % (config.get('gui-host'), config.get('gui-port')))
-        else:
-            UI.warn('Web GUI Started: http://%s:%s' % (config.get('gui-host'), config.get('gui-port')))
-        UI.warn('Web GUI Password: %s\n\n' % config.get('server-password'))
         webui_thread = init_gui_thread(cli, config)
 
     while True:
