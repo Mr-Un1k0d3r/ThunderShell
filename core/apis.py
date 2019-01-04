@@ -31,7 +31,7 @@ class FlaskFactory(Flask):
             'help',
     """
 
-    def init(self, config, web_config, cli):
+    def init(self, config, cli):
         self.sync = Sync(config)
         self.secret_key = Utils.gen_str(32)
         self.session = session
@@ -39,7 +39,6 @@ class FlaskFactory(Flask):
         self.internal_config = config
         self.sql = self.internal_config.get('mysql')
         self.redis = self.internal_config.get('redis')
-        self.web_conf = web_config
         self.cli = cli
         self.active_users = []
         self.msgs = []
@@ -84,11 +83,6 @@ class FlaskFactory(Flask):
         except:
             pass
         return False
-
-    def get_config(self, key):
-        if self.web_conf.has_key(key):
-            return self.web_conf[key]
-        return ''
 
     def get_username(self):
         return self.session['username']

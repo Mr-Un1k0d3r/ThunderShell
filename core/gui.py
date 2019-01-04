@@ -64,7 +64,6 @@ def new_events():
     else:
         return redirect(url_for('login'))
 
-# Websocket because I like live chat :)
 @websocket.on('msg-sent')
 def push_msg(json):
     if app.auth():
@@ -74,10 +73,9 @@ def push_msg(json):
                     websocket.emit('msg-received', json)
                     json['timestamp'] = Utils.timestamp()
                     app.send_msg(json)
-                    # We are logging the chat because we have a small brain and
-                    # are unable to remember things, if this bother you just comment it out :)
+                    
                     Log.log_chat(json['timestamp'], json['username'], json['message'])
-        except KeyError:
+        except:
             pass
     else:
         return redirect(url_for('login'))
@@ -224,15 +222,13 @@ def start_gui(config, cli):
     UI.warn('Web GUI Started: %s%s:%s' % (prefix, config.get('gui-host'), config.get('gui-port')))
     UI.warn('Web GUI Password: %s\n\n' % config.get('server-password'))
             
-    web_config = {}
-    web_config["server"] = "%s%s:%s" % (prefix, config.get("http-host"), config.get("http-port"))
-    web_config["version"] = version
-    app.init(config, web_config, cli)
+    app.init(config, cli)
     path = "%s/logs/%s" % (os.getcwd(), str(time.strftime("%d-%m-%Y")))
     gui_log = "%s/gui.log" % path
     
     if not os.path.exists(path):
         os.makedirs(path)
         
-    fd = os.open(gui_log, os.O_RDWR | os.O_CREAT); fd2 = 2
-    websocket.run(app, host=config.get("gui-host"), port=port, log_output=os.dup2(fd, fd2))
+    fd = os.open(gui_log, "a+")
+    stderr = 2
+    websocket.run(app, host=config.get("gui-host"), port=port, log_output=os.dup2(fd, stderr))
