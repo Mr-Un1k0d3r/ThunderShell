@@ -10,7 +10,6 @@ import json
 import base64
 import os
 import fnmatch
-from time import sleep
 from flask import Flask, session, request
 from core.websync import Sync
 from core.utils import Utils
@@ -103,7 +102,7 @@ class ThunderShellFlaskAPI(Flask):
             Log.log_event('User Logout', '%s' % str(self.session['username']))
             self.session.pop('username')
             self.session.pop('authenticated')
-        except ValueError:
+        except:
             pass
 
     def send_msg(self, msg):
@@ -186,8 +185,8 @@ class ThunderShellFlaskAPI(Flask):
                     }
                 shells_list.append(shell_info)
             return shells_list
-        except Exception, e:
-            print e
+        except:
+            pass
 
     def get_shell_domain(self, id):
         domain = self.redis.get_prompt(id).split(' ')[1].split('\\')[0]
