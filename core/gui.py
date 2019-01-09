@@ -4,7 +4,7 @@
 import threading
 import time
 import os
-from flask import redirect, url_for, request, render_template, jsonify
+from flask import redirect, url_for, request, render_template
 from flask_socketio import SocketIO
 from core.ui import UI
 from core.log import Log
@@ -17,6 +17,16 @@ version = Version.VERSION
 
 app = FlaskFactory(__name__, root_path=os.getcwd(), template_folder=os.getcwd() + '/templates', static_path='/static')
 websocket = SocketIO(app)
+
+
+@app.route('/', defaults={'path': 'login'})
+@app.route('/<path:path>')
+def catch_all(path):
+    if "login" in path:
+        return redirect(url_for('login'))
+    elif "dashboard" in path:
+        return redirect(url_for('dashboard'))
+    return ""
 
 @app.route('/login/<int:error>', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'], defaults={'error': None})
