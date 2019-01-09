@@ -58,16 +58,18 @@ class HTTPDParser:
 
     def keylogger(self, guid, data):
         (cmd, data) = data.split(' ', 1)
+        shell = self.db.get_prompt(guid).split(' ')[1]
         Log.append_keylogger_data(guid, data)
-        Log.log_event('Keylogger', 'Data received (%s)' % guid)
+        Log.log_event('Keylogger', 'Data received (%s)' % shell)
         self.db.append_keylogger_data(guid, data)
 
     def get_autocommands(self, guid):
         profile = self.config.get('profile')
         commands = profile.get('autocommands')
         if isinstance(commands, list):
-            UI.success('Running auto commands on shell %s' % guid)
-            Log.log_event('Running auto commands on shell', guid)
+            shell = self.db.get_prompt(guid).split(' ')[1]
+            UI.success('Running auto commands on shell %s' % shell)
+            Log.log_event('Running auto commands on shell', shell)
             for command in commands:
                 print '\t[+] %s' % command
                 Log.log_shell(guid, 'Sending', command)
