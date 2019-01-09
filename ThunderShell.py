@@ -21,7 +21,6 @@ from core.redisquery import RedisQuery
 from core.httpd import init_httpd_thread
 from core.gui import init_gui_thread
 from core.cli import Cli
-from core.mysqlquery import MySQLQuery
 
 if __name__ == '__main__':
 
@@ -40,13 +39,11 @@ if __name__ == '__main__':
 
     uid = Utils.guid()
     config.set('uid', uid)
-    config.set('username', '(CLI)%s' % sys.argv[2])
+    config.set('username', '%s' % sys.argv[2])
+    config.set('payload-callback', '%s:%s' % (config.get('http-fqdn'), config.get('http-port')))  # Temporary
     db = RedisQuery(config)
-    sql = MySQLQuery(config)
-    sql.install_db().init_uid()
 
     config.set('redis', db)
-    config.set('mysql', sql)
 
     db.update_config(config).init_sql()
     UI.warn('Current Active CLI session UUID is %s' % config.get('uid'))

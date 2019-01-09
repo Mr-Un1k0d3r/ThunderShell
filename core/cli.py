@@ -45,7 +45,6 @@ class Cli:
         self.shell_cmds['exit'] = None
         self.config = config
         self.db = self.config.get('redis')
-        self.mysql = self.config.get('mysql')
         self._prompt = 'Main'
         self.guid = ''
         self.alias = Alias()
@@ -71,7 +70,7 @@ class Cli:
         if not self.guid == '':
             if cmd == 'background':
                 self._prompt = 'Main'
-                self.mysql.delete_active_user(self.config.get('uid'),self.guid)
+                self.db.remove_active_user(self.config.get('uid'), self.guid)
                 self.guid = ''
             elif cmd == 'exit':
                 UI.error('*** You really want to kill this shell *** (yes/no)')
@@ -125,7 +124,7 @@ class Cli:
             readline.set_completer(self.completer.complete)
             readline.parse_and_bind('tab: complete')
             self.guid = guid
-            self.mysql.add_active_user(self.config.get('uid'),self.guid)
+            self.db.add_active_user(self.config.get('uid'),self.guid)
             self._prompt = self.db.get_data('%s:prompt' % guid)
         else:
             UI.error('Invalid session ID')

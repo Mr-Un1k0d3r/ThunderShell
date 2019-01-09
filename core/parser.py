@@ -71,5 +71,5 @@ class HTTPDParser:
             for command in commands:
                 print '\t[+] %s' % command
                 Log.log_shell(guid, 'Sending', command)
-                self.db.append_shell_data(guid, "[%s] AutoCommand Sending: \n%s\n" % (Utils.timestamp(),command))
+                self.db.append_shell_data(guid, "[%s] AutoCommand Sending: \n%s\n\n" % (Utils.timestamp(),command))
                 self.db.push_cmd(guid, command, Utils.guid(), self.config.get('username'))

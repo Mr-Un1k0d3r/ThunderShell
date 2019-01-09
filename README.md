@@ -25,10 +25,8 @@ ThunderShell itself uses Python2 and requires the following dependencies:.
 ```
 apt install python
 apt install redis-server
-apt install mysql-server
 apt install mono-dmcs
 apt install python-redis
-apt install python-mysqldb
 apt install python-tabulate
 ```
 
@@ -91,10 +89,6 @@ First, the configuration file needs to be configured properly. Here is an exampl
 {
         "redis-host": "localhost",
         "redis-port": 6379,
-        "mysql-host": "localhost",
-        "mysql-user": "root",
-        "mysql-pass": "",
-        "mysql-port": "3306",
         "http-host": "1.1.1.1",
         "http-port": 1111,
         "http-server": "Microsoft-IIS/7.5",
