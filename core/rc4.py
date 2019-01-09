@@ -4,7 +4,8 @@
     @author: Mr.Un1k0d3r RingZer0 Team
     @package: core/rc4.py
 """
-
+import os
+import re
 
 class RC4:
 
@@ -37,3 +38,11 @@ class RC4:
         for c in data:
             output = output + chr(ord(c) ^ self.keystream.next())
         return output
+
+    @staticmethod
+    def gen_rc4_key(size):
+        return os.urandom(size)
+        
+    @staticmethod
+    def format_rc4_key(key):
+        return "0x" + ", 0x".join(re.findall("..", key.encode("hex")))
