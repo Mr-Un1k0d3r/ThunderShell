@@ -10,7 +10,7 @@ The "core" RAT doesn't require a second stage to be injected / loaded in memory.
 
 # Current version
 
-Current release is 2.1.0
+Current release is 2.1.1
 
 # Installation
 
@@ -38,6 +38,7 @@ Currently ThunderShell supports:
 * `C#` as `cs`
 * `powershell` as `ps`
 * `C# exe` as `exe`
+* `msbuild` as `msbuild`
 
 default option is powershell `ps`
 
@@ -87,6 +88,7 @@ First, the configuration file needs to be configured properly. Here is an exampl
 
 ```
 {
+        "callback-url", "http://1.1.1.1:1111/
         "redis-host": "localhost",
         "redis-port": 6379,
         "http-host": "1.1.1.1",
@@ -147,6 +149,8 @@ http://1.1.1.1:1111/cat.png
 The endpoint supports several options that can be added to the url http://1.1.1.1:1111/cat.png/type/delay/
 
 `type` supports only `ps` and `exe` for now. `delay` is the amount of sleep (in milliseconds) between each callback. Its default value is `10000` (10 seconds).
+
+The endpoint is also responsible of setting the callback url based on the `callback-url` defined in the configuration. You can have a proxy in front of your server that have a different URL.
 
 ### Executing the code on the target
 
@@ -367,6 +371,14 @@ bug fix
 integration of the web interface
 fixing coding style (tab vs space). It's not standardized using tabs
 ```
+
+### Version 2.1.1 (08/01/2019)
+
+```
+bug fix
+getting rid of MySQL. ThunderShell only need redis now even for the syncing
+```
+
 
 
 # Upcoming features
