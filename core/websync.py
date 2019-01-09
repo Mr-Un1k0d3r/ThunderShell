@@ -13,43 +13,24 @@ class Sync:
 
     def __init__(self, config):
         self.config = config
-        self.sql = self.config.get('mysql')
         self.redis = self.config.get('redis')
 
-    def get_cmd_send(self, uid):
+    def get_cmd_send(self, uid, id):
         try:
-            guid = False
             cmd = ""
-            for item in self.sql.get_cmd(uid):
-                data = self.sql.get_cmd_data(item[1])
-                self.sql.delete_cmd(item[0], item[2], item[1], item[3])
-                cmd += "%s Sending: \n%s" % (item[4],data)
+            for item in self.redis.get_active_gui_session_cmd(uid, id):
+                data = self.redis.get_session_cmd(item)
+                data = data.split(":")
+                cmd += "%s - Sending command: %s" % (data[0],data[1])
+                self.redis.delete_entry(item)
             return cmd
         except IndexError:
             pass
 
-    def get_cmd_output(self, guid, uid):
+    def get_cmd_output(self, uid, id):
         cmd_output = ""
-        for item in self.sql.get_cmd_response(uid):
-            self.sql.delete_response(item[0], item[2], item[1], item[3])
-            cmd_output += '%s\n' % self.redis.get_output(item[0], item[1])[0]
+        for item in self.redis.get_active_gui_session_output(uid, id):
+            data = self.redis.get_session_output(item)
+            cmd_output += '%s\n' % data
+            self.redis.delete_entry(item)
         return cmd_output
-
-def start_cmd_sync(config):
-    sync = Sync(config)
-    thread = threading.Thread(target=start_cmd_sync_thread, args=(sync,))
-    thread.start()
-
-def start_cmd_sync_thread(sync, uid):
-    delay = 0
-    try:
-        delay = float(sync.config.get('cli-sync-delay'))
-    except:
-        UI.error('"cli-sync-delay" should be an integer check your config')
-        delay = 5
-    while True:
-        guid = sync.get_cmd_send(uid)
-        guid = sync.get_cmd_output(guid)
-        if guid:
-            sync.get_prompt(guid)
-        time.sleep(delay)

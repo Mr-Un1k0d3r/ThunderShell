@@ -4,7 +4,7 @@
       <tr>
          <th>Domain\Username</th>
          <th>Hostname</th>
-         <th>IP</th>
+         <th>External IP</th>
          <th>Last Seen</th>
       </tr>
    </thead>
@@ -12,15 +12,7 @@
      {% if shells%}
      {% for shell in shells %}
       <tr>
-         <td><a onclick='
-           $("#shell-placeholder").load("/api/attachShell/{{uid}}/{{ shell["shell_id"] }}")
-           $("#shell-placeholder").css("display", "block");
-           $("#shell-box").css("display", "block");
-           $("#online-shells-body").collapse("hide");
-           $("#chat-body").collapse("hide");
-           $("#log").css("display", "none");
-           $("#log-full").css("display", "none");
-             '>{{shell["shell_prompt"]}}</a></td>
+         <td><a id="shell-prompt" onclick='shell_handler("{{shell["shell_id"]}}", "{{uid}}", "{{shell["shell_prompt"].split("\\")[0]}}", "{{shell["shell_hostname"]}}", "{{shell["shell_prompt"].split("\\")[1]}}")'>{{shell["shell_prompt"]}}</a></td>
          <td>{{shell["shell_hostname"]}}</td>
          <td>{{shell["shell_ip"]}}</td>
          <td>{{shell["shell_timestamp"]}}</td>

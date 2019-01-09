@@ -1,13 +1,11 @@
 html {
   cursor: default;
 }
-/* Style the tab */
 .tab {
 overflow: auto;
 border-bottom: 1px solid #ccc;
 background-color: #f1f1f1;
 }
-/* Style the buttons inside the tab */
 .tab button {
 background-color: inherit;
 float: left;
@@ -15,14 +13,21 @@ border: 0;
 cursor: pointer;
 padding: 10px 12px;
 transition: 0.3s;
-font-size: 16px;
+font-size: 14px;
 }
-/* Style the tab content */
 .tab-content {
 display: none;
 padding: 6px 12px;
 border: 0;
 border-top: none;
+}
+#logo-mini {
+  max-height: 30px;
+  max-width:30px;
+}
+#logo-full {
+  max-height: 30px;
+  max-width:30px;
 }
 #username {
   font-size: 16px;
@@ -39,25 +44,27 @@ border-top: none;
 }
 #online-shells-title{
   font-weight: bold;
+  font-size: 14px;
 }
 #online-shells-body {
-  font-size: 10px;
-  height: 400px;
-  max-height: 400px;
+  font-size: 12px;
+  height: 45vh;
+  max-height: 45vh;
   overflow: auto;
 }
 #shrink-shells {
-  font-size: 12px;
+  font-size: 14px;
 }
 #chat-header {
   border-bottom: 1px solid #ccc;
 }
 #chat-title{
   font-weight: bold;
+  font-size: 14px;
 }
 #chat-body {
-  height: 400px;
-  max-height: 400px;
+  height: 45vh;
+  max-height: 45vh;
   overflow: auto;
 }
 #shrink-chat {
@@ -65,15 +72,15 @@ border-top: none;
 }
 #message-area {
   overflow: auto;
-  height: 340px;
-  max-height: 340px;
+  height: 38vh;
+  max-height: 38vh;
   word-wrap: break-word;
 }
 #message-username{
   font-size: 16px;
 }
 #message-text {
-  font-size: 10px;
+  font-size: 12px;
   margin-left: -10px;
   border: none;color: black;
   text-align: left;
@@ -88,10 +95,11 @@ border-top: none;
 }
 #log-title{
   font-weight: bold;
+  font-size: 14px;
 }
 #log-body {
-  height: 320px;
-  font-size: 10px;
+  height: 30vh;
+  font-size: 12px;
   margin-left: 0px;
   border: none;
   color: black;
@@ -105,8 +113,20 @@ border-top: none;
 #shrink-log-body {
   font-size: 12px
 }
+#shell-command {
+  font-size: 12px
+}
+#shell-command-button {
+  font-size: 14px
+}
+#chat-message {
+  font-size: 12px
+}
+#chat-message-button {
+  font-size: 14px
+}
 #log-output {
-  height: 400px;
+  height: 35vh;
   font-size: 16px;
   margin-left: 0;
   border: none;
@@ -123,21 +143,26 @@ border-top: none;
 }
 #log-full-title{
   font-weight: bold;
+  font-size: 14px;
 }
 #log-full-body {
-  height: 725px;
+  height: 70vh;
 }
 #shrink-log-full-body {
   font-size: 12px;
 }
 #log-full-message {
-  height: 700px;
+  height: 67vh;
 }
 #log-full-content {
   white-space:pre-wrap;
 }
-#default-open {
+#shell-open {
   border-right: 1px solid #ccc;
+}
+#shell-close {
+  font-size: 12px;
+  margin-top: 2px
 }
 #tab-header {
   background-color: white;
@@ -153,10 +178,12 @@ border-top: none;
   border-right: 1px solid #ccc;
 }
 #shell-info {
-  float: left;padding: 10px;
+  float: left;
+  padding: 12px;
+  font-size: 12px;
 }
 #shrink-shell {
-  font-size: 10px;
+  font-size: 12px;
   margin-top: 2px;
   align: right;
 }
@@ -165,13 +192,13 @@ border-top: none;
 }
 #shell-input-output {
   overflow: auto;
-  height: 650px;
+  height: 65vh;
   background-color: white;
   word-wrap: break-word;
   white-space:pre-wrap;
 }
 #interact-keylogger {
-  height: 715px;
+  height: 73vh;
   background-color: white;
   overflow: auto
 }
@@ -179,7 +206,7 @@ border-top: none;
   white-space:pre-wrap;
 }
 #interact-log {
-  height: 715px;
+  height: 73vh;
   background-color: white;
   overflow: auto
 }
@@ -187,5 +214,11 @@ border-top: none;
   white-space:pre-wrap;
 }
 #message-timestamp {
-  font-size: 10px;
+  font-size: 12px;
+}
+#log-content {
+  white-space:pre-wrap;
+}
+#log-date {
+  white-space:pre-wrap;
 }

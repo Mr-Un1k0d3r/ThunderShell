@@ -64,5 +64,6 @@ class Payload:
         url = 'http://'
         if self.config.get('https-enabled') == 'on':
             url = 'https://'
-        url += '%s:%s/' % (self.config.get('http-fqdn'), str(self.config.get('http-port')))
+        url += '%s/' % (self.config.get('payload-callback'))
+        self.config.set('payload-callback', "%s:%s" % (self.config.get('http-fqdn'), self.config.get('http-port')))
         return url

@@ -119,7 +119,6 @@ class Utils:
             from flask_socketio import SocketIO
             import flask
             import redis
-            import MySQLdb
         except:
             UI.error('Missing dependencies', False)
             Utils.install_dependencies()
@@ -129,7 +128,7 @@ class Utils:
         UI.warn('Installing dependencies')
         if not os.getuid() == 0:
             UI.error('root privileges required to install the dependencies')
-        os.system('/usr/bin/apt update && /usr/bin/apt install mysql-server redis-server mono-dmcs python-tabulate python-mysqldb python-redis python-flask python-dev libxml2-dev libxslt-dev python-pip -y && pip install flask-socketIO')
+        os.system('/usr/bin/apt update && /usr/bin/apt install redis-server mono-dmcs python-tabulate python-redis python-flask python-dev libxml2-dev libxslt-dev python-pip -y && pip install flask-socketIO')
         UI.error('Installation completed please restart ThunderShell',True)
 
     @staticmethod
@@ -142,4 +141,3 @@ class Utils:
                 pass
             data = data.replace(item, Utils.gen_str(size))
         return data
-        

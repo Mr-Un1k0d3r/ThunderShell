@@ -4,11 +4,18 @@ body, html {
 	background:black;
 	position: relative;
 }
+#container {
+	margin: 300px auto;
+}
 #main-container {
 	margin: 300px auto;
 }
 #logo-style {
 	color: black;
+	font-weight: bold;
+}
+#logo-font {
+	color: yellow;
 	font-weight: bold;
 }
 #logo-img {
@@ -88,6 +95,6 @@ footer {
     width: 500px;
     margin: auto;
     margin-top: 10px;
-    font-size: 0.25cm;
+    font-size: 12px;
     text-align: center;
 }

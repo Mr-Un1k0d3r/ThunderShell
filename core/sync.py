@@ -14,27 +14,28 @@ class Sync:
 
     def __init__(self, config):
         self.config = config
-        self.sql = self.config.get('mysql')
         self.redis = self.config.get('redis')
 
     def get_cmd_send(self):
         guid = False
-        for item in self.sql.get_cmd(self.config.get('uid')):
-            print ''
-            data = self.sql.get_cmd_data(item[1])
-            UI.success('%s - Sending command: %s' % (item[4], data))
-            self.sql.delete_cmd(item[0], item[2], item[1], item[3])
-            guid = item[0]
-            if data == 'exit':
+        for item in self.redis.get_active_cli_session_cmd(self.config.get('uid')):
+            print('\n')
+            data = self.redis.get_data(item)
+            data = data.split(":")
+            guid = item.split(":")[2]
+            UI.warn('%s - Sending command: %s' % (data[0], data[1]))
+            self.redis.delete_entry(item)
+            if data[1] == 'exit':
                 guid = 'exit'
         return guid
 
     def get_cmd_output(self, guid):
-        for item in self.sql.get_cmd_response(self.config.get('uid')):
-            print ''
-            UI.warn('Command output:\n%s' % self.redis.get_output(item[0], item[1])[0])
-            self.sql.delete_response(item[0], item[2], item[1], item[3])
-            guid = item[0]
+        for item in self.redis.get_active_cli_session_output(self.config.get('uid')):
+            print('\n')
+            data = self.redis.get_data(item)
+            guid = item.split(":")[2]
+            UI.warn('Command output:\n%s' % data)
+            self.redis.delete_entry(item)
         return guid
 
     def get_prompt(self, guid):
