@@ -133,11 +133,13 @@ def HTTPDFactory(config):
 
                 if len(payload_path) > 4:
                     payload.set_delay(payload_path[3])
+                    payload.set_callback(payload_path[4])
+
                 self.output = payload.get_output()
             elif path in Utils.get_download_folder_content():
                 force_download = True
                 self.output = Utils.load_file('download/%s' % path)
-                Log.log_event('Download File','%s was downloaded from %s (%s)' % (path, self.client_address[0], self.address_string()))
+                Log.log_event('Download File', '%s was downloaded from %s (%s)' % (path, self.client_address[0], self.address_string()))
             else:
                 self.output = Utils.load_file('html/%s' % self.config.get('http-default-404'))
                 Log.log_error('Invalid request got a GET request', self.path)

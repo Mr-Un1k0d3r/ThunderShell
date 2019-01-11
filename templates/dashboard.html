@@ -147,18 +147,18 @@
                      <div class="modal-body">
                        <br><p>Setting a new callback host and port for the payload will require you to setup port fowarding on the specified callback host.</p><br>
                        <label for="payload-info">Enter payload callback address (Leave empty for default value)</label>
-                         <input name="payloadInfo" type="text" class="form-control" id="payload-info" placeholder="{{host}}:{{port}} or www.ringzer0team.com"/><br>
+                         <input onchange="setPayload()" name="payloadInfo" type="text" class="form-control" id="payload-info" placeholder="http://{{host}}:{{port}} or https://www.ringzer0team.com"/><br>
                        <label for="payload-type">Select payload type:</label>
-                       <select onchange="setPayloadType()" name="payloadType" id="payload-type">
+                       <select onchange="setPayload()" name="payloadType" id="payload-type">
                          <option></option>
-                         <option value="/{{payloads_name}}/exe/10000" id="payload-exe">exe</option>
-                         <option value="/{{payloads_name}}/cs/10000" id="payload-cs">csharp</option>
-                         <option value="/{{payloads_name}}/ps/10000" id="payload-ps">powershell</option>
-                         <option value="/{{payloads_name}}/msbuild/10000" id="payload-ps">msbuild</option>
+                         <option value="/{{payload_name}}/exe/10000" id="payload-exe">exe</option>
+                         <option value="/{{payload_name}}/cs/10000" id="payload-cs">csharp</option>
+                         <option value="/{{payload_name}}/ps/10000" id="payload-ps">powershell</option>
+                         <option value="/{{payload_name}}/msbuild/10000" id="payload-ps">msbuild</option>
                        </select>
                      </div>
                      <div class="modal-footer">
-                       <button onclick="setPayloadInfo($('#payload-info').val())" type="button" class="btn btn-default" data-dismiss="modal">Confirm</button>
+                       <button onclick="fetchPayload()" type="button" class="btn btn-default" data-dismiss="modal">Confirm</button>
                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                      </div>
                    </div>
@@ -251,29 +251,17 @@
    var currentId = "__undefined__";
    var uid = "__undefined__";
    var payloadType = "__undefined__";
+   var payloadCallback  = "__undefined__";
 
-   function setPayloadType(){
+   function setPayload(){
      payloadType = document.getElementById("payload-type").value;
+     payloadCallback = encodeURIComponent(document.getElementById("payload-info").value);
    }
 
-   function setPayloadInfo(payloadInfo){
-       $.ajax({
-         type: "POST",
-         url: "/api/setPayloadInfo",
-         contentType: "application/json",
-         dataType: "json",
-         async: true,
-         data: JSON.stringify({'payloadInfo': payloadInfo, 'payloadType': payloadType}),
-         success: function(data){
-           //if (data == "payload-set"){
-             //
-             // For future??
-           //}
-         }
-       });
-       document.location.href = "{{protocol}}{{host}}:{{port}}"+payloadType;
-       $("#payload-info").val("").focus();
-
+   function fetchPayload() {
+     document.location.href = "{{protocol}}{{host}}:{{port}}" + payloadType +"/"+ payloadCallback
+     document.getElementById("payload-info").value = "";
+     document.getElementById("payload-type").value = "";
    }
 
    function shell_handler(i, u, domain, host, user){

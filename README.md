@@ -33,6 +33,8 @@ apt install python-tabulate
 # ThunderShell features
 ### Payload delivery
 
+The payload `callback-url` need to be set in the default.json file before starting Thundershell, note that if you input a different host you will need to setup port forwarding in order to get the data to the server.
+
 Currently ThunderShell supports:
 
 * `C#` as `cs`
@@ -41,6 +43,7 @@ Currently ThunderShell supports:
 * `msbuild` as `msbuild`
 
 default option is powershell `ps`
+
 
 ### Multi users interface
 
@@ -56,7 +59,7 @@ ThunderShell client supports threading, meaning you can execute several commands
 
 ### Network traffic formating
 
-(under development) ThunderShell allows you to configure the network request performed by the client by setting arbitrary headers and changing the format of the data sent to the server.
+(Under development) ThunderShell allows you to configure the network request performed by the client by setting arbitrary headers and changing the format of the data sent to the server.
 
 Example configuration file `profile.json`:
 
@@ -116,7 +119,7 @@ The `server-password` and `encryption-key` are generated automatically on the fi
 The server, including the web interface, are started from the CLI:
 
 ```
-$ python ThunderShell.py default.json MrUn1k0d3r 
+$ python ThunderShell.py default.json MrUn1k0d3r
 ```
 
 `default.json` is the configuration file. `MrUn1k0d3r` is the username for the session. By default the HTTP daemon and Web GUI will be launched.
@@ -395,4 +398,3 @@ Mr.Un1k0d3r @MrUn1k0d3r
 Tazz0 @Tazz019
 
 RingZer0 Team 2017
-

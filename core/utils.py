@@ -20,6 +20,10 @@ from core.ui import UI
 class Utils:
 
     @staticmethod
+    def url_decode(url):
+        return urllib2.unquote(url)
+
+    @staticmethod
     def timestamp():
         return str(time.strftime('%Y-%m-%d %H:%M:%S'))
 
@@ -125,7 +129,7 @@ class Utils:
         UI.warn('Installing dependencies')
         if not os.getuid() == 0:
             UI.error('root privileges required to install the dependencies')
-            
+
         os.system('/usr/bin/apt update && /usr/bin/apt install redis-server mono-dmcs python-tabulate python-redis python-flask python-dev libxml2-dev libxslt-dev python-pip -y && pip install flask-socketIO')
         UI.error('Installation completed please restart ThunderShell',True)
 
@@ -137,7 +141,7 @@ class Utils:
                 size = int(re.findall('[0-9]{2}', item)[0])
             except:
                 pass
-            
+
             data = data.replace(item, Utils.gen_str(size))
-        
+
         return data

@@ -62,7 +62,8 @@ def dashboard():
     if app.auth():
         return render_template('dashboard.html', \
             username=app.get_user(), host=app.get_ip(), port=app.get_port(),
-            protocol=app.get_protocol(), payloads_name=app.get_payloads_name(),)
+            protocol=app.get_protocol(), payload_name=app.get_payload_name(),
+            callback_url=app.get_payload_url())
     else:
         return redirect(url_for('login'))
 
@@ -212,14 +213,6 @@ def remove_shell(id):
             return ""
     else:
         return redirect(url_for('login'))
-
-@app.route('/api/setPayloadInfo', methods=['POST'])
-def set_payload_info():
-    if app.auth():
-        data = request.json
-        url = data['payloadInfo']
-        app.set_payload(url)
-        return "payload-set"
 
 def init_gui_thread(config, cli):
     thread = threading.Thread(target=start_gui, args=(config, cli, ))

