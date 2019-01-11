@@ -127,6 +127,7 @@ def HTTPDFactory(config):
                 force_download = True
                 Log.log_event('Download Stager', 'Stager was fetched from %s (%s)' % (self.client_address[0], self.address_string()))
                 payload = Payload(self.config)
+                payload.set_callback("__default__")
 
                 if len(payload_path) > 3:
                     payload.set_type(payload_path[2])
