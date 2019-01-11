@@ -40,10 +40,16 @@ class Payload:
         except:
             self.delay = Payload.DEFAULT_DELAY
 
+    def set_callback(self, url):
+        if url != "__default__" and url != "":
+            self.callback_url = Utils.url_decode(url)
+        else:
+            self.callback_url = self.get_url()
+
     def get_output(self):
         output = Utils.load_powershell_script(self.type[self.option], 999)
-        output = output.replace('[URL]', self.get_url()).replace('[KEY]', self.config.get('encryption-key')).replace('[DELAY]', str(self.delay))
-        
+        output = output.replace('[URL]', self.callback_url).replace('[KEY]', self.config.get('encryption-key')).replace('[DELAY]', str(self.delay))
+
         if self.option == "exe":
             output = self.compile_exe(output)
         if self.option == "msbuild":

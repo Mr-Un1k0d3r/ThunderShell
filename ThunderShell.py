@@ -40,7 +40,6 @@ if __name__ == '__main__':
     uid = Utils.guid()
     config.set('uid', uid)
     config.set('username', '%s' % sys.argv[2])
-    config.set('payload-callback', '%s:%s' % (config.get('http-fqdn'), config.get('http-port')))  # Temporary
     db = RedisQuery(config)
 
     config.set('redis', db)

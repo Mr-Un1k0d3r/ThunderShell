@@ -42,6 +42,7 @@ Currently ThunderShell supports:
 
 default option is powershell `ps`
 
+
 ### Multi users interface
 
 ThunderShell can be used through the CLI and the web interface (under development) and supports several users at the same time on both the web interface and the CLI.
@@ -56,7 +57,7 @@ ThunderShell client supports threading, meaning you can execute several commands
 
 ### Network traffic formating
 
-(under development) ThunderShell allows you to configure the network request performed by the client by setting arbitrary headers and changing the format of the data sent to the server.
+(Under development) ThunderShell allows you to configure the network request performed by the client by setting arbitrary headers and changing the format of the data sent to the server.
 
 Example configuration file `profile.json`:
 
@@ -116,7 +117,7 @@ The `server-password` and `encryption-key` are generated automatically on the fi
 The server, including the web interface, are started from the CLI:
 
 ```
-$ python ThunderShell.py default.json MrUn1k0d3r 
+$ python ThunderShell.py default.json MrUn1k0d3r
 ```
 
 `default.json` is the configuration file. `MrUn1k0d3r` is the username for the session. By default the HTTP daemon and Web GUI will be launched.
@@ -379,6 +380,13 @@ bug fix
 getting rid of MySQL. ThunderShell only need redis now even for the syncing
 ```
 
+### Version 2.1.2 (11/01/2019)
+
+```
+bug fix
+fixed payload fetch method from the GUI.
+```
+
 
 
 # Upcoming features
@@ -386,7 +394,7 @@ getting rid of MySQL. ThunderShell only need redis now even for the syncing
 * Implement in-memory protection using C# and push / pull code there to avoid sending the data several times
 * Implement different delivery methods
 * Inject the PowerShell RAT into another process
-* Fully integrated keylogger
+* ~~Fully integrated keylogger~~ [✓]
 
 # Credit
 
@@ -395,4 +403,3 @@ Mr.Un1k0d3r @MrUn1k0d3r
 Tazz0 @Tazz019
 
 RingZer0 Team 2017
-

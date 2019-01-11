@@ -11,6 +11,7 @@ import base64
 import os
 import fnmatch
 from flask import Flask, session, request
+from urllib import quote_plus
 from core.websync import Sync
 from core.utils import Utils
 from core.log import Log
@@ -196,8 +197,11 @@ class FlaskFactory(Flask):
         user = self.redis.get_prompt(id).split(' ')[1].split('\\')[1]
         return user
 
-    def get_payloads_name(self):
+    def get_payload_name(self):
         return self.internal_config.get('http-download-path')
+
+    def get_payload_url(self):
+        return self.internal_config.get('callback-url')
 
     def get_protocol(self):
         if self.internal_config.get('https-enabled') == 'on':
@@ -221,19 +225,8 @@ class FlaskFactory(Flask):
             if id in shell:
                 self.redis.delete_entry(shell)
 
-    def set_payload(self, url):
-        if url == "":
-            return
-        try:
-            host = url.split(":")[0]
-            port = url.split(":")[1]
-            info = "%s:%s" % (host, port)
-            self.internal_config.set('payload-callback', info)
-        except:
-            host = url
-            port = self.internal_config.get('http-port')
-            info = "%s:%s" % (host, port)
-            self.internal_config.set('payload-callback', info)
+
+
 
 
 class ServerApi:
