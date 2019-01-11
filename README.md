@@ -33,8 +33,6 @@ apt install python-tabulate
 # ThunderShell features
 ### Payload delivery
 
-The payload `callback-url` need to be set in the default.json file before starting Thundershell, note that if you input a different host you will need to setup port forwarding in order to get the data to the server.
-
 Currently ThunderShell supports:
 
 * `C#` as `cs`
@@ -382,6 +380,13 @@ bug fix
 getting rid of MySQL. ThunderShell only need redis now even for the syncing
 ```
 
+### Version 2.1.2 (11/01/2019)
+
+```
+bug fix
+fixed payload fetch method from the GUI.
+```
+
 
 
 # Upcoming features
@@ -389,7 +394,7 @@ getting rid of MySQL. ThunderShell only need redis now even for the syncing
 * Implement in-memory protection using C# and push / pull code there to avoid sending the data several times
 * Implement different delivery methods
 * Inject the PowerShell RAT into another process
-* Fully integrated keylogger
+* ~~Fully integrated keylogger~~ [✓]
 
 # Credit
 
