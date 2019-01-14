@@ -130,7 +130,7 @@ class Utils:
         if not os.getuid() == 0:
             UI.error('root privileges required to install the dependencies')
 
-        os.system('/usr/bin/apt update && /usr/bin/apt install redis-server mono-dmcs python-tabulate python-redis python-flask python-dev libxml2-dev libxslt-dev python-pip -y && pip install flask-socketIO && service redis-server start')
+        os.system('/usr/bin/apt update && /usr/bin/apt install redis-server mono-dmcs python-tabulate python-redis python-flask python-dev libxml2-dev libxslt-dev python-pip -y && pip install flask-socketIO && redis-server /etc/redis/redis.conf')
         UI.error('Installation completed please restart ThunderShell',True)
 
     @staticmethod
