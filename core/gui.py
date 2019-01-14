@@ -15,7 +15,11 @@ from core.apis import FlaskFactory
 errors = ['Wrong password', 'Session was destroyed']
 version = Version.VERSION
 
-app = FlaskFactory(__name__, root_path=os.getcwd(), template_folder=os.getcwd() + '/templates', static_path='/static')
+# Kali fix for: TypeError stati_path
+try:
+    app = FlaskFactory(__name__, root_path=os.getcwd(), template_folder=os.getcwd() + '/templates', static_path='/static')
+except:
+    app = FlaskFactory(__name__, root_path=os.getcwd(), template_folder=os.getcwd() + '/templates')
 websocket = SocketIO(app)
 
 
