@@ -20,6 +20,10 @@ from core.ui import UI
 class Utils:
 
     @staticmethod
+    def start_redis():
+        os.system('/usr/bin/sudo /usr/bin/redis-server /etc/redis/redis.conf')
+
+    @staticmethod
     def url_decode(url):
         return urllib2.unquote(url)
 
