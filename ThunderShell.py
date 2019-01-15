@@ -15,6 +15,7 @@ from core.ui import UI
 
 UI.banner()
 Utils.check_dependencies()
+Utils.start_redis()
 
 from core.config import CONFIG
 from core.redisquery import RedisQuery
