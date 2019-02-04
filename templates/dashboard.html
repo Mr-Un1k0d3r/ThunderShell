@@ -26,12 +26,6 @@
                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
                <span class="sr-only">Toggle navigation</span>
                </a>
-               <div id="host-info" class="navbar-custom-menu pull-left">
-                  <b>Host:</b> {{ host }} <b>Port:</b> {{ port }}
-               </div>
-               <div id="username" class="navbar-custom-menu pull-right">
-                  <b>{{ username }}</b>
-               </div>
             </nav>
          </header>
          <aside class="main-sidebar">
@@ -51,6 +45,9 @@
                         <li><a id="event-log">Event Log</a></li>
                         <li><a id="http-log">HTTP Log</a></li>
                         <li><a id="chat-log">Chat Log</a></li>
+                        <li><a id="shells-log">Shells Log</a></li>
+                        <li><a id="keyloggers-log">Keylogger Log</a></li>
+                        <li><a id="screenshots-log">Screenshots Log</a></li>
                         <li><a id="error-log">Error Log</a></li>
                      </ul>
                   </li>
@@ -63,7 +60,7 @@
             <section class="content container-fluid">
                <div class="row">
                   <!-- Online Shells -->
-                  <div id="online-shells" class="col-sm-12 col-md-6">
+                  <div id="online-shells" class="col-md-6">
                      <div class="box">
                         <div id="online-shells-header" class="box-header with-border">
                            <h3 id="online-shells-title" class="box-title">Online Shells</h3>
@@ -80,7 +77,7 @@
                   </div>
                   <!-- Online Shells -->
                   <!-- Chat Room -->
-                  <div id="chat" class="col-sm-12 col-md-6">
+                  <div id="chat" class="col-md-6">
                      <div class="box direct-chat direct-chat-warning">
                         <div id="chat-header" class="box-header with-border">
                            <h3 id="chat-title" class="box-title">Chat Room</h3>
@@ -112,6 +109,54 @@
                   </div>
                </div>
                <!-- Chat Room -->
+
+               <!-- Small Log -->
+               <div class="row">
+
+               <div id="log">
+                     <div class="col-md-12">
+                        <div id="log-area" class="box direct-chat direct-chat-warning">
+                          <div id="log-header" class="box-header with-border">
+                             <h3 id="log-title" class="box-title">Events</h3>
+                             <div class="box-tools pull-right">
+                                <button type="button" onclick="$('#sinfo').css('width', '100%');$('#log').css('display', 'none')" class="btn btn-box-tool pull-right"><i class="fa fa-times"></i>
+                                </button>
+                                <button id="shrink-log-body" onclick="$('#log-body').collapse('toggle')" type="button" class="btn btn-box-tool pull-right"><i class="fa fa-minus"></i>
+                                </button>
+                             </div>
+                          </div>
+                          <div id="log-body" class="box-body"> </div>
+                        </div>
+                    </div>
+                  </div>
+               <!-- Small Log -->
+
+               <!-- Server info -->
+               <div style="float: left;" id="sinfo">
+                     <div class="col-md-12">
+                        <div id="sinfo" class="box direct-chat direct-chat-warning">
+                          <div id="sinfo-header" class="box-header with-border">
+                             <h3 id="sinfo-title" class="box-title">Server Info</h3>
+                             <div class="box-tools pull-right">
+                                <button type="button" onclick="$('#log').css('width', '100%');$('#sinfo').css('display', 'none')" class="btn btn-box-tool pull-right"><i class="fa fa-times"></i>
+                                </button>
+                                <button id="sinfo-btn-body" onclick="$('#sinfo-body').collapse('toggle')" type="button" class="btn btn-box-tool pull-right"><i class="fa fa-minus"></i>
+                                </button>
+                             </div>
+                          </div>
+                          <div id="sinfo-body" class="box-body"><li><b>Your Username:</b> {{username}}</li>
+                              <li><b>RAT Server URL:</b> {{protocol}}{{host}}:{{port}}</li>
+                              <li><b>Payload Callback URL: </b>{{callback_url}}</li>
+                              <li><b>Payload Download URL: </b>{{protocol}}{{host}}:{{port}}/{{payload_name}}</li>
+                              <li><b>GUI Server URL:</b> {{protocol}}{{gui_host}}:{{gui_port}}</li>
+                              <li><b>GUI Server Password:</b> {{gui_password}}</li>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+               <!-- Small Log -->
+
                <!-- Delete Shell Modal -->
                <div class="modal fade" id="myModal" role="dialog">
                  <div class="modal-dialog">
@@ -155,6 +200,7 @@
                          <option value="/{{payload_name}}/cs/10000" id="payload-cs">csharp</option>
                          <option value="/{{payload_name}}/ps/10000" id="payload-ps">powershell</option>
                          <option value="/{{payload_name}}/msbuild/10000" id="payload-ps">msbuild</option>
+                         <!--<option value="/{{payload_name}}/dll/10000" id="payload-dll">dll</option>-->
                        </select>
                      </div>
                      <div class="modal-footer">
@@ -167,32 +213,14 @@
                </div>
                <!-- Modal -->
 
-               <!-- Small Log -->
-               <div id="log">
-                  <div class="row">
-                     <div class="col-sm-12 col-md-12">
-                        <div id="log-area" class="box direct-chat direct-chat-warning">
-                          <div id="log-header" class="box-header with-border">
-                             <h3 id="log-title" class="box-title">Event Log</h3>
-                             <div class="box-tools pull-right">
-                                <button type="button" onclick="$('#log').css('display', 'none')" class="btn btn-box-tool pull-right"><i class="fa fa-times"></i>
-                                </button>
-                                <button id="shrink-log-body" onclick="$('#log-body').collapse('toggle')" type="button" class="btn btn-box-tool pull-right"><i class="fa fa-minus"></i>
-                                </button>
-                             </div>
-                          </div>
-                          <div id="log-body" class="box-body"> </div>
-                        </div>
-                    </div>
-                  </div>
-                </div>
-               <!-- Small Log -->
+
 
                <div id="shell-placeholder">
                  <div id="shell-box" class="box">
                  <div id="tab-header" class="tab">
                    <button class="tablinks" onclick="open_box(event, 'interact-shell')" id="shell-open"><b>Shell</b></button>
                    <button class="tablinks" onclick="open_box(event, 'interact-keylogger')" id="keylogger"><b>Keylogger</b></button>
+                   <button class="tablinks" onclick="open_box(event, 'interact-screenshot');" id="screenshot"><b>Screenshots</b></button>
                    <button class="tablinks" onclick="open_box(event, 'interact-log')" id="shell-logs"><b>Log</b></button>
                    <div class="tablinks" id="shell-info"></div>
                    <button id="shell-close" onclick="$('#shell-box').css('display', 'none');$.get('/api/detachShell/{{guid}}/{{id}}')" type="button" class="btn btn-box-tool pull-right"><i class="fa fa-times"></i></button>
@@ -217,6 +245,9 @@
                  <div id="interact-log" class="tab-content">
                    <p id="shell-log-area"></p>
                  </div>
+                 <div id="interact-screenshot" class="tab-content">
+                   <p id="screenshot-area">a</p>
+                 </div>
                  </div>
                  </div>
                </div>
@@ -236,8 +267,6 @@
          </div>
       </div>
       </section>
-      </div>
-      </div>
       {% endblock %}
    </body>
 
@@ -253,6 +282,18 @@
    var payloadType = "__undefined__";
    var payloadCallback  = "__undefined__";
 
+   setInterval(function(){
+    $.ajax({
+      type: "GET",
+      url: "/",
+      async: true,
+      success: null,
+      error: function(data){
+        window.location = "/login"
+      }      
+    });
+   }, 15000);
+
    function setPayload(){
      payloadType = document.getElementById("payload-type").value;
      payloadCallback = encodeURIComponent(document.getElementById("payload-info").value);
@@ -264,36 +305,44 @@
      document.getElementById("payload-type").value = "";
    }
 
-   function shell_handler(i, u, domain, host, user){
-     currentId = i;
-     uid = u;
+   function shell_handler(id, uuid, domain, host, user){
+     currentId = id;
+     uid = uuid;
      $("#shell-input-output").html("");
      $("#keylogger-area").html("");
      $("#shell-log-area").html("");
-     $("#shell-info").html("<b>Domain:</b> "+domain+" <b>Hostname:</b> "+host+" <b>User:</b> "+user);
+     $("#shell-info").html("<b>ID:</b> "+id+" <b>Domain:</b> "+domain+" <b>Hostname:</b> "+host+" <b>User:</b> "+user);
      $.post("/api/attachShell/"+uid+"/"+currentId);
      $("#shell-placeholder").css("display", "block");
      $("#shell-box").css("display", "block");
      $("#shell-box-body").css("display", "block");
      $("#online-shells-body").collapse("hide");
      $("#chat-body").collapse("hide");
-     $("#log").css("display", "none");
+     $("#log").css("display", "block");
+     $("#log-body").collapse("hide");
      $("#log-full").css("display", "none");
+     $("#sinfo").css("width", "50%");
+     $("#sinfo-body").collapse("hide");
    }
 
    document.getElementById("shell-open").click();
    $("#keylogger").click(function(){
-     $("#keylogger-area").load("/api/fetchKeylogger/"+currentId)
+     $("#keylogger-area").load("/api/fetchKeylogger/"+currentId);
    });
    $("#shell-logs").click(function(){
-     $("#shell-log-area").load("/api/fetchShellLog/"+currentId)
+     $("#shell-log-area").load("/api/fetchShellLog/"+currentId);
    });
+   $("#screenshot").click(function(){
+    $("#screenshot-area").load("/api/fetchScreenshots/"+currentId);
+   });
+
    $("#shell-command").on("keyup", function(e){
        if (e.keyCode == 13) {
          e.preventDefault();
          send_cmd();
        };
    });
+
    function send_cmd(){
      var cmd = $("#shell-command").val();
      $.ajax({
@@ -307,6 +356,7 @@
          // For future??
        }
      });
+
      $("#shell-command").val("").focus();
      var objDiv = document.getElementById("shell-input-output");
      objDiv.scrollTop = objDiv.scrollHeight;
@@ -360,6 +410,7 @@
           });
         };
       };
+
       setInterval(function(){
         $("#online-shells-body").load("/api/listShells");
         $("#log-body").load("/api/newEvents");
@@ -371,14 +422,19 @@
         $("#message-area").load("/api/fetchMsgs");
         $("#log-body").load("/api/newEvents");
         $("#online-shells-body").load("/api/listShells");
-        $("#chat-body, #online-shells-body, #log-body").collapse("show");
+        $("#log").css("width", "50%");
+        $("#sinfo").css("width", "50%");
+        $("#chat-body, #online-shells-body, #log-body, #sinfo-body").collapse("show");
         $("#log-full, #shell-placeholder").css("display", "none");
       });
       $("#load-dashboard").click(function(){
-        $("#log, #chat, #online-shells").css("display", "block");
+        $("#log, #chat, #online-shells, #sinfo").css("display", "block");
         $("#log-full").css("display", "none");
         $("#chat, #online-shells").css("width", "");
-        $("#log-body,#chat-body,#online-shells-body").collapse("show");
+        $("#log").css("width", "50%");
+        $("#sinfo").css("width", "50%");
+        $('#shell-box-body').toggle();
+        $("#log-body,#chat-body,#online-shells-body, #sinfo-body").collapse("show");
       });
       $("#load-chat").click(function(){
         $("#online-shells").css("width", "");
@@ -393,53 +449,80 @@
       $("#event-log").click(function(){
         $('#shell-box-body').css("display", "none");
         $("#log-full-area").load("/api/fetchLogs/event");
-        $("#online-shells-body, #chat-body").collapse("hide");
-        $("#log,#interact-shell-body").css("display", "none");
+        $("#sinfo-body,#log-body,#log-body, #online-shells-body, #chat-body").collapse("hide");
+        $("#interact-shell-body").css("display", "none");
+        $("#log-full").css("display", "block");
+        $("#log-menu").trigger("click");
+      });
+      $("#shells-log").click(function(){
+        $('#shell-box-body').css("display", "none");
+        $("#log-full-area").load("/api/fetchLogs/shell");
+        $("#sinfo-body,#log-body,#online-shells-body, #chat-body").collapse("hide");
+        $("#interact-shell-body").css("display", "none");
+        $("#log-full").css("display", "block");
+        $("#log-menu").trigger("click");
+      });
+      $("#keyloggers-log").click(function(){
+        $('#shell-box-body').css("display", "none");
+        $("#log-full-area").load("/api/fetchLogs/keylogger");
+        $("#sinfo-body,#log-body,#online-shells-body, #chat-body").collapse("hide");
+        $("#interact-shell-body").css("display", "none");
+        $("#log-full").css("display", "block");
+        $("#log-menu").trigger("click");
+      });
+      $("#screenshots-log").click(function(){
+        $('#shell-box-body').css("display", "none");
+        $("#log-full-area").load("/api/fetchLogs/screenshot");
+        $("#sinfo-body,#log-body,#online-shells-body, #chat-body").collapse("hide");
+        $("#interact-shell-body").css("display", "none");
         $("#log-full").css("display", "block");
         $("#log-menu").trigger("click");
       });
       $("#http-log").click(function(){
         $("#log-full-area").load("/api/fetchLogs/http");
-        $("#chat-body,#online-shells-body").collapse("hide");
-        $("#log,#interact-shell-body").css("display", "none");
+        $("#sinfo-body,#log-body,#chat-body,#online-shells-body").collapse("hide");
+        $("#interact-shell-body").css("display", "none");
         $("#log-full").css("display", "block");
         $("#log-menu").trigger("click");
       });
       $("#shell-log").click(function(){
         $("#log-full-area").load("/api/fetchLogs/shell");
-        $("#chat-body,#online-shells-body").collapse("hide");
-        $("#log,#interact-shell-body").css("display", "none");
+        $("#sinfo-body,#log-body,#chat-body,#online-shells-body").collapse("hide");
+        $("#interact-shell-body").css("display", "none");
         $("#log-full").css("display", "block");
         $("#log-menu").trigger("click");
       });
       $("#keylogger-log").click(function(){
         $("#log-full-area").load("/api/fetchLogs/keylogger");
-        $("#chat-body,#online-shells-body").collapse("hide");
-        $("#log,#interact-shell-body").css("display", "none");
+        $("#sinfo-body,#log-body,#chat-body,#online-shells-body").collapse("hide");
+        $("#interact-shell-body").css("display", "none");
         $("#log-full").css("display", "block");
         $("#log-menu").trigger("click");
       });
       $("#chat-log").click(function(){
         $("#log-full-area").load("/api/fetchLogs/chat");
-        $("#chat-body,#online-shells-body").collapse("hide");
-        $("#log,#interact-shell-body").css("display", "none");
+        $("#sinfo-body,#log-body,#chat-body,#online-shells-body").collapse("hide");
+        $("#interact-shell-body").css("display", "none");
         $("#log-full").css("display", "block");
         $("#log-menu").trigger("click");
       });
       $("#error-log").click(function(){
         $("#log-full-area").load("/api/fetchLogs/error");
-        $("#chat-body,#online-shells-body").collapse("hide");
-        $("#log,#interact-shell-body").css("display", "none");
+        $("#sinfo-body,#log-body,#chat-body,#online-shells-body").collapse("hide");
+        $("#interact-shell-body").css("display", "none");
         $("#log-full").css("display", "block");
         $("#log-menu").trigger("click");
       });
+
       var socket = io.connect("{{protocol}}" + document.domain + ':' + location.port);
+
       $("#chat-message").on("keyup", function(e){
           if (e.keyCode == 13) {
             e.preventDefault();
             send_msg();
           };
       });
+
       function send_msg(){
         var user = "{{ username }}";
         var msg = $("#chat-message").val();
@@ -449,6 +532,7 @@
         })
         $("#chat-message").val("").focus();
       };
+
       socket.on("msg-received", function( msg ){
         if(typeof msg !== "__undefined__"){
           $("#message-area").load("/api/fetchMsgs");
@@ -456,4 +540,5 @@
           objDiv.scrollTop = objDiv.scrollHeight;
         };
       });
+
    </script>

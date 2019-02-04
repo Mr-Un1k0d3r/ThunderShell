@@ -1,0 +1,5 @@
+{% block content %}
+{% if screenshot %}
+<img style="height: 100%;width: 100%" src="data:image/png;base64, {{screenshot.decode()}}"/>
+{% endif %}
+{% endblock %}

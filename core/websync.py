@@ -13,13 +13,14 @@ class Sync:
 
     def __init__(self, config):
         self.config = config
-        self.redis = self.config.get('redis')
+        self.redis = self.config.get("redis")
 
     def get_cmd_send(self, uid, id):
         try:
             cmd = ""
             for item in self.redis.get_active_gui_session_cmd(uid, id):
                 data = self.redis.get_session_cmd(item)
+                data = data.decode()
                 data = data.split(":")
                 cmd += "%s - Sending command: %s" % (data[0],data[1])
                 self.redis.delete_entry(item)
@@ -31,6 +32,6 @@ class Sync:
         cmd_output = ""
         for item in self.redis.get_active_gui_session_output(uid, id):
             data = self.redis.get_session_output(item)
-            cmd_output += '%s\n' % data
+            cmd_output += "%s\n" % data.decode()
             self.redis.delete_entry(item)
         return cmd_output

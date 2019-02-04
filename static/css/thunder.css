@@ -110,7 +110,31 @@ border-top: none;
   white-space:pre-wrap;
   overflow:auto;
 }
-#shrink-log-body {
+#sinfo {
+  display: hidden;
+}
+#sinfo-header {
+  border-bottom: 1px solid #ccc;
+}
+#sinfo-title{
+  font-weight: bold;
+  font-size: 14px;
+}
+#sinfo-body {
+  line-height: 1em;
+  height: 30vh;
+  font-size: 12px;
+  padding-left: 10px;
+  margin-top: 1px;
+  border: none;
+  color: black;
+  text-align: left;
+  background-color: white;
+  width: 100%;
+  white-space:pre-wrap;
+  overflow:hidden;
+}
+#sinfo-btn-body {
   font-size: 12px
 }
 #shell-command {
@@ -173,6 +197,8 @@ border-top: none;
 }
 #keylogger {
   border-right: 1px solid #ccc;
+}#screenshot {
+  border-right: 1px solid #ccc;
 }
 #shell-logs {
   border-right: 1px solid #ccc;
@@ -201,6 +227,12 @@ border-top: none;
   height: 73vh;
   background-color: white;
   overflow: auto
+}
+#interact-screenshot {
+  height: 73vh;
+  background-color: white;
+  overflow: auto;
+  width: 100%;
 }
 #keylogger-area {
   white-space:pre-wrap;

