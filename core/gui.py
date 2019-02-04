@@ -127,7 +127,7 @@ def fetch_screenshots(id):
             return render_template("screenshots.html", screenshots=screenshots)
         else:
             for screenshot in app.get_screenshots(id):
-                info = screenshot.split("/");path = info[5];name = info[6]
+                info = screenshot.split("/");path = info[-2];name = info[-1]
                 screenshot = "%s/%s" % (path,name)
                 if screenshot not in screenshots:
                     screenshots.append(screenshot)
