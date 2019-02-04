@@ -10,7 +10,9 @@ The "core" RAT doesn't require a second stage to be injected / loaded in memory.
 
 # Current version
 
-Current release is 2.1.1
+ThunderShell is now using python3
+
+Current release is 3.0.0
 
 # Installation
 
@@ -387,7 +389,11 @@ bug fix
 fixed payload fetch method from the GUI.
 ```
 
+### Version 3.0.0 (04/02/2019)
 
+```
+Ported to python3
+```
 
 # Upcoming features
 
