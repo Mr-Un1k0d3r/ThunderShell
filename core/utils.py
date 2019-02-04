@@ -13,7 +13,7 @@ import uuid
 import glob
 import string
 import random
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import datetime
 from core.ui import UI
 
@@ -21,15 +21,15 @@ class Utils:
 
     @staticmethod
     def start_redis():
-        os.system('/usr/bin/sudo /usr/bin/redis-server /etc/redis/redis.conf')
+        os.system("/usr/bin/sudo /usr/bin/redis-server /etc/redis/redis.conf")
 
     @staticmethod
     def url_decode(url):
-        return urllib2.unquote(url)
+        return urllib.parse.unquote(url)
 
     @staticmethod
     def timestamp():
-        return str(time.strftime('%Y-%m-%d %H:%M:%S'))
+        return str(time.strftime("%Y-%m-%d %H:%M:%S"))
 
     @staticmethod
     def file_exists(path, die=False, show_error=True):
@@ -37,18 +37,18 @@ class Utils:
             return True
 
         if show_error:
-            UI.error('%s not found' % path, die)
+            UI.error("%s not found" % path, die)
         return False
 
     @staticmethod
     def load_file(path, die=False, show_error=True):
         if Utils.file_exists(path, die, show_error):
-            return open(path, 'rb').read()
-        return ''
+            return open(path, "r").read()
+        return ""
 
     @staticmethod
     def load_file_unsafe(path):
-        return open(path, 'rb').read()
+        return open(path, "rb").read()
 
     @staticmethod
     def create_folder_tree(path):
@@ -56,62 +56,62 @@ class Utils:
 
     @staticmethod
     def unix_to_date(timestamp):
-        return datetime.datetime.fromtimestamp(float(timestamp)).strftime('%d/%m/%Y %H:%M:%S')
+        return datetime.datetime.fromtimestamp(float(timestamp)).strftime("%d/%m/%Y %H:%M:%S")
 
     @staticmethod
     def get_arg_at(cmd, index, max):
-        cmd = cmd.split(' ', max)
+        cmd = cmd.split(" ", max)
         if len(cmd) - 1 >= index:
             return cmd[index]
-        return ''
+        return ""
 
     @staticmethod
     def download_url(path):
-        request = urllib2.Request(path)
-        request.add_header('User-Agent','Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0')
+        request = urllib.request.Request(path)
+        request.add_header("User-Agent","Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0")
         # Accept invalid cert
         context = ssl.create_default_context()
         context.check_hostname = False
         context.verify_mode = ssl.CERT_NONE
-        data = ''
+        data = ""
         try:
-            data = urllib2.urlopen(request, context=context).read()
+            data = urllib.request.urlopen(request, context=context).read()
         except:
-            UI.error('Failed to fetch %s' % path)
+            UI.error("Failed to fetch %s" % path)
 
         return data
 
     @staticmethod
     def load_powershell_script(path, length):
-        data = Utils.load_file('powershell/%s' % path)
+        data = Utils.load_file("powershell/%s" % path)
         return Utils.update_vars(data, length)
 
     @staticmethod
     def update_vars(data, length):
-        for i in reversed(range(0, length + 1)):
-            data = data.replace('VAR%d' % i, Utils.gen_str(random.randrange(4, 16)))
+        for i in reversed(list(range(0, length + 1))):
+            data = str(data).replace("VAR%d" % i, Utils.gen_str(random.randrange(4, 16)))
         return data
 
     @staticmethod
     def update_key(data, key, value):
-        return data.replace('[%s]' % key, value)
+        return data.replace("[%s]" % key, value)
 
     @staticmethod
     def gen_str(size):
-        return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(size))
+        return "".join(random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(size))
 
     @staticmethod
     def get_download_folder_content():
         files = []
-        for item in glob.glob('download/*'):
-            files.append(item.replace('download/', ''))
+        for item in glob.glob("download/*"):
+            files.append(item.replace("download/", ""))
         return files
 
     @staticmethod
     def validate_guid(guid):
         if re.match("^[\w\d]+$", guid):
             return guid
-        return ''
+        return ""
 
     @staticmethod
     def guid():
@@ -124,25 +124,25 @@ class Utils:
             from flask_socketio import SocketIO
             import flask
             import redis
-        except:
-            UI.error('Missing dependencies', False)
+        except Exception as e:
+            print(e)
+            UI.error("Missing dependencies", False)
             Utils.install_dependencies()
 
     @staticmethod
     def install_dependencies():
-        UI.warn('Installing dependencies')
+        UI.warn("Installing dependencies")
         if not os.getuid() == 0:
-            UI.error('root privileges required to install the dependencies')
-
-        os.system('/usr/bin/apt update && /usr/bin/apt install redis-server mono-dmcs python-tabulate python-redis python-flask python-dev libxml2-dev libxslt-dev python-pip -y && pip install flask-socketIO')
-        UI.error('Installation completed please restart ThunderShell',True)
+            UI.error("root privileges required to install the dependencies")
+        os.system("/usr/bin/apt update && /usr/bin/apt install redis-server mono-mcs python3-tabulate python3-redis python3-flask python3-dev python3-pip python3-gevent -y && /usr/bin/python3 -m pip install flask-socketio")
+        UI.error("Installation completed please restart ThunderShell", True)
 
     @staticmethod
     def parse_random(data):
         for item in re.findall("{{random}}\[.{2}\]", data):
             size = 16
             try:
-                size = int(re.findall('[0-9]{2}', item)[0])
+                size = int(re.findall("[0-9]{2}", item)[0])
             except:
                 pass
 

@@ -1,6 +1,12 @@
 {% block content %}
    <div id="log-full-header" class="box-header with-border">
-      <h3 style="font-size: 14px;" id="log-full-title" class="box-title">{{log_name}} Log</h3>
+      {% if output %}
+      <h3 style="font-size: 14px;" id="log-full-title" class="box-title">Log Name: {{log_name}}</h3>
+      {% elif screenshot %}
+      <h3 style="font-size: 14px;" id="log-full-title" class="box-title">Screenshot Name: {{log_name}}</h3>
+      {% else %}
+      <h3 style="font-size: 14px;" id="log-full-title" class="box-title">Logs Type: {{log_name.upper()}}</h3>
+      {% endif %}
       <div class="box-tools pull-right">
          <button type="button" onclick="$('#log-full').css('display', 'none')" class="btn btn-box-tool pull-right" ><i class="fa fa-times"></i>
          </button>
@@ -13,17 +19,24 @@
          <div class="direct-chat-msg">
                {% if output %}
                <div style="font-size: 12px;" id="log-content" content="text/plain">{{log_content}}</div>
-               {%else%}
+               {% endif %}
+               {% if screenshot %}
+               <div style="font-size: 12px;" id="log-content" content="text/plain"><img style="height: 100%; width: 100%;" src="data:image/png;base64, {{log_content.decode()}}"/></div>
+               {%endif%}
+               {% if extra %}
+               {% for name,date in log_extra.items() %}
+               <div style="font-size: 12px;" id="log-date" content="text/html"><a onclick='
+                  $("#sinfo-body,#log-body,#chat-body,#shell-body,#online-shells-body").collapse("hide");
+                  $("#log-full").css("display", "block");
+                  $("#log-full-area").load("/api/fetchLog/{{date}}/{{name}}");'>{{name}}</a></div>
+              {% endfor %}
+              {% endif %}
               {% for date in dates%}
               <div style="font-size: 12px;" id="log-date" content="text/html"><a onclick='
-                      $("#chat-body").collapse("hide");
-                      $("#online-shells-body").collapse("hide");
-                      $("#shell-body").collapse("hide");
-                      $("#log").css("display", "none");
-                      $("#log-full").css("display", "block");
-                      $("#log-full-area").load("/api/fetchLog/{{date}}/{{log_name}}");'>{{date}}</a></div>
+                  $("#sinfo-body,#log-body,#chat-body,#shell-body,#online-shells-body").collapse("hide");
+                  $("#log-full").css("display", "block");
+                  $("#log-full-area").load("/api/fetchLog/{{date}}/{{log_name}}");'>{{date}}</a></div>
               {% endfor %}
-              {%endif%}
          </div>
       </div>
    </div>

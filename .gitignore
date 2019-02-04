@@ -4,3 +4,4 @@
 *.pyc
 *.lock
 logs/
+__pycache__/

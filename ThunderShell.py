@@ -45,7 +45,6 @@ if __name__ == '__main__':
 
     config.set('redis', db)
 
-    db.update_config(config).init_sql()
     UI.warn('Current Active CLI session UUID is %s' % config.get('uid'))
 
     cli = Cli(config)
@@ -62,7 +61,7 @@ if __name__ == '__main__':
         try:
             cmd = cli.prompt()
             cli.parse_cmd(cmd)
-        except KeyboardInterrupt, e:
+        except KeyboardInterrupt as e:
             UI.error('*** You really want to exit the application? *** (yes/no)')
             if UI.prompt('Exit').lower() == 'yes':
                 os._exit(0)

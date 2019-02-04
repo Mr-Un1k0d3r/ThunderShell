@@ -2,20 +2,20 @@
 <table class="table">
    <thead>
       <tr>
-         <th>Domain\Username</th>
-         <th>Hostname</th>
-         <th>External IP</th>
-         <th>Last Seen</th>
+         <th>HOSTNAME DOMAIN\USERNAME</th>
+         <th>INCOMING IP</th>
+         <th>SHELL ID</th>
+         <th>LAST SEEN</th>
       </tr>
    </thead>
    <tbody>
      {% if shells%}
      {% for shell in shells %}
       <tr>
-         <td><a id="shell-prompt" onclick='shell_handler("{{shell["shell_id"]}}", "{{uid}}", "{{shell["shell_prompt"].split("\\")[0]}}", "{{shell["shell_hostname"]}}", "{{shell["shell_prompt"].split("\\")[1]}}")'>{{shell["shell_prompt"]}}</a></td>
-         <td>{{shell["shell_hostname"]}}</td>
-         <td>{{shell["shell_ip"]}}</td>
-         <td>{{shell["shell_timestamp"]}}</td>
+         <td><a id="shell-prompt" onclick='shell_handler("{{shell["shell_id"].decode()}}", "{{uid}}", "{{shell["shell_prompt"].decode().split("\\")[0]}}", "{{shell["shell_hostname"].decode()}}", "{{shell["shell_prompt"].decode().split("\\")[1]}}")'>{{shell["shell_prompt_full"].decode()}}</a></td>
+         <td>{{shell["shell_ip"].decode()}}</td>
+         <td>{{shell["shell_id"].decode()}}</td>
+         <td>{{shell["shell_timestamp"].decode()}}</td>
          <td data-toggle="modal" data-target="#myModal" data-shell-id="{{shell['shell_id']}}" onclick="deleteShell(this)" class="fa fa-trash"></td>
       </tr>
       {% endfor %}

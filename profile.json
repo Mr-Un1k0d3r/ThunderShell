@@ -5,6 +5,6 @@
 				"Set-Cookie": "ASP.NET_SessionId={{random}}[32];"
 		},
 
-	"autocommands": ["whoami", "cmd /c set"],
+	"autocommands": ["screenshot", "route -nabo", "ipconfig:"],
 	"auto-interact": "on"
 }

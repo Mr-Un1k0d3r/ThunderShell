@@ -1,20 +1,20 @@
 {
     "aliases": {
         "myalias": ""
-    }, 
-    "callback-url": "http://1.1.1.1:1111/", 
-    "cli-sync-delay": 5, 
-    "gui-host": "127.0.0.1", 
-    "gui-port": "8000", 
-    "http-default-404": "default.html", 
-    "http-download-path": "cat.png", 
-    "http-host": "1.1.1.1", 
-    "http-port": 1111, 
-    "http-profile": "profile.json", 
-    "http-server": "Microsoft-IIS/7.5", 
-    "https-cert-path": "cert.pem", 
-    "https-enabled": "off", 
-    "max-output-timeout": 5, 
-    "redis-host": "localhost", 
-    "redis-port": 6379 
+    },
+    "callback-url": "http://1.1.1.1:8443/",
+    "cli-sync-delay": 5,
+    "gui-host": "127.0.0.1",
+    "gui-port": "13337",
+    "http-default-404": "default.html",
+    "http-download-path": "cat.png",
+    "http-host": "1.1.1.1",
+    "http-port": 8443,
+    "http-profile": "profile.json",
+    "http-server": "Microsoft-IIS/7.5",
+    "https-cert-path": "cert.pem",
+    "https-enabled": "off",
+    "max-output-timeout": 5,
+    "redis-host": "localhost",
+    "redis-port": 6379
 }
