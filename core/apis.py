@@ -250,6 +250,7 @@ class FlaskFactory(Flask):
         shells = self.redis.get_all_shells()
         self.send_cmd(id, "exit", username)
         for shell in shells:
+            shell = shell.decode()
             if id in shell:
                 self.redis.delete_entry(shell)
 

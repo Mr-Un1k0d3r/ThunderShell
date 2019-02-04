@@ -4,7 +4,7 @@
     },
     "callback-url": "http://1.1.1.1:8443/",
     "cli-sync-delay": 5,
-    "gui-host": "127.0.0.1",
+    "gui-host": "1.1.1.1",
     "gui-port": "13337",
     "http-default-404": "default.html",
     "http-download-path": "cat.png",

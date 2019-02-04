@@ -16,7 +16,7 @@
          <td>{{shell["shell_ip"].decode()}}</td>
          <td>{{shell["shell_id"].decode()}}</td>
          <td>{{shell["shell_timestamp"].decode()}}</td>
-         <td data-toggle="modal" data-target="#myModal" data-shell-id="{{shell['shell_id']}}" onclick="deleteShell(this)" class="fa fa-trash"></td>
+         <td data-toggle="modal" data-target="#myModal" data-shell-id="{{shell['shell_id'].decode()}}" onclick="deleteShell(this)" class="fa fa-trash"></td>
       </tr>
       {% endfor %}
       {% endif %}
