@@ -20,7 +20,7 @@ Utils.start_redis()
 from core.config import CONFIG
 from core.redisquery import RedisQuery
 from core.httpd import init_httpd_thread
-from core.gui import init_gui_thread
+from core.webserver import init_flask_thread
 from core.cli import Cli
 
 if __name__ == '__main__':
@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
     # Launch the GUI
     if not '-nogui' in sys.argv:
-        webui_thread = init_gui_thread(config, cli)
+        webui_thread = init_flask_thread(config, cli)
 
     # Launch the HTTPD daemon
     if not '-nohttpd' in sys.argv:

@@ -5,3 +5,5 @@
 *.lock
 logs/
 __pycache__/
+.project
+.pydevproject

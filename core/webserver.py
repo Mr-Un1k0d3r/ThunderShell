@@ -12,7 +12,7 @@ from core.ui import UI
 from core.log import Log
 from core.utils import Utils
 from core.version import Version
-from core.apis import FlaskFactory
+from core.webapi import FlaskFactory
 
 errors = ["Wrong password", "Session was destroyed"]
 version = Version.VERSION
@@ -236,12 +236,12 @@ def remove_shell(id):
     else:
         return redirect(url_for("login"))
 
-def init_gui_thread(config, cli):
-    thread = threading.Thread(target=start_gui, args=(config, cli, ))
+def init_flask_thread(config, cli):
+    thread = threading.Thread(target=start_flask, args=(config, cli, ))
     thread.start()
     return thread
 
-def start_gui(config, cli):
+def start_flask(config, cli):
     prefix = "http://"
 
     if config.get("https-enabled") == "on":

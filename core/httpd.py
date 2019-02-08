@@ -20,7 +20,7 @@ from core.ui import UI
 from core.rc4 import RC4
 from core.parser import HTTPDParser
 from core.utils import Utils
-from core.apis import ServerApi
+from core.webapi import ServerApi
 from core.payload import Payload
 
 
