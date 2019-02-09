@@ -16,6 +16,7 @@ from urllib.parse import quote_plus
 from core.websync import Sync
 from core.utils import Utils
 from core.log import Log
+from core.shell import Shell
 
 
 class FlaskFactory(Flask):
@@ -27,6 +28,7 @@ class FlaskFactory(Flask):
         self.request = request
         self.internal_config = config
         self.redis = self.internal_config.get("redis")
+        self.shell = Shell(self.redis)
         self.cli = cli
         self.active_users = []
         self.msgs = []
@@ -89,10 +91,14 @@ class FlaskFactory(Flask):
         return self.redis.remove_active_user(uid, id)
 
     def send_cmd(self, id, cmd, username,):
+        data = self.shell.evalute_cmd(cmd)
         cmd_guid = Utils.guid()
-        self.redis.append_shell_data(id, "[%s] %s - Sending command: \n%s\n\n" % (Utils.timestamp(), username, cmd))
-        Log.log_shell(id, "- Sending command", cmd, username=username)
-        return self.redis.push_cmd(id, cmd, cmd_guid, username)
+        self.redis.append_shell_data(id, "[%s] %s - Sending command: \n%s\n%s\n\n" % (Utils.timestamp(), username, data[1], data[0]))
+        
+        if not data[1] == "":
+            Log.log_shell(id, "- Sending command", cmd, username=username)
+            return self.redis.push_cmd(id, cmd, cmd_guid, username)
+        return ""
 
     def html_escape(self, data):
         html_escape_table = {"&": "&amp;","\"": "&quot;","'": "&apos;",">": "&gt;","<": "&lt;"}
