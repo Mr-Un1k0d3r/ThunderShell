@@ -173,8 +173,7 @@ def push_cmd(id):
         username = data["user"]
         cmd = data["cmd"]
         if username == app.get_username():
-            app.send_cmd(id, cmd, username)
-            return ""
+            return app.send_cmd(id, cmd, username)
         else:
             return ""
     else:

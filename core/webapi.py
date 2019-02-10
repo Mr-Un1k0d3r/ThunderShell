@@ -91,14 +91,14 @@ class FlaskFactory(Flask):
         return self.redis.remove_active_user(uid, id)
 
     def send_cmd(self, id, cmd, username,):
-        data = self.shell.evalute_cmd(cmd)
+        output, cmd = self.shell.evalute_cmd(cmd)
         cmd_guid = Utils.guid()
-        self.redis.append_shell_data(id, "[%s] %s - Sending command: \n%s\n%s\n\n" % (Utils.timestamp(), username, data[1], data[0]))
-        
-        if not data[1] == "":
-            Log.log_shell(id, "- Sending command", cmd, username=username)
-            return self.redis.push_cmd(id, cmd, cmd_guid, username)
-        return ""
+        self.redis.append_shell_data(id, "[%s] %s - Sending command: \n%s\n%s\n\n" % (Utils.timestamp(), username, output, cmd))
+
+        Log.log_shell(id, "- Sending command", "%s\n%s" % (output, cmd), username=username)
+        self.redis.push_cmd(id, cmd, cmd_guid, username)
+
+        return json.dumps({"output": output})
 
     def html_escape(self, data):
         html_escape_table = {"&": "&amp;","\"": "&quot;","'": "&apos;",">": "&gt;","<": "&lt;"}

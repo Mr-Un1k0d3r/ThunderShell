@@ -353,7 +353,10 @@
        async: true,
        data: JSON.stringify({'user': "{{username}}", 'cmd': cmd}),
        success: function(data){
-         // For future??
+         output = data["output"];
+         if(output) {
+            $("#shell-input-output").append(output);
+         }
        }
      });
 

@@ -254,3 +254,7 @@ border-top: none;
 #log-date {
   white-space:pre-wrap;
 }
+
+#shell-input-output {
+    font-family: "Lucida Console", Monaco, monospace;
+}
