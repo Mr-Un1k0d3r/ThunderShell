@@ -13,7 +13,6 @@ import threading
 import random
 import sys
 import socket
-from socketserver import _SocketWriter
 from io import BufferedIOBase
 from core.log import Log
 from core.ui import UI
