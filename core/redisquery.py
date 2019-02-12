@@ -21,7 +21,6 @@ import base64
 from core.ui import UI
 from core.utils import Utils
 
-
 class RedisQuery:
 
     def __init__(self, config):

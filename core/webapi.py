@@ -96,7 +96,8 @@ class FlaskFactory(Flask):
         self.redis.append_shell_data(id, "[%s] %s - Sending command: \n%s\n%s\n\n" % (Utils.timestamp(), username, output, cmd))
 
         Log.log_shell(id, "- Sending command", "%s\n%s" % (output, cmd), username=username)
-        self.redis.push_cmd(id, cmd, cmd_guid, username)
+        if not cmd == "":
+            self.redis.push_cmd(id, cmd, cmd_guid, username)
 
         return json.dumps({"output": output})
 

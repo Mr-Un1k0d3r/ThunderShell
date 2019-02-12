@@ -8,3 +8,4 @@ __pycache__/
 .project
 .pydevproject
 default.json
+install.lock

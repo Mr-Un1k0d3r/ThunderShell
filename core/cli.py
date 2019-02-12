@@ -91,8 +91,13 @@ class Cli:
         for shell in self.db.get_all_shells():
             guid = shell.decode().split(":")[0]
             timestamp = self.db.get_data(shell)
-            prompt = self.db.get_data("%s:prompt" % guid).decode()
-            id = self.db.get_data("%s:id" % guid).decode()
+            prompt = ""
+            id = ""
+            try:
+                prompt = self.db.get_data("%s:prompt" % guid).decode()
+                id = self.db.get_data("%s:id" % guid).decode()
+            except:
+                pass
             if not id == "":
                 if Utils.get_arg_at(data, 1, 2) == "full":
                     print("  %s\t%s %s last seen %s" % (id, prompt, guid, timestamp))
