@@ -98,9 +98,13 @@ def HTTPDFactory(config):
 
             if not guid == None:
                 self.db.update_checkin(guid, str(self.client_address[0]))
-
+                
+                output = ""
                 parser = HTTPDParser(config)
-                output = parser.parse_cmd(guid, data["Data"], data["UUID"])
+                try:
+                    output = parser.parse_cmd(guid, data["Data"], data["UUID"])
+                except:
+                    pass
                 if not output == None:
                     uuid = output[:36]
                     output = output[37:]
