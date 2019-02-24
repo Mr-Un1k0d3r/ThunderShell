@@ -243,7 +243,7 @@ def init_flask_thread(config, cli):
 def start_flask(config, cli):
     prefix = "http://"
 
-    if config.get("https-enabled") == "on":
+    if config.get("gui-https-enabled") == "on":
             prefix = "https://"
 
     UI.warn("Web GUI Started: %s%s:%s" % (prefix, config.get("gui-host"), config.get("gui-port")))
@@ -251,5 +251,10 @@ def start_flask(config, cli):
 
     app.init(config, cli)
 
-    server = WSGIServer((config.get("gui-host"), int(config.get("gui-port"))), app, log=None)
+    if config.get("gui-https-enabled") == "on":
+        Utils.file_exists(config.get("gui-https-cert-path"), True)
+        server = WSGIServer((config.get("gui-host"), int(config.get("gui-port"))), app, log=None, keyfile=config.get("gui-https-cert-path"), certfile=config.get("gui-https-cert-path"))
+    else:
+        server = WSGIServer((config.get("gui-host"), int(config.get("gui-port"))), app, log=None)
+        
     server.serve_forever()
