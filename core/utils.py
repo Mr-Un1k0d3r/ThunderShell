@@ -45,7 +45,7 @@ class Utils:
     @staticmethod
     def load_file(path, die=False, show_error=True):
         if Utils.file_exists(path, die, show_error):
-            return open(path, "r").read()
+            return open(path, "rb").read()
         return ""
 
     @staticmethod

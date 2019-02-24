@@ -6,6 +6,7 @@
 """
 
 import json
+import sys
 from core.utils import Utils
 from core.ui import UI
 
@@ -23,7 +24,7 @@ class CONFIG:
 
     def parse_config(self):
         try:
-            self.configs = json.loads(Utils.load_file(self.path, True))
+            self.configs = json.loads(Utils.load_file(self.path, True).decode())
         except:
             UI.error("%s configuration file is not valid" % self.path, True)
 

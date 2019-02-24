@@ -131,7 +131,7 @@ def HTTPDFactory(config):
             payload_path = self.path.split("/")
             filename = Utils.gen_str(12)
             if payload_path[1] == self.config.get("http-download-path"):
-                filename = Utils.gen_str(12)
+                filename = "%s.%s" % (Utils.gen_str(12), payload_path[2])
                 force_download = True
                 Log.log_event("Download Stager", "Stager was fetched from %s (%s)" % (self.client_address[0], self.address_string()))
                 payload = Payload(self.config)

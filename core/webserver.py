@@ -250,12 +250,14 @@ def start_flask(config, cli):
     UI.warn("Web GUI Password: %s" % config.get("server-password"))
 
     app.init(config, cli)
+    try:
+        if config.get("gui-https-enabled") == "on":
+            cert = config.get("gui-https-cert-path")
+            Utils.file_exists(cert, True)
+            server = WSGIServer((config.get("gui-host"), int(config.get("gui-port"))), app, log=None, keyfile=cert, certfile=cert)
+        else:
+            server = WSGIServer((config.get("gui-host"), int(config.get("gui-port"))), app, log=None)
 
-    if config.get("gui-https-enabled") == "on":
-        cert = config.get("gui-https-cert-path")
-        Utils.file_exists(cert, True)
-        server = WSGIServer((config.get("gui-host"), int(config.get("gui-port"))), app, log=None, keyfile=cert, certfile=cert)
-    else:
-        server = WSGIServer((config.get("gui-host"), int(config.get("gui-port"))), app, log=None)
-        
-    server.serve_forever()
+        server.serve_forever()
+    except:
+        pass
