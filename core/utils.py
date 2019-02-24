@@ -21,7 +21,9 @@ class Utils:
 
     @staticmethod
     def start_redis():
-        os.system("/usr/bin/sudo /usr/bin/redis-server /etc/redis/redis.conf")
+        if not os.getuid() == 0:
+            UI.error("root privileges required to install force start redis server")
+        os.system("/usr/bin/redis-server /etc/redis/redis.conf")
 
     @staticmethod
     def url_decode(url):

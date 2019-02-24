@@ -9,3 +9,4 @@ __pycache__/
 .pydevproject
 default.json
 install.lock
+cert.pem
