@@ -85,7 +85,7 @@ class Utils:
 
     @staticmethod
     def load_powershell_script(path, length):
-        data = Utils.load_file("powershell/%s" % path)
+        data = Utils.load_file("powershell/%s" % path).decode()
         return Utils.update_vars(data, length)
 
     @staticmethod

