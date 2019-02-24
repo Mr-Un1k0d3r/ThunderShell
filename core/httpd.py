@@ -203,9 +203,9 @@ def start_httpd(config):
             Utils.file_exists(cert, True)
 
             httpd_server.socket = ssl.wrap_socket(httpd_server.socket, certfile=cert)
-            UI.success("Web server is using HTTPS")
+            UI.warn("Web server is using HTTPS")
 
         httpd_server.serve_forever()
+        
     except Exception as e:
-        print("%s, %s" % (sys.exc_info()[1],sys.exc_info()[2]))
         UI.error("Server was not able to start (Port already in use?)... Aborting", True)
