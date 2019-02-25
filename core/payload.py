@@ -13,12 +13,12 @@ from core.rc4 import RC4
 class Payload:
 
     DEFAULT_DELAY = 10000
-    DEFAULT_TYPE = "ps"
+    DEFAULT_TYPE = "ps1"
 
     def __init__(self, config):
         self.config = config
         self.type = {}
-        self.type["ps"] = "stager.ps1"
+        self.type["ps1"] = "stager.ps1"
 
         # self.type["js"] = "stager.ps1"
         # self.type["hta"] = "stager.ps1"
