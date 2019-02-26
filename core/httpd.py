@@ -130,7 +130,7 @@ def HTTPDFactory(config):
             filename = Utils.gen_str(12)
             if payload_path[1] == self.config.get("http-download-path"):
                 force_download = True
-                extension = ".ps1"
+                extension = "ps1"
                 payload = Payload(self.config)
                 payload.set_callback("__default__")
 

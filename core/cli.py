@@ -161,7 +161,7 @@ class Cli:
             data = list(data)
             for i in range(0, rows):
                 try:
-                    print(data[i])
+                    print(data[i].decode().strip())
                 except:
                     pass
                 
