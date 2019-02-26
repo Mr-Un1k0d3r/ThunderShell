@@ -35,6 +35,8 @@
         using Microsoft.Build.Utilities;
         using Microsoft.Build.Framework;
         using System.Management.Automation.Runspaces;
+	using System.Net;
+	using System.Net.Security;
         
         public class VAR2 :  Task, ITask {  
             public override bool Execute() {

