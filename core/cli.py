@@ -100,7 +100,7 @@ class Cli:
                 pass
             if not id == "":
                 if Utils.get_arg_at(data, 1, 2) == "full":
-                    print("  %s\t%s %s last seen %s" % (id, prompt, guid, timestamp))
+                    print("  %s\t%s %s last seen %s" % (id, prompt, guid, timestamp.decode()))
                 else:
                     print("  %s\t%s" % (id, prompt))
 
@@ -180,8 +180,8 @@ class Cli:
             output = subprocess.check_output(cmd,stderr=subprocess.PIPE, shell=True)
         except:
             UI.error("Command failed to execute properly")
-            output = ""
-        print(output)
+            output = bytearray()
+        print(output.decode())
         
     def kill_shell(self, data):
         current_id = Utils.get_arg_at(data, 1, 2)

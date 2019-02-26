@@ -2,7 +2,7 @@
     "aliases": {
         "myalias": ""
     },
-    "callback-url": "http://192.168.161.128:8080/",
+    "callback-url": "https://192.168.161.128:8080",
     "cli-sync-delay": 5,
     "encryption-key": "pCDlNJYwFLeyVYroRyXzqJUx",
     "gui-host": "192.168.161.128",

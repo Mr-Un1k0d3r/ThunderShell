@@ -18,7 +18,7 @@ errors = ["Wrong password", "Session was destroyed"]
 version = Version.VERSION
 
 app = FlaskFactory(__name__, root_path=os.getcwd(), template_folder=os.getcwd() + "/templates", static_folder=os.getcwd() + "/static")
-websocket = SocketIO(app)
+websocket = SocketIO(app, async_handlers=True)
 
 
 @app.route("/", defaults={"path": "login"})
