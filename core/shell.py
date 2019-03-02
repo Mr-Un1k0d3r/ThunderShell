@@ -46,8 +46,8 @@ class Shell:
     def evalute_cmd(self, cmd):
         self.flush_output()
         
-        self.cmd = cmd
-        cmd = self.cmd.split(' ', 1)[0].lower()
+        self.data = cmd
+        cmd = self.data.split(' ', 1)[0].lower()
         
         if cmd not in self.cmds:
             return ("", cmd)
