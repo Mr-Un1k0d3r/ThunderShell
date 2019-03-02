@@ -5,11 +5,11 @@ body, html {
 	position: relative;
 }
 #container {
-	margin: 300px auto;
+	width: 400px;
+	margin: auto;
+	margin-top: 150px;
 }
-#main-container {
-	margin: 300px auto;
-}
+
 #logo-style {
 	color: black;
 	font-weight: bold;
@@ -22,17 +22,13 @@ body, html {
 	max-height: 50px;
 	max-width:50px;
 }
+
 #error-msg {
-	color: black;
-	background-color: white;
+	border-radius: 0;
 }
+
 #login-box {
-	position: absolute;
-	top: 0px;
-	left: 50%;
-	transform: translateX(-50%);
-	width: 350px;
-	margin: 0 auto;
+	margin: auto;
 	border: 1px solid black;
 	background: rgba(48, 46, 45, 1);
 	min-height: 250px;

@@ -9,21 +9,21 @@
   <link href="{{ url_for('static', filename='css/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
   <link href="{{ url_for('static', filename='img/TShell-Black.ico') }}" rel="shortcut icon">
 </head>
+{% if error %}
+<div id="error-msg" class="alert alert-danger">{{ error }}</div>
+{% endif %}
 <div id="container" class="container">
 	<div id="login-box">
 		<div class="logo">
 			<h1 class="logo-caption"><span id="logo-font"=class="tweak"><img id="logo-img" src="{{ url_for('static', filename='img/TShell-Yellow.ico') }}"></img>  Thunder</span>Shell</h1>
 		</div>
 		<div class="controls">
-      <form method="POST">
+		<form method="POST">
 			<input type="text" name="username" placeholder="Username" class="form-control login-username" />
 			<input type="password" name="password" placeholder="Password" class="form-control" />
 			<button type="submit" class="btn btn-default btn-block btn-custom">Login</button>
-    </form>
+		</form>
 		</div>
-    {% if error %}
-    <div id="error-msg" class="alert alert-warning">{{ error }}</div>
-    {% endif %}
 	</div>
 </div>
 <br>

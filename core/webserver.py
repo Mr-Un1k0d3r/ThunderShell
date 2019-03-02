@@ -14,7 +14,7 @@ from core.utils import Utils
 from core.version import Version
 from core.webapi import FlaskFactory
 
-errors = ["Wrong password", "Session was destroyed"]
+errors = ["Error! Wrong password. Please refer to the CLI.", "Error! The session was destroyed"]
 version = Version.VERSION
 
 app = FlaskFactory(__name__, root_path=os.getcwd(), template_folder=os.getcwd() + "/templates", static_folder=os.getcwd() + "/static")
