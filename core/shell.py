@@ -53,9 +53,13 @@ class Shell:
             return ("", cmd)
         
         callback = self.cmds[cmd]
-        data = callback()
-        return (self.output, data)
-        
+
+        if not callback == None:
+            data = callback()
+            return (self.output, data)
+
+        return ("", "")
+
     def output_cli_or_str(self, message):
         if self.cli:
             UI.warn(message)

@@ -263,3 +263,7 @@ border-top: none;
 li {
     list-style-type: none;
 }
+
+.input-group {
+	width: 100%;
+}

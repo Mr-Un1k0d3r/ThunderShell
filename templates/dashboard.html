@@ -192,13 +192,12 @@
                      <div class="modal-body">
                        <br><p>Setting a new callback host and port for the payload will require you to setup port fowarding on the specified callback host.</p><br>
                        <label for="payload-info">Enter payload callback address (Leave empty for default value)</label>
-                         <input onchange="setPayload()" name="payloadInfo" type="text" class="form-control" id="payload-info" placeholder="http://{{host}}:{{port}} or https://www.ringzer0team.com"/><br>
+                         <input onchange="setPayload()" name="payloadInfo" type="text" class="form-control" id="payload-info" placeholder="{{callback_url}}"/><br>
                        <label for="payload-type">Select payload type:</label>
                        <select onchange="setPayload()" name="payloadType" id="payload-type">
-                         <option></option>
+                         <option value="/{{payload_name}}/ps1/10000" id="payload-ps">powershell</option>
                          <option value="/{{payload_name}}/exe/10000" id="payload-exe">exe</option>
                          <option value="/{{payload_name}}/cs/10000" id="payload-cs">csharp</option>
-                         <option value="/{{payload_name}}/ps/10000" id="payload-ps">powershell</option>
                          <option value="/{{payload_name}}/msbuild/10000" id="payload-ps">msbuild</option>
                          <!--<option value="/{{payload_name}}/dll/10000" id="payload-dll">dll</option>-->
                        </select>
@@ -233,9 +232,6 @@
                    <div id="shell-footer" class="box-footer ">
                          <div class="input-group">
                             <input id="shell-command" autocomplete="off" type="text" name="message" placeholder="Type Command ..." class="form-control">
-                            <span class="input-group-btn">
-                            <button id="shell-command-button" onclick="" type="button" class="btn btn-warning btn-flat bg-black">Send</button>
-                            </span>
                          </div>
                    </div>
                  </div>
