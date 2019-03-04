@@ -32,6 +32,8 @@ if __name__ == '__main__':
     if config.reload_config():
         config = CONFIG(sys.argv[1])
 
+    Utils.suppress_ssl_errors()
+
     profile = config.get('http-profile')
     if not profile == '':
         Utils.file_exists(profile, True)

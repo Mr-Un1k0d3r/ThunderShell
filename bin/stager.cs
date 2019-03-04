@@ -541,6 +541,8 @@ namespace VAR1
             VAR59.Method = "POST";
             VAR59.UserAgent = VAR11;
             VAR59.Timeout = 10000;
+            VAR59.Headers["Host"] = "[FRONTING]";
+
             VAR59.Proxy.Credentials = CredentialCache.DefaultNetworkCredentials;
             Stream VAR60 = null;
             StreamReader VAR61 = null;

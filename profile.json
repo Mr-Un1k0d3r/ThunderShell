@@ -4,7 +4,8 @@
 				"X-AspNet-Version": "4.0.30319",
 				"Set-Cookie": "ASP.NET_SessionId={{random}}[32];"
 		},
-
+	"domain-fronting": "off",
+	"domain-fronting-host": "google.ca",
 	"autocommands": ["netstat -nr", "route -n", "arp -a", "screenshot"],
 	"auto-interact": "on"
 }

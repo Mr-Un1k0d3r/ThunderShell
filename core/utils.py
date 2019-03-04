@@ -13,11 +13,16 @@ import uuid
 import glob
 import string
 import random
+import requests
 import urllib.request, urllib.error, urllib.parse
 import datetime
 from core.ui import UI
 
 class Utils:
+
+    @staticmethod
+    def suppress_ssl_errors():
+        requests.packages.urllib3.disable_warnings() 
 
     @staticmethod
     def start_redis():

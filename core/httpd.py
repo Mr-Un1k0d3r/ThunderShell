@@ -134,6 +134,10 @@ def HTTPDFactory(config):
                 payload = Payload(self.config)
                 payload.set_callback("__default__")
 
+                profile = self.config.get("profile")
+                if profile.get("domain-fronting") == "on":
+                    payload.set_fronting(profile.get("domain-fronting-host"))
+
                 if len(payload_path) > 3:
                     payload.set_type(payload_path[2])
                     extension = payload_path[2]
