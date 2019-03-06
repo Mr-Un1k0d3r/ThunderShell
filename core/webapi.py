@@ -57,7 +57,7 @@ class FlaskFactory(Flask):
 
     def post_login(self):
         if request.form["username"].strip() in self.active_users:
-            return False
+            return -1
         if self.request.form["password"].strip() == self.internal_config.get("server-password"):
             self.set_user()
             return True
