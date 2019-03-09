@@ -45,13 +45,14 @@ class Shell:
         self.output = ""
         
     def evalute_cmd(self, cmd):
+        full_cmd = cmd
         self.flush_output()
         
         self.data = cmd
         cmd = self.data.split(' ', 1)[0].lower()
         
         if cmd not in self.cmds:
-            return ("", cmd)
+            return ("", full_cmd)
         
         callback = self.cmds[cmd]
 
@@ -131,7 +132,7 @@ class Shell:
         if Utils.file_exists(path, False, False):
             data = Utils.load_file_unsafe(path)
         else:
-            data = Utils.download_url(path)
+            data = Utils.download_url(path).decode()
 
         if not data == "":
             self.output += self.output_cli_or_str("Fetching %s" % path)
