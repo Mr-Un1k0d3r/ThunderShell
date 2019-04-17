@@ -187,9 +187,9 @@ class Cli:
         current_id = Utils.get_arg_at(data, 1, 2)
         guid = ""
         for shell in self.db.get_all_shell_id():
-            id = self.db.get_data(shell)
+            id = self.db.get_data(shell).decode()
             if current_id == id:
-                guid = shell.split(":")[0]
+                guid = shell.decode().split(":")[0]
                 break
         if not guid == "":
             self.db.delete_all_by_guid(guid)
