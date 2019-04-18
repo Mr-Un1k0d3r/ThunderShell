@@ -141,6 +141,7 @@ def HTTPDFactory(config):
                 if len(payload_path) > 3:
                     payload.set_type(payload_path[2])
                     extension = payload_path[2]
+                    if extension == "exe-old": extension = "exe"
 
                 if len(payload_path) > 4:
                     payload.set_delay(payload_path[3])

