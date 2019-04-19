@@ -526,7 +526,7 @@ namespace VAR1
             {
                 VAR46 = VAR53.ToString();
             }
-            VAR21(VAR46, VAR45);
+            VAR21(Convert.ToBase64String(Encoding.UTF8.GetBytes(VAR46)), VAR45);
         }
         public static string VAR21(string VAR55, string VAR56)
         {
