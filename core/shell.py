@@ -246,6 +246,6 @@ class Shell:
         return ""
 
     def shell_exec(self):
-         command = Utils.get_arg_at(self.data, 1, 2)
+         command = Utils.get_arg_at(self.data, 1, 1)
          self.output += self.output_cli_or_str("Spawning cmd.exe to execute: %s" % command)
          return "cmd.exe /c %s" % command

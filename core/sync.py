@@ -7,6 +7,7 @@
 
 import threading
 import time
+from base64 import b64decode
 from core.ui import UI
 
 
@@ -22,7 +23,7 @@ class Sync:
             print("\n")
             item = item.decode()
             data = self.redis.get_data(item).decode()
-            data = data.split(":")
+            data = data.split(":", 1)
             guid = item.split(":")[2]
             UI.warn("%s - Sending command: %s" % (data[0], data[1]))
             self.redis.delete_entry(item)
@@ -34,7 +35,7 @@ class Sync:
         for item in self.redis.get_active_cli_session_output(self.config.get("uid")):
             print("\n")
             item = item.decode()
-            data = self.redis.get_data(item).decode()
+            data = b64decode(self.redis.get_data(item)).decode()
             guid = item.split(":")[2]
             UI.warn("Command output:\n%s" % data)
             self.redis.delete_entry(item)
