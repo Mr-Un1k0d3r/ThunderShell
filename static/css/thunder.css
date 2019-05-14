@@ -235,6 +235,8 @@ border-top: none;
   width: 100%;
 }
 #keylogger-area {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 0.25cm; 
   white-space:pre-wrap;
 }
 #interact-log {

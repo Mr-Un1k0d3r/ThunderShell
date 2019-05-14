@@ -71,7 +71,7 @@ class Shell:
         
     def help(self):
         self.output = '''Help Menu\n''' + '=' * 9 + \
-        '\n' + tabulate({'Commands': [
+        '\n' + tabulate({'_Commands': [
             'background',
             'fetch',
             'exec',
@@ -83,23 +83,25 @@ class Shell:
             'alias',
             'delay',
             'shell',
+	    'screenshot',
             'help',
             ],
-            'Args': [
-            '',
+            '__Args': [
             '',
             'path/url, cmd',
             'path/url',
             'remote path',
             'path/url, path',
+            '',
             'pid, command',
             'number of line (default 20)',
             'key, value',
             'milliseconds',
             'command',
-            ''
+            '',
+            '',
             ],
-            'Descriptions': [
+            '___Descriptions': [
             'Return to the main console (CLI only)',
             'In memory execution of a script and execute a command',
             'In memory execution of code (shellcode)',
@@ -111,9 +113,10 @@ class Shell:
             'Create an alias to avoid typing the same thing over and over',
             'Update the callback delay',
             'Run command by spawning cmd.exe /c',
+            'Take a screenshot',
             'show this help menu',
             ]},
-            headers='keys', tablefmt='simple')
+            headers="keys", tablefmt="simple")
         
         self.output += self.alias.list_alias()
         self.output += self.alias.list_custom_alias()
