@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import threading
+import base64
 import time
 import os
 import logging
@@ -191,12 +192,16 @@ def fetch_output(id):
         if len(data) == 0:
             return "__no_output__"
         else:
-            output = "<b>[%s] Received Output:</b>\n%s" % (Utils.timestamp(), app.html_escape(data))
+            output = ""
+            try:
+                output = "<b>[%s] Received Output:</b>\n%s" % (Utils.timestamp(), app.html_escape(base64.b64decode(data).decode()))
+            except:
+                output = "__no_output__"
             return output
     else:
         return redirect(url_for("login"))
 
-# Fetch shell cmd output
+# Fetch shell cmd input
 @app.route("/api/fetchInput/<id>", methods=["GET", "POST"])
 def fetch_input(id):
     if app.auth():
