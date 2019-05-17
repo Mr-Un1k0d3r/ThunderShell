@@ -4,7 +4,7 @@
     @author: Mr.Un1k0d3r RingZer0 Team
     @package: core/parser.py
 """
-
+import base64
 from core.log import Log
 from core.ui import UI
 from core.utils import Utils
@@ -35,7 +35,7 @@ class HTTPDParser:
                 # I assume we got command output here and save it
                 self.db.push_output(guid, data, cmd_guid)
                 Log.log_shell(guid, "Received", data)
-                self.db.append_shell_data(guid, "[%s] Received: \n%s\n" % (Utils.timestamp(), data))
+                self.db.append_shell_data(guid, "[%s] Received: \n%s\n" % (Utils.timestamp(), base64.b64decode(data)))
         return self.output
 
     def register(self, guid, data):
