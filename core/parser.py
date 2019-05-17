@@ -35,7 +35,7 @@ class HTTPDParser:
                 # I assume we got command output here and save it
                 self.db.push_output(guid, data, cmd_guid)
                 Log.log_shell(guid, "Received", data)
-                self.db.append_shell_data(guid, "[%s] Received: \n%s\n" % (Utils.timestamp(), base64.b64decode(data)))
+                self.db.append_shell_data(guid, "[%s] Received: \n%s\n" % (Utils.timestamp(), base64.b64decode(data).decode()))
         return self.output
 
     def register(self, guid, data):
