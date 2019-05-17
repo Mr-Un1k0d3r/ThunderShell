@@ -427,8 +427,9 @@ namespace VAR1
             string VAR19 = String.Format("register {0} {1}", VAR8, VAR20());
             VAR11 = Environment.OSVersion.ToString();
             VAR21(VAR19, null);
-            Thread VAR103 = new Thread(() => VAR104());
-            VAR103.Start();
+            # Will implement a calling function
+            #Thread VAR103 = new Thread(() => VAR104());
+            #VAR103.Start();
             while (!VAR18)
             {
                 try
