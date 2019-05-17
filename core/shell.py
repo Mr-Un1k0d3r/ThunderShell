@@ -133,7 +133,7 @@ class Shell:
         data = ""
         path = self.alias.get_alias(path)
         if Utils.file_exists(path, False, False):
-            data = Utils.load_file_unsafe(path)
+            data = Utils.load_file_unsafe(path).decode()
         else:
             data = Utils.download_url(path).decode()
 
