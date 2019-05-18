@@ -8,6 +8,7 @@
 from core.log import Log
 from core.ui import UI
 from core.utils import Utils
+import base64
 
 
 class HTTPDParser:
@@ -34,8 +35,8 @@ class HTTPDParser:
             else:
                 # I assume we got command output here and save it
                 self.db.push_output(guid, data, cmd_guid)
-                Log.log_shell(guid, "Received", data)
-                self.db.append_shell_data(guid, "[%s] Received: \n%s\n" % (Utils.timestamp(), data))
+                Log.log_shell(guid, "Received", base64.b64decode(data).decode())
+                self.db.append_shell_data(guid, "[%s] Received: \n%s\n" % (Utils.timestamp(), base64.b64decode(data).decode()))
         return self.output
 
     def register(self, guid, data):
