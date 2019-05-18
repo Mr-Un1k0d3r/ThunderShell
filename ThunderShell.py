@@ -14,6 +14,7 @@ from core.ui import UI
 # Make sure all the dependencies are installed
 
 UI.banner()
+Utils.check_pyver()
 Utils.check_dependencies()
 Utils.start_redis()
 

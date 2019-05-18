@@ -7,13 +7,14 @@
 
 import os
 import re
-import ssl
+import sys
 import time
 import uuid
 import glob
 import string
 import random
 import requests
+import platform
 import urllib.request, urllib.error, urllib.parse
 import datetime
 from core.ui import UI
@@ -129,20 +130,28 @@ class Utils:
         try:
             from tabulate import tabulate
             from flask_socketio import SocketIO
+            from Crypto.Cipher import ARC4
             import flask
             import redis
         except Exception as e:
             print(e)
             UI.error("Missing dependencies", False)
-            Utils.install_dependencies()
+            Utils.install_dependencies("3")
+            Utils.install_dependencies("3.7")
+            UI.error("Installation completed please restart ThunderShell", True)
 
     @staticmethod
-    def install_dependencies():
+    def install_dependencies(pyver):
         UI.warn("Installing dependencies")
         if not os.getuid() == 0:
             UI.error("root privileges required to install the dependencies")
-        os.system("/usr/bin/apt update && /usr/bin/apt install redis-server mono-mcs python3-tabulate python3-redis python3-flask python3-dev python3-pip python3-gevent -y && /usr/bin/python3 -m pip install flask-socketio")
-        UI.error("Installation completed please restart ThunderShell", True)
+        os.system("/usr/bin/apt update && /usr/bin/apt install redis-server mono-mcs python%s-pip python%s-dev -y" % (pyver, pyver, pyver))
+        os.system("pip%s install tabulate" % pyver)
+        os.system("pip%s install redis" % pyver)
+        os.system("pip%s install flask" % pyver)
+        os.system("pip%s install flask-socketio" % pyver)
+        os.system("pip%s install pycrypto" % pyver)
+        os.system("pip%s install gevent" % pyver)
 
     @staticmethod
     def parse_random(data):
@@ -156,3 +165,8 @@ class Utils:
             data = data.replace(item, Utils.gen_str(size))
 
         return data
+
+    @staticmethod
+    def check_pyver():
+        if int(platform.python_version().split(".")[1]) < 7:
+            UI.error("Please use python >= 3.7", True)
