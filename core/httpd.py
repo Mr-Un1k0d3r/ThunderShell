@@ -22,6 +22,8 @@ from core.utils import Utils
 from core.webapi import ServerApi
 from core.payload import Payload
 
+class HTTPServerIPv6(http.server.HTTPServer):
+    address_family = socket.AF_INET6
 
 def HTTPDFactory(config):
 
@@ -35,7 +37,6 @@ def HTTPDFactory(config):
             self.rc4 = RC4(self.rc4_key)
             self.db = self.config.get("redis")
             self.output = ""
-
             super(HTTPD, self).__init__(*args, **kwargs)
 
         def set_http_headers(self, force_download=False, filename=None):
@@ -202,6 +203,9 @@ def start_httpd(config):
     UI.warn("Starting web server on %s port %d" % (ip, port))
     try:
         server_class = http.server.HTTPServer
+        if ":" in config.get("http-host"):
+            UI.warn("IPv6 detected")
+            server_class = HTTPServerIPv6
         factory = HTTPDFactory(config)
         httpd_server = server_class((ip, port), factory)
         if config.get("https-enabled") == "on":
@@ -214,4 +218,6 @@ def start_httpd(config):
         httpd_server.serve_forever()
         
     except Exception as e:
+        print(sys.exc_info()[1])
         UI.error("Server was not able to start (Port already in use?)... Aborting", True)
+

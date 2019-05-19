@@ -255,7 +255,10 @@ def start_flask(config, cli):
     if config.get("gui-https-enabled") == "on":
             prefix = "https://"
 
-    UI.warn("Web GUI Started: %s%s:%s" % (prefix, config.get("gui-host"), config.get("gui-port")))
+    output = "Web GUI Started: %s%s:%s" % (prefix, config.get("gui-host"), config.get("gui-port"))
+    if ":" in config.get("gui-host"):
+        output = "Web GUI Started: %s[%s]:%s" % (prefix, config.get("gui-host"), config.get("gui-port"))
+    UI.warn(output)
     UI.warn("Web GUI Password: %s" % config.get("server-password"))
 
     app.init(config, cli)
