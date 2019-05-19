@@ -145,7 +145,7 @@ class Utils:
         UI.warn("Installing dependencies")
         if not os.getuid() == 0:
             UI.error("root privileges required to install the dependencies")
-        os.system("/usr/bin/apt update && /usr/bin/apt install redis-server mono-mcs python%s-pip python%s-dev -y" % (pyver, pyver, pyver))
+        os.system("/usr/bin/apt update && /usr/bin/apt install redis-server mono-mcs python%s-pip python%s-dev -y" % (pyver, pyver))
         os.system("pip%s install tabulate" % pyver)
         os.system("pip%s install redis" % pyver)
         os.system("pip%s install flask" % pyver)
