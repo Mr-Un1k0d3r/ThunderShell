@@ -134,7 +134,6 @@ class Utils:
             import flask
             import redis
         except Exception as e:
-            print(e)
             UI.error("Missing dependencies", False)
             Utils.install_dependencies("3")
             Utils.install_dependencies("3.7")
