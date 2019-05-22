@@ -5,8 +5,14 @@
     @package: launcher
 """
 
-import os
+# Make sure we are running python 3
+import platform 
 import sys
+import os
+
+if int(platform.python_version().split(".")[0]) < 3:
+    sys.stdout.write("\n\033[31m[-] %s\033[00m\n" % "*** Warning Python 3 is required ***")
+    sys.exit(0)
 
 from core.utils import Utils
 from core.ui import UI

@@ -77,7 +77,7 @@ class Utils:
     def download_url(path):
         request = urllib.request.Request(path)
         request.add_header("User-Agent","Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0")
-        # Accept invalid cert
+
         context = ssl.create_default_context()
         context.check_hostname = False
         context.verify_mode = ssl.CERT_NONE
@@ -136,7 +136,12 @@ class Utils:
         except Exception as e:
             UI.error("Missing dependencies", False)
             Utils.install_dependencies("3")
-            Utils.install_dependencies("3.7")
+            if "-install3.6" in sys.argv:
+                UI.error("Installing python 3.6", False)
+                Utils.install_dependencies("3.6")
+            if "-install3.7" in sys.argv:
+                UI.error("Installing python 3.7", False)
+                Utils.install_dependencies("3.7")
             UI.error("Installation completed please restart ThunderShell", True)
 
     @staticmethod
@@ -144,7 +149,7 @@ class Utils:
         UI.warn("Installing dependencies")
         if not os.getuid() == 0:
             UI.error("root privileges required to install the dependencies")
-        os.system("/usr/bin/apt update && /usr/bin/apt install redis-server mono-mcs python%s-pip python%s-dev -y" % (pyver, pyver))
+        os.system("/usr/bin/apt update && /usr/bin/apt install redis-server mono-mcs python%s python%s-pip python%s-dev -y" % (pyver, pyver, pyver))
         os.system("pip%s install tabulate" % pyver)
         os.system("pip%s install redis" % pyver)
         os.system("pip%s install flask" % pyver)
@@ -167,5 +172,6 @@ class Utils:
 
     @staticmethod
     def check_pyver():
-        if int(platform.python_version().split(".")[1]) < 7:
-            UI.error("Please use python >= 3.7", True)
+        if int(platform.python_version().split(".")[1]) < 6:
+            UI.error("Please use python >= 3.6", False)
+            UI.error("You may want to force ThunderShell to install python3.6 or python3.7 using the following switch (-install3.6, -install3.7", True)
