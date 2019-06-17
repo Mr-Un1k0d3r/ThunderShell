@@ -2,24 +2,33 @@
     "aliases": {
         "myalias": ""
     },
-    "callback-url": "http://1.1.1.1:8080",
+    "callback-url": "http://127.0.0.1:8080",
     "cli-sync-delay": 5,
-    "encryption-key": "ZzUQCcIduhNKGKlAanbYRmgZ",
-    "gui-host": "1.1.1.1",
+    "encryption-key": "",
+    "gui-host": "127.0.0.1",
     "gui-https-cert-path": "cert.pem",
     "gui-https-enabled": "off",
     "gui-port": "13337",
     "http-default-404": "default.html",
     "http-download-path": "cat.png",
-    "http-host": "1.1.1.1",
+    "http-host": "127.0.0.1",
     "http-port": 8080,
     "http-profile": "profile.json",
     "http-server": "Microsoft-IIS/7.5",
     "https-cert-path": "cert.pem",
     "https-enabled": "off",
     "max-output-timeout": 5,
+    "notify-email-password": "password",
+    "notify-email-server": "smtp.gmail.com",
+    "notify-email-server-port": 587,
+    "notify-email-server-tls": "on",
+    "notify-email-subject": "New Shell Callback",
+    "notify-email-username": "youremail@gmail.com",
+    "notify-list": [
+        "mr.un1k0d3r@gmail.com",
+        ""
+    ],
+    "notify-new-shell": "on",
     "redis-host": "localhost",
     "redis-port": 6379,
-    "server-password": "dxqcGNJXdNhPJZiHxAdwGUiixVuuuqzr",
-    "verbose": "on"
-}
+    "server-password": ""
