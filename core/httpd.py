@@ -34,7 +34,7 @@ def HTTPDFactory(config):
             self.server_version = self.config.get("http-server")
             self.sys_version = ""
             self.rc4_key = self.config.get("encryption-key")
-            self.rc4 = RC4(self.rc4_key)
+            self.rc4 = RC4(self.rc4_key.encode())
             self.db = self.config.get("redis")
             self.output = ""
             super(HTTPD, self).__init__(*args, **kwargs)
