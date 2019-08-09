@@ -51,7 +51,7 @@ class HTTPDParser:
         UI.success("New shell ID %s GUID is %s" % (index, guid))
 
         try:
-            notify = EmailNotify(config)
+            notify = EmailNotify(self.config)
             notify.send_notification("NEW SHELL callback: %s" % prompt)
         except:
             UI.error("Notification failed", False)
