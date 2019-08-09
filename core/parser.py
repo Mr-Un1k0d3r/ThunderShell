@@ -9,6 +9,7 @@ from core.log import Log
 from core.ui import UI
 from core.utils import Utils
 from core.notify import EmailNotify
+from base64 import b64decode
 
 class HTTPDParser:
 
@@ -35,7 +36,7 @@ class HTTPDParser:
             else:
                 # I assume we got command output here and save it
                 self.db.push_output(guid, data, cmd_guid)
-                Log.log_shell(guid, "Received", data)
+                Log.log_shell(guid, "Received", b64decode(data).decode())
                 self.db.append_shell_data(guid, "[%s] Received: \n%s\n" % (Utils.timestamp(), data))
         return self.output
 
