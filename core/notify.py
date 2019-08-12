@@ -29,7 +29,7 @@ class EmailNotify:
             for to in self.destination:
                 self.send_email(to, self.format_message(to, data))
 
-    def format_message(self, data):
+    def format_message(self, to, data):
         message = MIMEMultipart()
         message["From"] = self.source
         message["To"] = to
@@ -43,5 +43,5 @@ class EmailNotify:
             connector.starttls()
 
         connector.login(self.source, self.password)
-        connecter.sendmail(self.source, to, data)
+        connector.sendmail(self.source, to, data)
         connector.quit()
