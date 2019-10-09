@@ -164,3 +164,9 @@ class RedisQuery:
 
     def get_session_output(self, key):
         return self.get_data(key)
+
+    def append_server_events(self,data):
+        return self.conn.append("events", data)
+
+    def get_server_events(self):
+        return self.get_data("events")

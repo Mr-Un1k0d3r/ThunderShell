@@ -7,7 +7,7 @@ For any information related on how to use the tool and it's supported features c
 
 # Current version
 
-Current release is 3.1.1
+Current release is 3.1.2
 
 # Credit
 

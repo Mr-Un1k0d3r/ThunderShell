@@ -23,12 +23,12 @@
     "notify-email-server-port": 587,
     "notify-email-server-tls": "on",
     "notify-email-subject": "New Shell Callback",
-    "notify-email-username": "youremail@gmail.com",
+    "notify-email-username": "",
     "notify-list": [
         "mr.un1k0d3r@gmail.com",
         ""
     ],
-    "notify-new-shell": "on",
+    "notify-new-shell": "off",
     "redis-host": "localhost",
     "redis-port": 6379,
     "server-password": ""

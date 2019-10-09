@@ -156,14 +156,14 @@ def HTTPDFactory(config):
 
                 filename = "%s.%s" % (Utils.gen_str(12), extension)
                 Log.log_event("Download Stager", "Stager was fetched from %s (%s). Stager type is %s" % (self.client_address[0], self.address_string(), extension))
-
+                self.db.append_server_events("\n[%s] Stager was fetched from %s (%s). Stager type is %s" % (Utils.timestamp(),self.client_address[0], self.address_string(), extension))
                 self.output = payload.get_output()
 
             elif path in Utils.get_download_folder_content():
                 force_download = True
                 self.output = Utils.load_file("download/%s" % path)
                 Log.log_event("Download File", "%s was downloaded from %s (%s)" % (path, self.client_address[0], self.address_string()))
-
+                self.db.append_server_events("\n[%s] %s was downloaded from %s (%s)" % (Utils.timestamp(),path, self.client_address[0], self.address_string()))
             else:
                 self.output = Utils.load_file("html/%s" % self.config.get("http-default-404"))
                 Log.log_error("Invalid request got a GET request", self.path)

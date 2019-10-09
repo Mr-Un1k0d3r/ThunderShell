@@ -1,5 +1,5 @@
 {% block content %}
 {% for screenshot in screenshots %}
-<a onclick='$("#screenshot-area").load("/api/fetchScreenshot/{{screenshot}}");'>{{screenshot}}</a><br>
+<a href="#" style="color: white" onclick='$("#shell-screenshot-content").load("/api/get/screenshot/{{screenshot}}");'>{{screenshot}}</a><br>
 {%endfor%}
 {% endblock %}

