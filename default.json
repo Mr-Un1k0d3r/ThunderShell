@@ -4,7 +4,7 @@
     },
     "callback-url": "http://192.168.197.133:8080",
     "cli-sync-delay": 5,
-    "encryption-key": "HwmnwfBOBJRJZlqYUswiFJUH",
+    "encryption-key": "ZEZyDQMEWFGOOWefKZRFKDOE",
     "gui-font-family": "\"Trebuchet MS\", Helvetica, sans-serif",
     "gui-font-size": "0.35cm",
     "gui-host": "192.168.197.133",
@@ -33,5 +33,5 @@
     "notify-new-shell": "off",
     "redis-host": "localhost",
     "redis-port": 6379,
-    "server-password": "GiZVerLEpbxqIyjJuNujpjZdZhRKBOrb"
+    "server-password": "OfrsGsMoGdbecdZpJfGAhSJCTgReqCrK"
 }
