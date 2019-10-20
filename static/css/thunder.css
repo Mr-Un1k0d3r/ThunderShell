@@ -16,10 +16,6 @@
     background: #282828;
 }
 
-* {
-    font-family: 'Lucida Console', Monaco, monospace;
-}
-
 #shell-content {
     max-height: 99vh;
     overflow-y: auto;

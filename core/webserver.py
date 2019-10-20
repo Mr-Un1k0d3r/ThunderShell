@@ -70,7 +70,9 @@ def dashboard():
         return render_template("dashboard.html", username=app.get_user(), host=app.get_ip(), port=app.get_port(),
             protocol=app.get_protocol(), payload_name=app.get_payload_name(),
             callback_url=app.get_payload_url(), gui_port=app.get_gui_port(),
-            gui_host=app.get_gui_host(), password=app.get_gui_password())
+            gui_host=app.get_gui_host(), password=app.get_gui_password(),
+            font_family=app.internal_config.get("gui-font-family"),
+            font_size=app.internal_config.get("gui-font-size"))
     else:
         return redirect(url_for("login"))
 
