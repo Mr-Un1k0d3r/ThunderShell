@@ -33,5 +33,6 @@
     "notify-new-shell": "off",
     "redis-host": "localhost",
     "redis-port": 6379,
-    "server-password": "OfrsGsMoGdbecdZpJfGAhSJCTgReqCrK"
+    "server-password": "OfrsGsMoGdbecdZpJfGAhSJCTgReqCrK",
+    "debug-mode": "off"
 }
