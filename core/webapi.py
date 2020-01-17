@@ -22,9 +22,6 @@ from core.shell import Shell
 class FlaskFactory(Flask):
 
     def init(self, config, cli):
-        self.debug = False
-        if self.internal_config.get("debug-mode").lower() == "on":
-           self.debug = True
         self.sync = Sync(config)
         self.secret_key = Utils.gen_str(32)
         self.session = session
@@ -38,6 +35,9 @@ class FlaskFactory(Flask):
         self.cmds = []
         self.username = ""
         self.command = ""
+        self.debug = False
+        if self.internal_config.get("debug-mode").lower() == "on":
+           self.debug = True
 
     def auth(self):
         if "authenticated" in self.session:
