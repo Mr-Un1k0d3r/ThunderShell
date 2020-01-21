@@ -21,4 +21,4 @@ Get-CimInstance Win32_process | ForEach-Object {
     
 }
 
-$ProcessList | Format-Table -Wrap -AutoSize
+$ProcessList | Format-Table -AutoSize
