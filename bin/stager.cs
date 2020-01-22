@@ -540,6 +540,7 @@ namespace VAR1
         protected static VAR2 VAR24(string VAR33)
         {
             var VAR34 = new JavaScriptSerializer();
+            VAR34.MaxJsonLength = Int32.MaxValue;
             VAR2 VAR35 = VAR34.Deserialize<VAR2>(VAR33);
             return VAR35;
         }
@@ -626,6 +627,7 @@ namespace VAR1
                 Data = VAR63
             };
             var VAR65 = new JavaScriptSerializer();
+            VAR65.MaxJsonLength = Int32.MaxValue;
             var VAR66 = VAR65.Serialize(VAR64).ToString();
             VAR59.ContentType = "application/json";
             try
