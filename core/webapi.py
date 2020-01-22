@@ -11,7 +11,7 @@ import base64
 import os
 import fnmatch
 import logging
-from flask import Flask, session, request
+from flask import Flask, session, request, escape
 from urllib.parse import quote_plus
 from core.websync import Sync
 from core.utils import Utils
@@ -53,7 +53,7 @@ class FlaskFactory(Flask):
         password = request.form["password"].strip().encode("utf-8")
         self.session["authenticated"] = True
         self.session["uid"] = Utils.guid()
-        self.session["username"] = request.form["username"].strip()
+        self.session["username"] = escape(request.form["username"].strip())
         self.session["password"] = hashlib.sha512(password).hexdigest()
         self.active_users.append(self.session["username"])
         Log.log_event("User Login", "%s" % str(self.session["username"]))
