@@ -149,15 +149,15 @@ class Utils:
  
     @staticmethod
     def check_version():
-		current = version.VERSION
-		request = urllib2.Request("http://thundershell.ringzer0team.com/version.html")
+        current = version.VERSION
+        request = urllib2.Request("http://thundershell.ringzer0team.com/version.html")
         response = urllib2.urlopen(request).read()
-		if not response == current:
-			UI.error("Your ThunderShell installation is outdated latest is %s. Your version is %s" % (response, current), False) 
-			UI.warn("Do you want to exit ThunderShell and update it") 
-			if UI.prompt('Updating (Yes/No)').lower() == 'yes':
-				os.system("git pull")
-				UI.error("Installation updated" Please restart ThunderShell", True)
+        if not response == current:
+            UI.error("Your ThunderShell installation is outdated latest is %s. Your version is %s" % (response, current), False) 
+            UI.warn("Do you want to exit ThunderShell and update it") 
+            if UI.prompt('Updating (Yes/No)').lower() == 'yes':
+                os.system("git pull")
+                UI.error("Installation updated" Please restart ThunderShell", True)
                 os._exit(0)
        
     @staticmethod
