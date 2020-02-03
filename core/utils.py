@@ -157,7 +157,7 @@ class Utils:
             UI.warn("Do you want to exit ThunderShell and update it") 
             if UI.prompt('Updating (Yes/No)').lower() == 'yes':
                 os.system("git pull")
-                UI.error("Installation updated" Please restart ThunderShell", True)
+                UI.error("Installation updated! Please restart ThunderShell", True)
                 os._exit(0)
        
     @staticmethod
