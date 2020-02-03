@@ -17,8 +17,10 @@ import random
 import requests
 import platform
 import urllib.request, urllib.error, urllib.parse
+import urllib2
 import datetime
 from core.ui import UI
+from core.version import version
 
 class Utils:
 
@@ -143,8 +145,21 @@ class Utils:
             if "-install3.7" in sys.argv:
                 UI.error("Installing python 3.7", False)
                 Utils.install_dependencies("3.7")
-            UI.error("Installation completed please restart ThunderShell", True)
-
+            UI.error("Installation completed! Please restart ThunderShell", True)
+ 
+    @staticmethod
+    def check_version():
+		current = version.VERSION
+		request = urllib2.Request("http://thundershell.ringzer0team.com/version.html")
+        response = urllib2.urlopen(request).read()
+		if not response == current:
+			UI.error("Your ThunderShell installation is outdated latest is %s. Your version is %s" % (response, current), False) 
+			UI.warn("Do you want to exit ThunderShell and update it") 
+			if UI.prompt('Updating (Yes/No)').lower() == 'yes':
+				os.system("git pull")
+				UI.error("Installation updated" Please restart ThunderShell", True)
+                os._exit(0)
+       
     @staticmethod
     def install_dependencies(pyver):
         UI.warn("Installing dependencies")
