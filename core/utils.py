@@ -149,7 +149,7 @@ class Utils:
     @staticmethod
     def check_version():
         current = Version.VERSION
-        request = urllib.request.Request("http://thundershell.ringzer0team.com/version.html")
+        request = urllib.request.Request("http://thundershell.ringzer0team.com/version.html?%s" % current)
         response = urllib.request.urlopen(request).read().strip().decode()
         if not response == current:
             UI.error("Your ThunderShell installation is outdated latest is %s. Your version is %s" % (response, current), False) 
