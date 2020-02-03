@@ -17,10 +17,9 @@ import random
 import requests
 import platform
 import urllib.request, urllib.error, urllib.parse
-import urllib2
 import datetime
 from core.ui import UI
-from core.version import version
+from core.version import Version
 
 class Utils:
 
@@ -149,9 +148,9 @@ class Utils:
  
     @staticmethod
     def check_version():
-        current = version.VERSION
-        request = urllib2.Request("http://thundershell.ringzer0team.com/version.html")
-        response = urllib2.urlopen(request).read()
+        current = Version.VERSION
+        request = urllib.request.Request("http://thundershell.ringzer0team.com/version.html")
+        response = urllib.request.urlopen(request).read().strip().decode()
         if not response == current:
             UI.error("Your ThunderShell installation is outdated latest is %s. Your version is %s" % (response, current), False) 
             UI.warn("Do you want to exit ThunderShell and update it") 
