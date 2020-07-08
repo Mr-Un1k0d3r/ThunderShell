@@ -8,6 +8,8 @@
 import os
 import base64
 import random
+
+from core.vars import THUNDERSHELL
 from core.utils import Utils
 from core.rc4 import RC4
 
@@ -20,15 +22,15 @@ class Payload:
         self.config = config
         self.fronting = None
         self.type = {}
-        self.type["ps1"] = "stager.ps1"
+        self.type["ps1"] = "%s/stager.ps1" % THUNDERSHELL.PAYLOADS_PATH
 
         # self.type["js"] = "stager.ps1"
         # self.type["hta"] = "stager.ps1"
 
-        self.type["exe"] = "../bin/stager.cs"
-        self.type["exe-old"] = "../bin/stager.cs"
-        self.type["cs"] = "../bin/stager.cs"
-        self.type["msbuild"] = "stager.ps1"
+        self.type["exe"] = "%s/stager.cs" % THUNDERSHELL.PAYLOADS_PATH
+        self.type["exe-old"] = "%s/stager.cs" % THUNDERSHELL.PAYLOADS_PATH
+        self.type["cs"] = "%s/stager.cs" % THUNDERSHELL.PAYLOADS_PATH
+        self.type["msbuild"] = "%s/stager.ps1" % THUNDERSHELL.PAYLOADS_PATH
 
         self.delay = Payload.DEFAULT_DELAY
         self.option = Payload.DEFAULT_TYPE
@@ -75,8 +77,8 @@ class Payload:
         open(filename, "w+").write(data)
         ver = "-v1" if v1 else ""
         cmdline = \
-            "mcs %s -out:%s.exe -r:bin/System.Drawing.dll -r:bin/System.Management.Automation%s.dll -r:bin/System.Web.Extensions.dll -r:bin/System.Windows.Forms.dll > /dev/null 2>&1" \
-            % (filename, filename, ver)
+            "mcs %s -out:%s.exe -r:%sSystem.Drawing.dll -r:%sSystem.Management.Automation%s.dll -r:%sSystem.Web.Extensions.dll -r:%sSystem.Windows.Forms.dll > /dev/null 2>&1" \
+            % (filename, filename, THUNDERSHELL.DATA_BIN_PATH, THUNDERSHELL.DATA_BIN_PATH, ver, THUNDERSHELL.DATA_BIN_PATH, THUNDERSHELL.DATA_BIN_PATH)
 
         os.system(cmdline)
         output = open("%s.exe" % filename, "rb").read()
@@ -86,7 +88,7 @@ class Payload:
         return output
 
     def generate_msbuild(self, ps):
-        msbuild = Utils.load_powershell_script("../bin/stager.csproj", 999)
+        msbuild = Utils.load_powershell_script("%s/stager.csproj" % THUNDERSHELL.PAYLOADS_PATH, 999)
         rc4_key = RC4.gen_rc4_key(32)
         hex_rc4_key = RC4.format_rc4_key(rc4_key)
         rc4 = RC4(rc4_key)

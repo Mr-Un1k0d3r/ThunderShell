@@ -8,7 +8,10 @@
 import os
 import base64
 import subprocess
+
 from tabulate import tabulate
+
+from core.vars import THUNDERSHELL
 from core.alias import Alias
 from core.utils import Utils
 from core.ui import UI
@@ -181,7 +184,7 @@ class Shell:
             self.output += self.output_cli_or_str("Fetching %s" % path)
 
             data = base64.b64encode(data)
-            ps = Utils.load_powershell_script("upload.ps1", 3)
+            ps = Utils.load_powershell_script("%s/upload.ps1" % THUNDERSHELL.POWERSHELL_SCRIPT, 3)
             ps = Utils.update_key(ps, "PAYLOAD", data.decode())
             ps = Utils.update_key(ps, "PATH", remote)
             self.output += self.output_cli_or_str("Payload will be saved at %s" % path)
@@ -207,7 +210,7 @@ class Shell:
         if not data == "":
             self.output += self.output_cli_or_str("Fetching %s" % path)
             data = base64.b64encode(data)
-            ps = Utils.load_powershell_script("exec.ps1", 16)
+            ps = Utils.load_powershell_script("%s/exec.ps1" % THUNDERSHELL.POWERSHELL_SCRIPT, 16)
             ps = Utils.update_key(ps, "PAYLOAD", data)
             self.output += self.output_cli_or_str("Payload should be executed shortly on the target")
             return ps
@@ -221,7 +224,7 @@ class Shell:
         except:
             self.output += self.output_cli_or_str("Missing arguments")
             return ""
-        ps = Utils.load_powershell_script("injector.ps1", 1)
+        ps = Utils.load_powershell_script("%s/injector.ps1" % THUNDERSHELL.POWERSHELL_SCRIPT, 1)
         ps = Utils.update_key(ps, "PAYLOAD", base64.b64encode(cmd))
         ps = Utils.update_key(ps, "PID", pid)
         self.output += self.output_cli_or_str("Injecting %s" % cmd)
@@ -229,7 +232,7 @@ class Shell:
         return ps
 
     def ps(self):
-        ps = Utils.load_powershell_script("ps.ps1", 0)
+        ps = Utils.load_powershell_script("%s/ps.ps1" % THUNDERSHELL.POWERSHELL_SCRIPT, 0)
         return ps
 
     def update_delay(self):

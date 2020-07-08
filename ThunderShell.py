@@ -5,20 +5,20 @@
     @package: launcher
 """
 
-# Make sure we are running python 3
 import platform 
 import sys
 import os
 
+# Make sure we are running python 3
 if int(platform.python_version().split(".")[0]) < 3:
     sys.stdout.write("\n\033[31m[-] %s\033[00m\n" % "*** Warning Python 3 is required ***")
     sys.exit(0)
-
+    
+from core.vars import THUNDERSHELL
 from core.utils import Utils
 from core.ui import UI
 
 # Make sure all the dependencies are installed
-
 UI.banner()
 #Utils.check_version()
 Utils.check_pyver()

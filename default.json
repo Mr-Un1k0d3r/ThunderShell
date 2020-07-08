@@ -2,19 +2,19 @@
     "aliases": {
         "myalias": ""
     },
-    "callback-url": "http://192.168.197.138:8080",
+    "callback-url": "http://192.168.197.131:8080",
     "cli-sync-delay": 5,
     "debug-mode": "off",
-    "encryption-key": "CagclnYHzzXtNActciRhzCIB",
+    "encryption-key": "PppEWCIgXbsepIwnuRIHtQLC",
     "gui-font-family": "\"Trebuchet MS\", Helvetica, sans-serif",
     "gui-font-size": "0.35cm",
-    "gui-host": "192.168.197.138",
+    "gui-host": "192.168.197.131",
     "gui-https-cert-path": "cert.pem",
     "gui-https-enabled": "off",
     "gui-port": "13337",
     "http-default-404": "default.html",
     "http-download-path": "cat.png",
-    "http-host": "192.168.197.138",
+    "http-host": "192.168.197.131",
     "http-port": 8080,
     "http-profile": "profile.json",
     "http-server": "Microsoft-IIS/7.5",
@@ -34,5 +34,5 @@
     "notify-new-shell": "off",
     "redis-host": "localhost",
     "redis-port": 6379,
-    "server-password": "POpWrWKBLjhLyqeDTzciVlErOghCkvne"
+    "server-password": "YaWNdpwplLwycqWQDCyruhAFsYjWjnBA"
 }

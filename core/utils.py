@@ -18,6 +18,8 @@ import requests
 import platform
 import urllib.request, urllib.error, urllib.parse
 import datetime
+
+from core.vars import THUNDERSHELL
 from core.ui import UI
 from core.version import Version
 
@@ -93,7 +95,7 @@ class Utils:
 
     @staticmethod
     def load_powershell_script(path, length):
-        data = Utils.load_file("powershell/%s" % path).decode()
+        data = Utils.load_file(path).decode()
         return Utils.update_vars(data, length)
 
     @staticmethod
@@ -113,8 +115,8 @@ class Utils:
     @staticmethod
     def get_download_folder_content():
         files = []
-        for item in glob.glob("download/*"):
-            files.append(item.replace("download/", ""))
+        for item in glob.glob("%s/*" % THUNDERSHELL.DOWNLOAD_PATH):
+            files.append(item.replace(THUNDERSHELL.DOWNLOAD_PATH, ""))
         return files
 
     @staticmethod
