@@ -87,7 +87,7 @@ class Utils:
         context.verify_mode = ssl.CERT_NONE
         data = ""
         try:
-            data = urllib.request.urlopen(request, context=context).read()
+            data = urllib.request.urlopen(request, context=context).read().decode()
         except:
             UI.error("Failed to fetch %s" % path)
 
