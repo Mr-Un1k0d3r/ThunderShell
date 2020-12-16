@@ -6,6 +6,6 @@
 		},
 	"domain-fronting": "off",
 	"domain-fronting-host": "google.ca",
-	"autocommands": ["netstat -nr", "route -n", "arp -a", "screenshot"],
+	"autocommands": ["whoami", "screenshot"],
 	"auto-interact": "on"
 }
