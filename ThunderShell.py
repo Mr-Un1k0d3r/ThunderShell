@@ -5,36 +5,36 @@
     @package: launcher
 """
 
+import os
 import platform 
 import sys
-import os
 
-# Make sure we are running python 3
+# Make sure we are running Python 3
 if int(platform.python_version().split(".")[0]) < 3:
     sys.stdout.write("\n\033[31m[-] %s\033[00m\n" % "*** Warning Python 3 is required ***")
     sys.exit(0)
-    
-from core.vars import THUNDERSHELL
-from core.utils import Utils
-from core.ui import UI
 
-# Make sure all the dependencies are installed
+from core.ui import UI
+from core.utils import Utils
+from core.vars import THUNDERSHELL
+
+# Make sure all of the dependencies are installed
 UI.banner()
-#Utils.check_version()
-Utils.check_pyver()
 Utils.check_dependencies()
+Utils.check_pyver()
+#Utils.check_version()
 Utils.start_redis()
 
-from core.config import CONFIG
-from core.redisquery import RedisQuery
-from core.httpd import init_httpd_thread
-from core.webserver import init_flask_thread
 from core.cli import Cli
+from core.config import CONFIG
+from core.httpd import init_httpd_thread
+from core.redisquery import RedisQuery
+from core.webserver import init_flask_thread
 
 if __name__ == '__main__':
 
     if len(sys.argv) < 3:
-        UI.error('''Missing configuration file path or username\n\n Usage: %s config username (optional -nohttpd, -nogui)''' % sys.argv[0], True)
+        UI.error('''Missing the config file or username\n\n Usage: %s config username (optional -nohttpd, -nogui)''' % sys.argv[0], True)
 
     config = CONFIG(sys.argv[1])
     if config.reload_config():
@@ -55,7 +55,7 @@ if __name__ == '__main__':
 
     config.set('redis', db)
 
-    UI.warn('Current Active CLI session UUID is %s' % config.get('uid'))
+    UI.warn('Current active CLI session UUID is %s' % config.get('uid'))
 
     cli = Cli(config)
 
@@ -72,7 +72,7 @@ if __name__ == '__main__':
             cmd = cli.prompt()
             cli.parse_cmd(cmd)
         except KeyboardInterrupt as e:
-            UI.error('*** You really want to exit the application? *** (yes/no)')
+            UI.error('[*] Are you sure you want to quit? (yes/no)')
             if UI.prompt('Exit').lower() == 'yes':
                 os._exit(0)
                 sql.shutdown()
