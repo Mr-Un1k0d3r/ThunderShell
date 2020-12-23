@@ -39,7 +39,7 @@ share/python-wheels/
 MANIFEST
 
 # PyInstaller
-#  Usually these files are written by a python script from a template
+#  Usually these files are written by a Python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
@@ -67,16 +67,16 @@ cover/
 *.mo
 *.pot
 
-# Django stuff:
+# Django stuff
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
-# Flask stuff:
+# Flask stuff
 instance/
 .webassets-cache
 
-# Scrapy stuff:
+# Scrapy stuff
 .scrapy
 
 # Sphinx documentation
@@ -199,10 +199,10 @@ local.properties
 # STS (Spring Tool Suite)
 .springBeans
 
-# Code Recommenders
+# Code recommenders
 .recommenders/
 
-# Annotation Processing
+# Annotation processing
 .apt_generated/
 .apt_generated_test/
 
@@ -245,7 +245,7 @@ local.properties
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
-# since they will be recreated, and may cause churn.  Uncomment if using
+# since they will be recreated, and may cause churn. Uncomment if using
 # auto-import.
 # .idea/artifacts
 # .idea/compiler.xml
