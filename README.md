@@ -12,14 +12,14 @@ If you like ThunderShell and are using it to accomplish your work, consider dona
 
 With love, Mr.Un1k0d3r
 
-# Current beta version
+# Contributors
 
-Current release is 3.1.2
+* [![Twitter Follow](https://img.shields.io/twitter/follow/MrUn1k0d3r.svg?style=social&label=Follow)](https://twitter.com/MrUn1k0d3r) Mr.Un1k0d3r
 
-# Credits
+* [![Twitter Follow](https://img.shields.io/twitter/follow/tazz019.svg?style=social&label=Follow)](https://twitter.com/tazz019) Tazz0
 
-Mr.Un1k0d3r @MrUn1k0d3r
+* [![Twitter Follow](https://img.shields.io/twitter/follow/RingZer0_CTF.svg?style=social&label=Follow)](https://twitter.com/RingZer0_CTF) RingZer0 Team 2017
 
-Tazz0 @Tazz019
+* [![Twitter Follow](https://img.shields.io/twitter/follow/jay_townsend1.svg?style=social&label=Follow)](https://twitter.com/jay_townsend1) Jay "L1ghtn1ng" Townsend
 
-RingZer0 Team 2017
+* [![Twitter Follow](https://img.shields.io/twitter/follow/discoverscripts.svg?style=social&label=Follow)](https://twitter.com/discoverscripts) Lee Baird
