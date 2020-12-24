@@ -7,8 +7,8 @@
 
 import json
 import sys
-from core.utils import Utils
 from core.ui import UI
+from core.utils import Utils
 
 
 class CONFIG:

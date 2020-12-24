@@ -5,17 +5,15 @@
     @package: core/shell.py
 """
 
-import os
 import base64
+import os
 import subprocess
-
-from tabulate import tabulate
-
-from core.vars import THUNDERSHELL
 from core.alias import Alias
-from core.utils import Utils
-from core.ui import UI
 from core.log import Log
+from core.ui import UI
+from core.utils import Utils
+from core.vars import THUNDERSHELL
+from tabulate import tabulate
 
 
 class Shell:

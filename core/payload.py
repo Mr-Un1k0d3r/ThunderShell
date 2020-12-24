@@ -5,14 +5,13 @@
     @package: core/payload.py
 """
 
-import os
-import re
 import base64
+import os
 import random
-
-from core.vars import THUNDERSHELL
-from core.utils import Utils
+import re
 from core.rc4 import RC4
+from core.utils import Utils
+from core.vars import THUNDERSHELL
 
 
 class Payload:

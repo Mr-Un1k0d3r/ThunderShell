@@ -5,10 +5,10 @@
     @package: core/sync.py
 """
 
-import threading
 import datetime
-from core.ui import UI
+import threading
 from base64 import b64decode
+from core.ui import UI
 from core.utils import Utils
 
 
