@@ -10,12 +10,13 @@ class Alias:
 
     def __init__(self):
         self.alias = {}
-        self.alias["wmiexec"] = \
-            ("https://raw.githubusercontent.com/Mr-Un1k0d3r/RedTeamPowershellScripts/master/scripts/Remote-WmiExecute.ps1"
-             , "Remote-WmiExecute utility")
         self.alias["searchevent"] = \
             ("https://github.com/Mr-Un1k0d3r/RedTeamPowershellScripts/blob/master/scripts/Search-EventForUser.ps1"
              , "Search-EventForUser utility")
+ 
+        self.alias["wmiexec"] = \
+            ("https://raw.githubusercontent.com/Mr-Un1k0d3r/RedTeamPowershellScripts/master/scripts/Remote-WmiExecute.ps1"
+             , "Remote-WmiExecute utility")
         self.custom_alias = {}
 
     def get_alias(self, alias):
