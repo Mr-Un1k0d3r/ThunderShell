@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
     @author: Mr.Un1k0d3r RingZer0 Team
@@ -16,12 +15,23 @@ import string
 import random
 import requests
 import platform
-import urllib.request, urllib.error, urllib.parse
+import urllib.request
+import urllib.error
+import urllib.parse
 import datetime
 
 from core.vars import THUNDERSHELL
 from core.ui import UI
 from core.version import Version
+try:
+    import flask
+    from tabulate import tabulate
+    from flask_socketio import SocketIO
+    from Crypto.Cipher import ARC4
+    import redis
+except ImportError as e:
+    print(f'Missing dependencies, please make sure you have installed: {e.name} correctly')
+
 
 class Utils:
 
@@ -60,7 +70,8 @@ class Utils:
 
     @staticmethod
     def load_file_unsafe(path):
-        return open(path, "rb").read()
+        with open(path, "rb").read() as file:
+            return file
 
     @staticmethod
     def create_folder_tree(path):
@@ -80,7 +91,7 @@ class Utils:
     @staticmethod
     def download_url(path):
         request = urllib.request.Request(path)
-        request.add_header("User-Agent","Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0")
+        request.add_header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0")
 
         context = ssl.create_default_context()
         context.check_hostname = False
@@ -88,8 +99,8 @@ class Utils:
         data = ""
         try:
             data = urllib.request.urlopen(request, context=context).read().decode()
-        except:
-            UI.error("Failed to fetch %s" % path)
+        except urllib.error.URLError:
+            UI.error(f"Failed to fetch {path}")
 
         return data
 
@@ -121,7 +132,7 @@ class Utils:
 
     @staticmethod
     def validate_guid(guid):
-        if re.match("^[\w\d]+$", guid):
+        if re.match(r"^[\w\d]+$", guid):
             return guid
         return ""
 
@@ -129,25 +140,6 @@ class Utils:
     def guid():
         return str(uuid.uuid4())
 
-    @staticmethod
-    def check_dependencies():
-        try:
-            from tabulate import tabulate
-            from flask_socketio import SocketIO
-            from Crypto.Cipher import ARC4
-            import flask
-            import redis
-        except Exception as e:
-            UI.error("Missing dependencies", False)
-            Utils.install_dependencies("3")
-            if "-install3.6" in sys.argv:
-                UI.error("Installing python 3.6", False)
-                Utils.install_dependencies("3.6")
-            if "-install3.7" in sys.argv:
-                UI.error("Installing python 3.7", False)
-                Utils.install_dependencies("3.7")
-            UI.error("Installation completed! Please restart ThunderShell", True)
- 
     @staticmethod
     def check_version():
         current = Version.VERSION
@@ -159,28 +151,15 @@ class Utils:
             if UI.prompt('Updating (Yes/No)').lower() == 'yes':
                 os.system("git pull")
                 UI.error("Installation updated! Please restart ThunderShell", True)
-                os._exit(0)
-       
-    @staticmethod
-    def install_dependencies(pyver):
-        UI.warn("Installing dependencies")
-        if not os.getuid() == 0:
-            UI.error("root privileges required to install the dependencies")
-        os.system("/usr/bin/apt update && /usr/bin/apt install redis-server mono-mcs python%s python%s-pip python%s-dev -y" % (pyver, pyver, pyver))
-        os.system("pip%s install tabulate" % pyver)
-        os.system("pip%s install redis" % pyver)
-        os.system("pip%s install flask" % pyver)
-        os.system("pip%s install flask-socketio" % pyver)
-        os.system("pip%s install pycrypto" % pyver)
-        os.system("pip%s install gevent" % pyver)
+                sys.exit(0)
 
     @staticmethod
     def parse_random(data):
-        for item in re.findall("{{random}}\[.{2}\]", data):
+        for item in re.findall(r"{{random}}\[.{2}\]", data):
             size = 16
             try:
-                size = int(re.findall("[0-9]{2}", item)[0])
-            except:
+                size = int(re.findall(r"[0-9]{2}", item)[0])
+            except Exception:
                 pass
 
             data = data.replace(item, Utils.gen_str(size))
@@ -191,4 +170,3 @@ class Utils:
     def check_pyver():
         if int(platform.python_version().split(".")[1]) < 6:
             UI.error("Please use python >= 3.6", False)
-            UI.error("You may want to force ThunderShell to install python3.6 or python3.7 using the following switch (-install3.6, -install3.7", True)
