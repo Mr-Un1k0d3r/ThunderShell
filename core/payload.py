@@ -1,5 +1,5 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 """
     @author: Mr.Un1k0d3r RingZer0 Team
     @package: core/payload.py
@@ -13,6 +13,7 @@ import random
 from core.vars import THUNDERSHELL
 from core.utils import Utils
 from core.rc4 import RC4
+
 
 class Payload:
 

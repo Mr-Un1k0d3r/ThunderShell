@@ -1,5 +1,5 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 """
     @author: Mr.Un1k0d3r RingZer0 Team
     @package: core/client.py
@@ -17,6 +17,7 @@ from core.log import Log
 from core.alias import Alias
 from core.sync import start_cmd_sync
 from core.shell import Shell
+
 
 class Cli:
 

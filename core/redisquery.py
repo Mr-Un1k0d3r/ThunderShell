@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 """
@@ -20,6 +19,7 @@ import time
 import base64
 from core.ui import UI
 from core.utils import Utils
+
 
 class RedisQuery:
 

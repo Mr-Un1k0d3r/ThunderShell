@@ -1,10 +1,10 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 """
     @author: Mr.Un1k0d3r RingZer0 Team
     @package: core/shell.py
 """
+
 import os
 import base64
 import subprocess
@@ -16,6 +16,7 @@ from core.alias import Alias
 from core.utils import Utils
 from core.ui import UI
 from core.log import Log
+
 
 class Shell:
 
@@ -257,4 +258,4 @@ class Shell:
          return "cmd.exe /c %s" % command
 
     def exit(self):
-        return "exit"    
+        return "exit"
