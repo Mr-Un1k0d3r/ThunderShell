@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
     @author: Mr.Un1k0d3r RingZer0 Team
@@ -11,12 +10,12 @@ class Alias:
     def __init__(self):
         self.alias = {}
         self.alias["searchevent"] = \
-            ("https://github.com/Mr-Un1k0d3r/RedTeamPowershellScripts/blob/master/scripts/Search-EventForUser.ps1"
-             , "Search-EventForUser utility")
- 
+            ("https://github.com/Mr-Un1k0d3r/RedTeamPowershellScripts/blob/master/scripts/Search-EventForUser.ps1",
+             "Search-EventForUser utility")
+
         self.alias["wmiexec"] = \
-            ("https://raw.githubusercontent.com/Mr-Un1k0d3r/RedTeamPowershellScripts/master/scripts/Remote-WmiExecute.ps1"
-             , "Remote-WmiExecute utility")
+            ("https://raw.githubusercontent.com/Mr-Un1k0d3r/RedTeamPowershellScripts/master/scripts/Remote-WmiExecute.ps1",
+             "Remote-WmiExecute utility")
         self.custom_alias = {}
 
     def get_alias(self, alias):
