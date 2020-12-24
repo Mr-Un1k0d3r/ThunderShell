@@ -1,5 +1,5 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 """
     @author: Mr.Un1k0d3r RingZer0 Team
     @package: core/sync.py
@@ -37,4 +37,3 @@ class Sync:
             cmd_output += "\n[%s] Received output:\n%s" % (Utils.timestamp(),b64decode(data.decode()).decode())
             self.redis.delete_entry(item)
         return cmd_output
-

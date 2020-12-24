@@ -1,5 +1,5 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 """
     @author: Tazz0 RingZer0 Team
     @package: core/autocomplete.py

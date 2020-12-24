@@ -1,10 +1,13 @@
-#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 """
     @author: Mr.Un1k0d3r RingZer0 Team
     @package: core/rc4.py
 """
+
 import os,re
 from Crypto.Cipher import ARC4
+
 
 class RC4:
 
@@ -22,4 +25,3 @@ class RC4:
 
 	def format_rc4_key(key):
 		return "0x" + ", 0x".join(re.findall("..", key.encode("hex")))
-
