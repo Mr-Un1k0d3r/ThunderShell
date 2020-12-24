@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+
 """
     @author: Mr.Un1k0d3r RingZer0 Team
     @package: launcher
@@ -7,13 +8,13 @@
 
 import platform
 import sys
-from core.ui import UI
-from core.utils import Utils
-from core.vars import THUNDERSHELL
 from core.cli import Cli
 from core.config import CONFIG
 from core.httpd import init_httpd_thread
 from core.redisquery import RedisQuery
+from core.ui import UI
+from core.utils import Utils
+from core.vars import THUNDERSHELL
 from core.webserver import init_flask_thread
 
 # Make sure all of the dependencies are installed
@@ -24,7 +25,7 @@ Utils.check_pyver()
 if __name__ == '__main__':
 
     if len(sys.argv) < 3:
-        UI.error('''Missing the config file or username\n\n Usage: %s config username (optional -nohttpd, -nogui)''' % sys.argv[0], True)
+        UI.error('''Missing the config file or username.\n\n Usage: %s config username (optional -nohttpd, -nogui)''' % sys.argv[0], True)
 
     config = CONFIG(sys.argv[1])
     if config.reload_config():
