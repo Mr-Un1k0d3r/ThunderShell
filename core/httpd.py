@@ -1,5 +1,5 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 """
     @author: Mr.Un1k0d3r RingZer0 Team
     @package: core/httpd.py
@@ -21,6 +21,7 @@ from core.parser import HTTPDParser
 from core.utils import Utils
 from core.webapi import ServerApi
 from core.payload import Payload
+
 
 class HTTPServerIPv6(http.server.HTTPServer):
     address_family = socket.AF_INET6
@@ -229,4 +230,3 @@ def start_httpd(config):
     except Exception as e:
         print(sys.exc_info()[1])
         UI.error("Server was not able to start (Port already in use?)... Aborting", True)
-

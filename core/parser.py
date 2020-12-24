@@ -1,5 +1,5 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 """
     @author: Mr.Un1k0d3r RingZer0 Team
     @package: core/parser.py
@@ -10,6 +10,7 @@ from core.ui import UI
 from core.utils import Utils
 from core.notify import EmailNotify
 from base64 import b64decode
+
 
 class HTTPDParser:
 
