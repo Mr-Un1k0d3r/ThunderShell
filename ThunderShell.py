@@ -25,7 +25,7 @@ Utils.check_pyver()
 if __name__ == '__main__':
 
     if len(sys.argv) < 3:
-        UI.error('''Missing the config file or username.\n\n Usage: %s config username (optional -nohttpd, -nogui)''' % sys.argv[0], True)
+        UI.error('''Missing the config file or username.\n\nUsage: python3 %s config username (optional -nohttpd, -nogui)\n''' % sys.argv[0], True)
 
     config = CONFIG(sys.argv[1])
     if config.reload_config():

@@ -23,17 +23,9 @@ class UI:
 
     @staticmethod
     def error(error, die=False):
-        print("\n\033[31m[-] %s\033[00m" % error)
+        print("\n\033[31m[!] %s\033[00m" % error)
         if die:
             os._exit(0)
-
-    @staticmethod
-    def success(message):
-        print("\033[32m[+] %s\033[00m" % message)
-
-    @staticmethod
-    def warn(message):
-        print("\033[33m[*] %s\033[00m" % message)
 
     @staticmethod
     def prompt(path):
@@ -48,8 +40,20 @@ class UI:
         sys.stdout.flush()
 
     @staticmethod
+    def success(message):
+        print("\033[32m[+] %s\033[00m" % message)
+
+    @staticmethod
+    def usage(message):
+        print("\033[00m[*] %s\033[00m" % message)
+
+    @staticmethod
+    def warn(message):
+        print("\033[33m[*] %s\033[00m" % message)
+
+    @staticmethod
     def banner():
-        print("""
+        print("""\n
              {}.#"{}    {}=[{} ThunderShell version {} | RingZer0 Team {}]={}
            {}.##"{}
         {}.###"{}       __       __    _________    __            __
