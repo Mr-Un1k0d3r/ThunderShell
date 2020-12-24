@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
-import os
-import time
+import ast
 import base64
 import logging
+import os
 import threading
-import ast
-from core.ui import UI
+import time
 from core.log import Log
+from core.ui import UI
 from core.utils import Utils
 from core.version import Version
-from flask_socketio import SocketIO
-from gevent.pywsgi import WSGIServer
 from core.webapi import FlaskFactory
 from flask import redirect, url_for, request, render_template, escape, jsonify
+from flask_socketio import SocketIO
+from gevent.pywsgi import WSGIServer
 
 errors = ["Error! Wrong password. Please refer to the CLI.", "Error! The session was destroyed.", "Error! Username already in use. Please choose another one."]
 version = Version.VERSION

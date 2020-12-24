@@ -5,11 +5,11 @@
     @package: core/parser.py
 """
 
+from base64 import b64decode
 from core.log import Log
+from core.notify import EmailNotify
 from core.ui import UI
 from core.utils import Utils
-from core.notify import EmailNotify
-from base64 import b64decode
 
 
 class HTTPDParser:

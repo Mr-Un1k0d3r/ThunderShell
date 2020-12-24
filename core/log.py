@@ -5,8 +5,8 @@
     @package: core/log.py
 """
 
-import time
 import base64
+import time
 from core.utils import Utils
 
 

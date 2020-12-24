@@ -5,7 +5,8 @@
     @package: core/rc4.py
 """
 
-import os,re
+import os
+import re
 from Crypto.Cipher import ARC4
 
 

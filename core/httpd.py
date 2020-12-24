@@ -5,22 +5,22 @@
     @package: core/httpd.py
 """
 
-import http.server
 import base64
-import ssl
+import http.server
 import json
-import threading
 import random
-import sys
 import socket
-from io import BufferedIOBase
+import ssl
+import sys
+import threading
 from core.log import Log
-from core.ui import UI
-from core.rc4 import RC4
 from core.parser import HTTPDParser
+from core.payload import Payload
+from core.rc4 import RC4
+from core.ui import UI
 from core.utils import Utils
 from core.webapi import ServerApi
-from core.payload import Payload
+from io import BufferedIOBase
 
 
 class HTTPServerIPv6(http.server.HTTPServer):

@@ -5,18 +5,18 @@
     @package: core/client.py
 """
 
+import base64
 import os
 import readline
-import base64
 import subprocess
-from tabulate import tabulate
 from core.autocomplete import Completer
+from core.alias import Alias
+from core.log import Log
+from core.shell import Shell
+from core.sync import start_cmd_sync
 from core.ui import UI
 from core.utils import Utils
-from core.log import Log
-from core.alias import Alias
-from core.sync import start_cmd_sync
-from core.shell import Shell
+from tabulate import tabulate
 
 
 class Cli:

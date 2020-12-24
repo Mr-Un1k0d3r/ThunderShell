@@ -14,9 +14,9 @@
 
 """
 
+import base64
 import redis
 import time
-import base64
 from core.ui import UI
 from core.utils import Utils
 
