@@ -20,6 +20,7 @@ cert.pem
 
 # Distribution / packaging
 .Python
+logs/
 build/
 develop-eggs/
 dist/

@@ -10,7 +10,7 @@ from core.log import Log
 from core.notify import EmailNotify
 from core.ui import UI
 from core.utils import Utils
-
+from core.modules import Modules
 
 class HTTPDParser:
 
@@ -89,15 +89,23 @@ class HTTPDParser:
     def get_autocommands(self, guid):
         profile = self.config.get("profile")
         commands = profile.get("autocommands")
+        modules = profile.get("automodules")
         
+        for module in modules:
+            Log.log_shell(guid, "Autoloading module %s" % module)
+            self.db.push_cmd(guid, Modules.gen_push_command(module), Utils.guid(), self.config.get("username"))
+        
+        # execution autocommand after modules autoload
         if isinstance(commands, list):
             shell = self.db.get_prompt(guid).decode().split(" ")[1]
             UI.success("Running auto commands on shell %s" % shell)
             Log.log_event("Running auto commands on shell", shell)
-            self.db.append_server_events("\n[%s] Running auto commands on shell: %s" % (Utils.timestamp(),shell))
+            self.db.append_server_events("\n[%s] Running auto commands on shell: %s" % (Utils.timestamp(), shell))
             
             for command in commands:
                 print("\t[+] %s" % command)
                 Log.log_shell(guid, "Sending", command)
-                self.db.append_shell_data(guid, "[%s] AutoCommand Sending: \n%s\n\n" % (Utils.timestamp(),command))
+                self.db.append_shell_data(guid, "[%s] AutoCommand Sending: \n%s\n\n" % (Utils.timestamp(), command))
                 self.db.push_cmd(guid, command, Utils.guid(), self.config.get("username"))
+                
+    
