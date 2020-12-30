@@ -4,10 +4,11 @@
     @author: Mr.Un1k0d3r RingZer0 Team
     @package: core/notify.py
 """
-import base64 
 
+import base64 
 from core.utils import Utils
 from core.vars import THUNDERSHELL
+
 
 class Modules:
     
