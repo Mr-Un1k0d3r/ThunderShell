@@ -7,10 +7,11 @@
 
 from base64 import b64decode
 from core.log import Log
+from core.modules import Modules
 from core.notify import EmailNotify
 from core.ui import UI
 from core.utils import Utils
-from core.modules import Modules
+
 
 class HTTPDParser:
 
@@ -68,7 +69,7 @@ class HTTPDParser:
         self.output = self.db.get_cmd(guid)
 
     def ping(self, guid, data):
-        # not used for the moment every callback act as a ping
+        # Not used for the moment every callback act as a ping
         self.output = "pong"
 
     def screenshot(self, guid, data):
@@ -95,7 +96,7 @@ class HTTPDParser:
             Log.log_shell(guid, "Autoloading module %s" % module)
             self.db.push_cmd(guid, Modules.gen_push_command(module), Utils.guid(), self.config.get("username"))
         
-        # execution autocommand after modules autoload
+        # Execution autocommand after modules autoload
         if isinstance(commands, list):
             shell = self.db.get_prompt(guid).decode().split(" ")[1]
             UI.success("Running auto commands on shell %s" % shell)
