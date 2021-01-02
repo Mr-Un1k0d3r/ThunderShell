@@ -18,7 +18,7 @@ from tabulate import tabulate
 
 class Shell:
 
-    def __init__(self, db, cli = False):
+    def __init__(self, db, cli=False):
         self.cli = cli
         self.db = db
         self.init_cmds()
@@ -60,7 +60,7 @@ class Shell:
 
         if not callback == None:
             data = callback()
-            return (self.output, data)
+            return self.output, data
 
         return ("", "")
 
@@ -123,7 +123,6 @@ class Shell:
         self.output += self.alias.list_alias()
         self.output += self.alias.list_custom_alias()
         return ""
-
 
     def fetch(self):
         try:
