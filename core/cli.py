@@ -25,7 +25,6 @@ class Cli:
         self.cmds = dict()
         self.cmds["exit"] = self.exit_cli
         self.cmds["list"] = self.list_clients
-        self.cmds["interact"] = self.interact
         self.cmds["show"] = self.view_event
         self.cmds["help"] = self.show_help
         self.cmds["kill"] = self.kill_shell
@@ -105,24 +104,6 @@ class Cli:
                 else:
                     print("  %s\t%s" % (id, prompt))
 
-    def interact(self, data):
-        current_id = Utils.get_arg_at(data, 1, 2)
-        guid = ""
-        for shell in self.db.get_all_shell_id():
-            id = self.db.get_data(shell).decode()
-            if current_id == id:
-                guid = shell.decode().split(":")[0]
-                break
-        if not guid == "":
-            self.completer = Completer(self.shell.get_cmd())
-            readline.set_completer(self.completer.complete)
-            readline.parse_and_bind("tab: complete")
-            self.guid = guid
-            self.db.add_active_user(self.config.get("uid"),self.guid)
-            self._prompt = self.db.get_data("%s:prompt" % guid).decode()
-        else:
-            UI.error("Invalid session ID")
-
     def view_event(self, data):
         log_path = Utils.get_arg_at(data, 1, 2)
         if log_path == "":
@@ -201,7 +182,7 @@ class Cli:
     def show_help(self, data):
         print("""Help Menu\n""" + "=" * 9)
         print("\n" + tabulate({"Commands": [
-            "list","interact",
+            "list",
             "show",
             "kill",
             "os",
@@ -221,7 +202,6 @@ class Cli:
             ],
             "Descriptions": [
             "List all active shells",
-            "Interact with a session",
             "Show server password, encryption key, errors, http or events log (default number of rows 10)",
             "kill shell (clear db only)",
             "Execute command on the system (local)",

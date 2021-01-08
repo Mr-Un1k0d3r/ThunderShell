@@ -30,7 +30,8 @@ class HTTPDParser:
 
     def parse_cmd(self,guid,data,cmd_guid=None):
         if self.debug:
-            UI.warn("parse_cmd got %s" % (guid,cmd_guid))
+            UI.warn("parse_cmd got %s %s" % (guid,cmd_guid))
+            UI.warn(data)
         data = data.decode()
         cmd = data.split(" ", 1)[0].lower()
         

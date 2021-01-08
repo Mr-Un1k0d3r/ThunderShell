@@ -19,7 +19,7 @@ from core.webserver import init_flask_thread
 # Make sure all of the dependencies are installed
 UI.banner()
 Utils.check_pyver()
-Utils.check_version()
+#Utils.check_version()
 
 
 if __name__ == '__main__':
