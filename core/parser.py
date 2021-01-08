@@ -12,7 +12,6 @@ from core.notify import EmailNotify
 from core.ui import UI
 from core.utils import Utils
 from core.modules import Modules
-from __builtin__ import False
 
 class HTTPDParser:
 
