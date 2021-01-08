@@ -149,7 +149,7 @@ class Utils:
         if not response == current:
             UI.error("Your ThunderShell installation is outdated latest is %s. Your version is %s" % (response, current), False) 
             UI.warn("Do you want to exit ThunderShell and update it") 
-            if UI.prompt('Updating (Yes/No)').lower() == 'yes':
+            if UI.prompt('Updating (Yes/No)').lower() == 'yes' or UI.prompt('Updating (Yes/No)').lower() == 'y':
                 os.system("git pull")
                 UI.error("Installation updated! Please restart ThunderShell", True)
                 sys.exit(0)
