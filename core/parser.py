@@ -11,6 +11,7 @@ from core.notify import EmailNotify
 from core.ui import UI
 from core.utils import Utils
 from core.modules import Modules
+from __builtin__ import False
 
 class HTTPDParser:
 
@@ -23,8 +24,13 @@ class HTTPDParser:
         self.config = config
         self.output = None
         self.db = self.config.get("redis")
+        self.debug = False
+        if self.config.get("debug-mode") == "on":
+            self.debug = True
 
-    def parse_cmd(self,guid,data,cmd_guid=None,):
+    def parse_cmd(self,guid,data,cmd_guid=None):
+        if self.debug:
+            UI.warn("parse_cmd got %s" % (guid,cmd_guid))
         data = data.decode()
         cmd = data.split(" ", 1)[0].lower()
         
@@ -36,6 +42,7 @@ class HTTPDParser:
                 self.hello(guid, data)
             else:
                 # I assume we got command output here and save it
+                # The GUID does not matter it's just used to confirm we are receiving data
                 self.db.push_output(guid, data, cmd_guid)
                 Log.log_shell(guid, "Received", b64decode(data).decode())
                 self.db.append_shell_data(guid, "[%s] Received: \n%s\n" % (Utils.timestamp(), b64decode(data).decode()))
@@ -65,6 +72,12 @@ class HTTPDParser:
             pass
 
     def hello(self, guid, data):
+        data = self.db.get_cmd(guid)
+        if self.debug:
+            try:
+                UI.warn("hello %s %s" % (guid,data[:64]))
+            except:
+                UI.warn("hello %s %s" % (guid,data))
         self.output = self.db.get_cmd(guid)
 
     def ping(self, guid, data):
@@ -93,6 +106,7 @@ class HTTPDParser:
         
         for module in modules:
             Log.log_shell(guid, "Autoloading module %s" % module)
+            self.db.append_shell_data(guid, "[%s] AutoModule Sending: \n%s\n\n" % (Utils.timestamp(), command))
             self.db.push_cmd(guid, Modules.gen_push_command(module), Utils.guid(), self.config.get("username"))
         
         # execution autocommand after modules autoload

@@ -4,7 +4,7 @@
     },
     "callback-url": "http://198.199.83.128:8080",
     "cli-sync-delay": 5,
-    "debug-mode": "off",
+    "debug-mode": "on",
     "encryption-key": "ycWkTmGPHgPfEpGyARUrbStx",
     "gui-font-family": "\"Trebuchet MS\", Helvetica, sans-serif",
     "gui-font-size": "0.35cm",
