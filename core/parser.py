@@ -104,21 +104,20 @@ class HTTPDParser:
         profile = self.config.get("profile")
         commands = profile.get("autocommands")
         modules = profile.get("automodules")
-        
+        print(guid)
         if self.debug:
             UI.warn("Calling AutoLoading session: %s" % guid)
         
         for module in modules:
             remote_command = Modules.gen_push_command(module)
+            if self.debug:
+                UI.warn("AutoLoading sending:\n%s" % remote_command)
+            
             Log.log_shell(guid, "Autoloading module %s" % module)
             self.db.append_shell_data(guid, "[%s] AutoModule Sending: \n%s\n\n" % (Utils.timestamp(), remote_command))
-            if self.debug:
-                UI.warn("AutoLoading sending:\r\n%s" % remote_command)
-            
             self.db.push_cmd(guid, remote_command, Utils.guid(), self.config.get("username"))
 
-
-        # Execution autocommand after modules autoload
+        # Execution autocommand after modules autoload to make sure we have loaded module required
         if self.debug:
             UI.warn("Calling AutoLoading session: %s" % guid) 
                    
@@ -130,7 +129,8 @@ class HTTPDParser:
             
             for command in commands:
                 if self.debug:
-                    UI.warn("AutoCommand sending:\r\n%s" % command)
+                    UI.warn("AutoCommand sending:\n%s" % command)
+                    
                 Log.log_shell(guid, "Sending", command)
                 self.db.append_shell_data(guid, "[%s] AutoCommand Sending: \n%s\n\n" % (Utils.timestamp(), command))
                 self.db.push_cmd(guid, command, Utils.guid(), self.config.get("username"))

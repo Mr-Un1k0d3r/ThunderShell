@@ -79,6 +79,7 @@ class RedisQuery:
             cmds = "%s:%s" % (origin, cmd)
             self.set_key("%s:session_cmd:%s" % (session_uid, session_id), cmds)
         data = "%s:%s" % (cmd_guid, cmd)
+        print(data)
         self.set_key("%s:cmd:%s" % (guid, timestamp), data)
 
     def get_cmd(self, guid):
