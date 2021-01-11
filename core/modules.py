@@ -14,10 +14,10 @@ class Modules:
 
     @staticmethod
     def get_module(name):
-        path = f"{THUNDERSHELL.MODULES_PATH}/{name}.exe"
+        path = "%s%s.exe" % (THUNDERSHELL.MODULES_PATH, name)
         if Utils.file_exists(path):
-            return base64.b64encode(Utils.load_file(path))
+            return base64.b64encode(Utils.load_file(path)).decode()
 
     @staticmethod
     def gen_push_command(name):
-        return f"module {name} {Modules.get_module(name)}"
+        return "module %s %s" % (name, Modules.get_module(name))

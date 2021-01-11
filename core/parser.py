@@ -105,12 +105,23 @@ class HTTPDParser:
         commands = profile.get("autocommands")
         modules = profile.get("automodules")
         
-        for module in modules:
-            Log.log_shell(guid, "Autoloading module %s" % module)
-            self.db.append_shell_data(guid, "[%s] AutoModule Sending: \n%s\n\n" % (Utils.timestamp(), command))
-            self.db.push_cmd(guid, Modules.gen_push_command(module), Utils.guid(), self.config.get("username"))
+        if self.debug:
+            UI.warn("Calling AutoLoading session: %s" % guid)
         
+        for module in modules:
+            remote_command = Modules.gen_push_command(module)
+            Log.log_shell(guid, "Autoloading module %s" % module)
+            self.db.append_shell_data(guid, "[%s] AutoModule Sending: \n%s\n\n" % (Utils.timestamp(), remote_command))
+            if self.debug:
+                UI.warn("AutoLoading sending:\r\n%s" % remote_command)
+            
+            self.db.push_cmd(guid, remote_command, Utils.guid(), self.config.get("username"))
+
+
         # Execution autocommand after modules autoload
+        if self.debug:
+            UI.warn("Calling AutoLoading session: %s" % guid) 
+                   
         if isinstance(commands, list):
             shell = self.db.get_prompt(guid).decode().split(" ")[1]
             UI.success("Running auto commands on shell %s" % shell)
@@ -118,7 +129,8 @@ class HTTPDParser:
             self.db.append_server_events("\n[%s] Running auto commands on shell: %s" % (Utils.timestamp(), shell))
             
             for command in commands:
-                print("\t[+] %s" % command)
+                if self.debug:
+                    UI.warn("AutoCommand sending:\r\n%s" % command)
                 Log.log_shell(guid, "Sending", command)
                 self.db.append_shell_data(guid, "[%s] AutoCommand Sending: \n%s\n\n" % (Utils.timestamp(), command))
                 self.db.push_cmd(guid, command, Utils.guid(), self.config.get("username"))
