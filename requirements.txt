@@ -4,4 +4,4 @@ gevent==21.1.2
 pycrypto
 redis==3.5.3
 requests==2.25.1
-tabulate==0.8.8
+tabulate==0.8.9
