@@ -1,4 +1,4 @@
-Flask==1.1.2
+Flask==2.0.1
 flask-socketio==5.0.1
 gevent==21.1.2
 pycrypto
