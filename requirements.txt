@@ -1,5 +1,5 @@
 Flask==1.1.2
-flask-socketio==5.0.1
+flask-socketio==5.1.0
 gevent==21.1.2
 pycrypto
 redis==3.5.3
