@@ -3,5 +3,5 @@ flask-socketio==5.0.1
 gevent==21.1.2
 pycrypto
 redis==3.5.3
-requests==2.25.1
+requests==2.26.0
 tabulate==0.8.9
