@@ -2,6 +2,6 @@ Flask==2.0.2
 flask-socketio==5.1.1
 gevent==21.12.0
 pycrypto
-redis==4.0.2
+redis==4.1.2
 requests==2.26.0
 tabulate==0.8.9
