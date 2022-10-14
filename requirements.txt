@@ -1,6 +1,6 @@
 Flask==2.2.2
 flask-socketio==5.3.0
-gevent==21.12.0
+gevent==22.10.1
 pycrypto
 redis==4.3.4
 requests==2.28.1
